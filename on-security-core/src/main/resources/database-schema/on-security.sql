@@ -79,13 +79,13 @@ CREATE TABLE `global_data_signature_algorithm` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `secuirty_client`
+-- Table structure for table `security_client`
 --
 
-DROP TABLE IF EXISTS `secuirty_client`;
+DROP TABLE IF EXISTS `security_client`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `secuirty_client` (
+CREATE TABLE `security_client` (
                                    `id` varchar(36) NOT NULL COMMENT 'ID',
                                    `client_id` varchar(20) NOT NULL COMMENT '客户端ID',
                                    `region_id` varchar(36) NOT NULL COMMENT '所属安全域',
@@ -96,7 +96,7 @@ CREATE TABLE `secuirty_client` (
                                    `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
                                    `create_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
                                    PRIMARY KEY (`id`),
-                                   UNIQUE KEY `secuirty_client_client_id_uindex` (`client_id`)
+                                   UNIQUE KEY `security_client_client_id_uindex` (`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客户端基本信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
