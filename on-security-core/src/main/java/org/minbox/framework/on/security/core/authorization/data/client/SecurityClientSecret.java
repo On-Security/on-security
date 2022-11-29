@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
  * 客户端认证密钥
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecurityClientSecret implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
