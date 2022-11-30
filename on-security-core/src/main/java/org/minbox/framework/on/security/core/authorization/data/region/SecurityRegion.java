@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client;
+package org.minbox.framework.on.security.core.authorization.data.region;
 
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
 import org.springframework.util.Assert;
