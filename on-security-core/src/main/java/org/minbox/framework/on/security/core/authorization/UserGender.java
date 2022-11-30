@@ -22,29 +22,18 @@ import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersio
 import java.io.Serializable;
 
 /**
- * 签名算法
+ * 用户性别
  *
  * @author 恒宇少年
- * @since 0.0.1
  */
-public final class SignatureAlgorithm implements Serializable {
+public class UserGender implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
-
-    public static final SignatureAlgorithm ES256 = new SignatureAlgorithm("ES256");
-    public static final SignatureAlgorithm ES256K = new SignatureAlgorithm("ES256K");
-    public static final SignatureAlgorithm ES512 = new SignatureAlgorithm("ES512");
-    public static final SignatureAlgorithm HS256 = new SignatureAlgorithm("HS256");
-    public static final SignatureAlgorithm HS384 = new SignatureAlgorithm("HS384");
-    public static final SignatureAlgorithm HS512 = new SignatureAlgorithm("HS512");
-    public static final SignatureAlgorithm PS256 = new SignatureAlgorithm("PS256");
-    public static final SignatureAlgorithm PS384 = new SignatureAlgorithm("PS384");
-    public static final SignatureAlgorithm PS512 = new SignatureAlgorithm("PS512");
-    public static final SignatureAlgorithm RS256 = new SignatureAlgorithm("RS256");
-    public static final SignatureAlgorithm RS384 = new SignatureAlgorithm("RS384");
-    public static final SignatureAlgorithm RS512 = new SignatureAlgorithm("RS512");
     private final String value;
+    public static final UserGender MAN = new UserGender("man");
+    public static final UserGender WOMAN = new UserGender("woman");
+    public static final UserGender OTHER = new UserGender("other");
 
-    public SignatureAlgorithm(String value) {
+    public UserGender(String value) {
         this.value = value;
     }
 
@@ -60,7 +49,7 @@ public final class SignatureAlgorithm implements Serializable {
         if (obj == null || this.getClass() != obj.getClass()) {
             return false;
         }
-        SignatureAlgorithm that = (SignatureAlgorithm) obj;
+        UserGender that = (UserGender) obj;
         return getValue().equals(that.getValue());
     }
 

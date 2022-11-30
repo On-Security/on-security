@@ -31,6 +31,7 @@ import java.util.Set;
  * 客户端认证配置信息
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecurityClientAuthentication implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;

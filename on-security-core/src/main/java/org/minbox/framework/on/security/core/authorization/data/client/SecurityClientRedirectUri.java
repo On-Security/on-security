@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
  * 根据{@link ClientRedirectUriType}配置，支持多种跳转地址配置
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecurityClientRedirectUri implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;

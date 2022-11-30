@@ -25,6 +25,7 @@ import java.io.Serializable;
  * 客户端跳转地址类型
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public final class ClientRedirectUriType implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
