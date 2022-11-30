@@ -96,7 +96,7 @@ CREATE TABLE `security_client` (
                                    `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
                                    `create_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
                                    PRIMARY KEY (`id`),
-                                   UNIQUE KEY `security_client_client_id_uindex` (`client_id`)
+                                   UNIQUE KEY `secuirty_client_client_id_uindex` (`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客户端基本信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -360,9 +360,9 @@ DROP TABLE IF EXISTS `security_session`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `security_session` (
                                     `id` varchar(36) NOT NULL COMMENT 'ID',
-                                    `user_id` varchar(36) NOT NULL COMMENT '用户ID',
                                     `region_id` varchar(36) NOT NULL COMMENT '安全域ID',
                                     `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
+                                    `user_id` varchar(36) NOT NULL COMMENT '用户ID',
                                     `state` varchar(15) NOT NULL DEFAULT 'normal' COMMENT '状态，normal：正常，forced_offline：强制下线，active_offline：主动下线',
                                     `attributes` text DEFAULT NULL COMMENT '属性',
                                     `authorization_grant_types` varchar(100) NOT NULL COMMENT '授权类型',
@@ -373,6 +373,7 @@ CREATE TABLE `security_session` (
                                     `authorization_code_metadata` text DEFAULT NULL COMMENT '授权码元数据',
                                     `access_token_value` text DEFAULT NULL COMMENT 'access_token令牌值',
                                     `access_token_issued_at` datetime DEFAULT NULL COMMENT 'access_token发布时间',
+                                    `access_token_expires_at` datetime DEFAULT NULL COMMENT 'access_token过期时间',
                                     `access_token_metadata` text DEFAULT NULL COMMENT 'access_token元数据',
                                     `access_token_type` varchar(20) DEFAULT NULL COMMENT 'access_token类型',
                                     `access_token_scopes` varchar(100) DEFAULT NULL COMMENT 'access_token范围',
@@ -492,12 +493,13 @@ DROP TABLE IF EXISTS `security_user_login_log`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `security_user_login_log` (
                                            `id` varchar(36) NOT NULL COMMENT 'ID',
+                                           `region_id` varchar(36) NOT NULL COMMENT '安全域ID',
+                                           `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
                                            `user_id` varchar(36) NOT NULL COMMENT '用户ID',
                                            `user_group_id` varchar(36) DEFAULT NULL COMMENT '用户组ID',
-                                           `client_id` varchar(36) DEFAULT NULL COMMENT '客户端ID',
                                            `session_id` varchar(36) NOT NULL COMMENT '会话ID',
-                                           `login_time` datetime DEFAULT NULL COMMENT '登录时间',
-                                           `ip_address` varchar(30) DEFAULT NULL COMMENT 'IP地址',
+                                           `login_time` datetime NOT NULL COMMENT '登录时间',
+                                           `ip_address` varchar(30) NOT NULL COMMENT 'IP地址',
                                            `device_system` varchar(10) DEFAULT NULL COMMENT '设备系统',
                                            `browser` varchar(20) DEFAULT NULL COMMENT '浏览器',
                                            `country` varchar(10) DEFAULT NULL COMMENT '国家',
@@ -514,25 +516,32 @@ CREATE TABLE `security_user_login_log` (
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*
- *     Copyright (C) 2022  恒宇少年
- *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-28 17:58:56
+-- Dump completed on 2022-11-30 16:37:00
+
+LOCK TABLES `gloabl_data_authorization_grant` WRITE;
+/*!40000 ALTER TABLE `gloabl_data_authorization_grant` DISABLE KEYS */;
+INSERT INTO `gloabl_data_authorization_grant` VALUES ('3950e707-6b0b-11ed-b779-0242ac110003','授权码模式','authorization_code',NULL),('461ba332-6b0b-11ed-b779-0242ac110003','刷新令牌模式','refresh_token',NULL),('4b48c30a-6b0b-11ed-b779-0242ac110003','密码模式','password',NULL),('67e87832-6b0b-11ed-b779-0242ac110003','客户端模式','client_credentials',NULL),('6ee85c04-6b0b-11ed-b779-0242ac110003','简化模式','implicit',NULL);
+/*!40000 ALTER TABLE `gloabl_data_authorization_grant` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `global_data_authentication_method` WRITE;
+/*!40000 ALTER TABLE `global_data_authentication_method` DISABLE KEYS */;
+INSERT INTO `global_data_authentication_method` VALUES ('5ad881f4-6b11-11ed-b779-0242ac110003','client_secret_post',NULL),('606a14b6-6b11-11ed-b779-0242ac110003','client_secret_basic',NULL),('6354cb0f-6b11-11ed-b779-0242ac110003','client_secret_jwt',NULL),('6655df1f-6b11-11ed-b779-0242ac110003','private_key_jwt',NULL),('69610d47-6b11-11ed-b779-0242ac110003','none',NULL);
+/*!40000 ALTER TABLE `global_data_authentication_method` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `global_data_client_protocol` WRITE;
+/*!40000 ALTER TABLE `global_data_client_protocol` DISABLE KEYS */;
+INSERT INTO `global_data_client_protocol` VALUES ('939b64bc-6b06-11ed-b779-0242ac110003','OpenID Connect',_binary '','OpenID Connect 是 OAuth 2.0 协议之上的简单身份协议'),('d2381524-6b06-11ed-b779-0242ac110003','SAML',_binary '\0','安全断言标记语言（SAML）是一种用于在各方之间交换身份验证和授权数据的开放标准');
+/*!40000 ALTER TABLE `global_data_client_protocol` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `global_data_signature_algorithm` WRITE;
+/*!40000 ALTER TABLE `global_data_signature_algorithm` DISABLE KEYS */;
+INSERT INTO `global_data_signature_algorithm` VALUES ('216d76f6-6ba1-11ed-b5c2-0242ac110002','HS256',NULL),('231013a5-6ba1-11ed-b5c2-0242ac110002','RS256',NULL),('3e9f13e1-6ba1-11ed-b5c2-0242ac110002','ES256',NULL),('b6b83793-6ba1-11ed-b5c2-0242ac110002','HS384',NULL),('bafbc213-6ba1-11ed-b5c2-0242ac110002','HS512',NULL),('c5d35417-6ba1-11ed-b5c2-0242ac110002','RS384',NULL),('d2a6d2db-6ba1-11ed-b5c2-0242ac110002','RS512',NULL),('d8435c32-6ba1-11ed-b5c2-0242ac110002','ES256K',NULL),('da7e7841-6ba1-11ed-b5c2-0242ac110002','ES384',NULL),('dcadf341-6ba1-11ed-b5c2-0242ac110002','ES512',NULL),('df32f309-6ba1-11ed-b5c2-0242ac110002','PS256',NULL),('e14f421a-6ba1-11ed-b5c2-0242ac110002','PS384',NULL),('e3b56f64-6ba1-11ed-b5c2-0242ac110002','PS512',NULL);
+/*!40000 ALTER TABLE `global_data_signature_algorithm` ENABLE KEYS */;
+UNLOCK TABLES;
