@@ -21,6 +21,7 @@ package org.minbox.framework.on.security.core.authorization.data.client;
  * 客户端秘钥存储库接口
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public interface SecurityClientSecretRepository {
 }

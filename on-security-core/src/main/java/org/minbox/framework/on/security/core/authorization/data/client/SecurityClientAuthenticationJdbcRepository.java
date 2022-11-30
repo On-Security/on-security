@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
  * 客户端认证数据存储JDBC方式实现类
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecurityClientAuthenticationJdbcRepository implements SecurityClientAuthenticationRepository {
     private JdbcOperations jdbcOperations;

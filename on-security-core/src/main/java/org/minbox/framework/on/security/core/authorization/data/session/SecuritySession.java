@@ -31,6 +31,7 @@ import java.util.Set;
  * 认证会话
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecuritySession implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;

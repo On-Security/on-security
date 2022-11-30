@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
  * 用户授权角色关系
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecurityUserAuthorizeRole implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;

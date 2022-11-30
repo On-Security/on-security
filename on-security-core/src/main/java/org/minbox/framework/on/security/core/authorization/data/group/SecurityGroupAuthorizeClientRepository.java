@@ -21,6 +21,7 @@ package org.minbox.framework.on.security.core.authorization.data.group;
  * 安全组授权客户端数据存储库
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public interface SecurityGroupAuthorizeClientRepository {
 }

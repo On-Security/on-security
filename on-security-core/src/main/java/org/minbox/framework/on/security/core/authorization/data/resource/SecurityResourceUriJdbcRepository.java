@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
  * 资源路径数据存储库JDBC实现类
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecurityResourceUriJdbcRepository implements SecurityResourceUriRepository {
     private JdbcOperations jdbcOperations;

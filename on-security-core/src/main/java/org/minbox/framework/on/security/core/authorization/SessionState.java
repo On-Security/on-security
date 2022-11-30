@@ -25,6 +25,7 @@ import java.io.Serializable;
  * 会话状态
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public final class SessionState implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;

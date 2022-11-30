@@ -21,6 +21,7 @@ package org.minbox.framework.on.security.core.authorization.data.user;
  * 用户登录日志数据存储库
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public interface SecurityUserLoginLogRepository {
 }

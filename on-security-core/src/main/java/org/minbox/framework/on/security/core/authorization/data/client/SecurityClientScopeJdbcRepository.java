@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
  * 客户端范围存储库JDBC实现类
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecurityClientScopeJdbcRepository implements SecurityClientScopeRepository {
     private JdbcOperations jdbcOperations;
