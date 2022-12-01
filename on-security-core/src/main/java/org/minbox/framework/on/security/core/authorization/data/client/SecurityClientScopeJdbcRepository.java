@@ -52,7 +52,7 @@ public class SecurityClientScopeJdbcRepository implements SecurityClientScopeRep
     private static final String INSERT_CLIENT_SCOPE_SQL = "INSERT INTO " + TABLE_NAME
             + "(" + COLUMN_NAMES + ") VALUES (?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_CLIENT_SCOPE_SQL = "UPDATE " + TABLE_NAME
-            + " SET client_id = ?, scope_name = ?, scope_code = ?, type = ?"
+            + " SET scope_name = ?, scope_code = ?, type = ?"
             + " WHERE " + ID_FILTER;
     // @formatter:on
 
@@ -80,8 +80,10 @@ public class SecurityClientScopeJdbcRepository implements SecurityClientScopeRep
 
     private void updateClientScope(SecurityClientScope clientScope) {
         List<SqlParameterValue> parameters = new ArrayList<>(this.clientScopeParametersMapper.apply(clientScope));
-        parameters.remove(0); // remove id
+        SqlParameterValue id = parameters.remove(0); // remove id
         parameters.remove(0); // remove client_id
+        parameters.remove(3); // remove create_time
+        parameters.add(id); // add where id
         PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
         this.jdbcOperations.update(UPDATE_CLIENT_SCOPE_SQL, pss);
     }
