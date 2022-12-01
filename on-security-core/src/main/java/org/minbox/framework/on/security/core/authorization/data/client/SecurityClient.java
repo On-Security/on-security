@@ -112,6 +112,11 @@ public class SecurityClient implements Serializable {
         return new Builder(id);
     }
 
+    public static Builder with(SecurityClient client) {
+        Assert.notNull(client, "client cannot be empty");
+        return new Builder(client);
+    }
+
     public String toString() {
         // @formatter:off
         return "SecurityClient(id=" + this.getId() + ", clientId=" + this.getClientId() + ", regionId=" + this.getRegionId() +
@@ -143,6 +148,22 @@ public class SecurityClient implements Serializable {
 
         protected Builder(String id) {
             this.id = id;
+        }
+
+        protected Builder(SecurityClient client) {
+            this.id = client.id;
+            this.clientId = client.clientId;
+            this.regionId = client.regionId;
+            this.protocol = client.protocol;
+            this.displayName = client.displayName;
+            this.describe = client.describe;
+            this.enabled = client.enabled;
+            this.deleted = client.deleted;
+            this.createTime = client.createTime;
+            this.authentication = client.authentication;
+            this.scopes = client.scopes;
+            this.redirectUris = client.redirectUris;
+            this.secrets = client.secrets;
         }
 
         public Builder clientId(String clientId) {
@@ -207,20 +228,18 @@ public class SecurityClient implements Serializable {
 
         public SecurityClient build() {
             Assert.hasText(this.clientId, "clientId cannot be empty.");
-            Assert.hasText(this.regionId, "regionId cannot be empty.");
-            Assert.notNull(this.protocol, "protocol cannot be empty.");
-            Assert.hasText(this.describe, "describe cannot be empty.");
-            Assert.notNull(this.authentication, "authentication cannot be null.");
-            if (authentication.isConfidential()) {
-                Assert.notEmpty(this.secrets, "confidential client must configure secret.");
-                long notDeletedCount = this.secrets.stream().filter(s -> !s.isDeleted()).count();
-                Assert.isTrue(notDeletedCount > 0, "confidential client must be configured with at least 1 valid secret");
-            }
-            if (authentication.getGrantTypes().contains(AuthorizationGrantType.AUTHORIZATION_CODE)) {
-                Assert.notEmpty(this.redirectUris, "redirectUris cannot be empty.");
-                long loginRedirectUriCount = this.redirectUris.stream().filter(ru -> ClientRedirectUriType.LOGIN.equals(ru.getRedirectType())).count();
-                Assert.isTrue(loginRedirectUriCount > 0, "The client has enabled the authorization_code grant type, " +
-                        "must configure a valid login redirect uri.");
+            if (this.authentication != null) {
+                if (authentication.isConfidential()) {
+                    Assert.notEmpty(this.secrets, "confidential client must configure secret.");
+                    long notDeletedCount = this.secrets.stream().filter(s -> !s.isDeleted()).count();
+                    Assert.isTrue(notDeletedCount > 0, "confidential client must be configured with at least 1 valid secret");
+                }
+                if (authentication.getGrantTypes().contains(AuthorizationGrantType.AUTHORIZATION_CODE)) {
+                    Assert.notEmpty(this.redirectUris, "redirectUris cannot be empty.");
+                    long loginRedirectUriCount = this.redirectUris.stream().filter(ru -> ClientRedirectUriType.LOGIN.equals(ru.getRedirectType())).count();
+                    Assert.isTrue(loginRedirectUriCount > 0, "The client has enabled the authorization_code grant type, " +
+                            "must configure a valid login redirect uri.");
+                }
             }
             return this.create();
         }

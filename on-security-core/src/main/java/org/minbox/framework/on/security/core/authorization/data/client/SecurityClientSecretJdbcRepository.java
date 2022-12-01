@@ -69,15 +69,15 @@ public class SecurityClientSecretJdbcRepository implements SecurityClientSecretR
     @Override
     public void save(SecurityClientSecret clientSecret) {
         Assert.notNull(clientSecret, "clientSecret cannot be null");
-        SecurityClientSecret storedClientScope = this.findBy(ID_FILTER, clientSecret.getId());
-        if (storedClientScope != null) {
-            this.updateClientScope(clientSecret);
+        SecurityClientSecret storedClientSecret = this.findBy(ID_FILTER, clientSecret.getId());
+        if (storedClientSecret != null) {
+            this.updateClientSecret(clientSecret);
         } else {
-            this.insertClientScope(clientSecret);
+            this.insertClientSecret(clientSecret);
         }
     }
 
-    private void updateClientScope(SecurityClientSecret clientSecret) {
+    private void updateClientSecret(SecurityClientSecret clientSecret) {
         List<SqlParameterValue> parameters = new ArrayList<>(this.clientSecretParametersMapper.apply(clientSecret));
         SqlParameterValue id = parameters.remove(0); // remove id
         parameters.remove(0); // remove client_id
@@ -87,7 +87,7 @@ public class SecurityClientSecretJdbcRepository implements SecurityClientSecretR
         this.jdbcOperations.update(UPDATE_CLIENT_SECRET_SQL, pss);
     }
 
-    private void insertClientScope(SecurityClientSecret clientSecret) {
+    private void insertClientSecret(SecurityClientSecret clientSecret) {
         List<SqlParameterValue> parameters = this.clientSecretParametersMapper.apply(clientSecret);
         PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
         this.jdbcOperations.update(INSERT_CLIENT_SECRET_SQL, pss);

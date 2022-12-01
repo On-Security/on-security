@@ -67,15 +67,15 @@ public class SecurityClientRedirectUriJdbcRepository implements SecurityClientRe
     @Override
     public void save(SecurityClientRedirectUri clientRedirectUri) {
         Assert.notNull(clientRedirectUri, "clientRedirectUri cannot be null");
-        SecurityClientRedirectUri storedClientScope = this.findBy(ID_FILTER, clientRedirectUri.getId());
-        if (storedClientScope != null) {
-            this.updateClientScope(clientRedirectUri);
+        SecurityClientRedirectUri storedClientRedirectUri = this.findBy(ID_FILTER, clientRedirectUri.getId());
+        if (storedClientRedirectUri != null) {
+            this.updateClientRedirectUri(clientRedirectUri);
         } else {
-            this.insertClientScope(clientRedirectUri);
+            this.insertClientRedirectUri(clientRedirectUri);
         }
     }
 
-    private void updateClientScope(SecurityClientRedirectUri clientRedirectUri) {
+    private void updateClientRedirectUri(SecurityClientRedirectUri clientRedirectUri) {
         List<SqlParameterValue> parameters = new ArrayList<>(this.clientRedirectUriParametersMapper.apply(clientRedirectUri));
         SqlParameterValue id = parameters.remove(0); // remove id
         parameters.remove(0); // remove client_id
@@ -85,7 +85,7 @@ public class SecurityClientRedirectUriJdbcRepository implements SecurityClientRe
         this.jdbcOperations.update(UPDATE_CLIENT_REDIRECT_URI_SQL, pss);
     }
 
-    private void insertClientScope(SecurityClientRedirectUri clientRedirectUri) {
+    private void insertClientRedirectUri(SecurityClientRedirectUri clientRedirectUri) {
         List<SqlParameterValue> parameters = this.clientRedirectUriParametersMapper.apply(clientRedirectUri);
         PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
         this.jdbcOperations.update(INSERT_CLIENT_REDIRECT_URI_SQL, pss);

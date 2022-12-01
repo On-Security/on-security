@@ -24,5 +24,12 @@ package org.minbox.framework.on.security.core.authorization.data.client;
  * @since 0.0.1
  */
 public interface SecurityClientRepository {
-
+    /**
+     * 存储客户端
+     * <p>
+     * 根据{@link SecurityClient#getId()}判定是新增还是更新数据，如果已经存在则执行更新，否则执行新增
+     *
+     * @param client {@link SecurityClient} 客户端对象实例
+     */
+    void save(SecurityClient client);
 }
