@@ -51,7 +51,7 @@ public class SecurityClientSecretJdbcRepository implements SecurityClientSecretR
     private static final String INSERT_CLIENT_SECRET_SQL = "INSERT INTO " + TABLE_NAME
             + "(" + COLUMN_NAMES + ") VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_CLIENT_SECRET_SQL = "UPDATE " + TABLE_NAME
-            + " SET client_secret = ?, secret_expires_at = ?, deleted = ?, delete_time"
+            + " SET client_secret = ?, secret_expires_at = ?, deleted = ?, delete_time = ?"
             + " WHERE " + ID_FILTER;
     // @formatter:on
     private JdbcOperations jdbcOperations;
