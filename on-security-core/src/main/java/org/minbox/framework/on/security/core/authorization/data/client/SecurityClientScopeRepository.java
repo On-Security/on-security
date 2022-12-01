@@ -24,4 +24,12 @@ package org.minbox.framework.on.security.core.authorization.data.client;
  * @since 0.0.1
  */
 public interface SecurityClientScopeRepository {
+    /**
+     * 保存客户端范围基本信息
+     * <p>
+     * 新增或更新客户端范围基本信息，根据{@link SecurityClientScope#getId()}查询如果已经存在则执行更新否则执行新增
+     *
+     * @param clientScope {@link SecurityClientScope} 客户端范围实例
+     */
+    void save(SecurityClientScope clientScope);
 }
