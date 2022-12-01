@@ -24,4 +24,12 @@ package org.minbox.framework.on.security.core.authorization.data.client;
  * @since 0.0.1
  */
 public interface SecurityClientRedirectUriRepository {
+    /**
+     * 存储客户端跳转地址
+     * <p>
+     * 根据{@link SecurityClientRedirectUri#getId()}判断如果已经存在执行更新，否则执行新增
+     *
+     * @param clientRedirectUri {@link SecurityClientRedirectUri} 客户端跳转地址对象实例
+     */
+    void save(SecurityClientRedirectUri clientRedirectUri);
 }

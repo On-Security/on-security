@@ -19,6 +19,7 @@ package org.minbox.framework.on.security.core.authorization.data.client;
 
 import org.springframework.jdbc.core.*;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -127,7 +128,8 @@ public class SecurityClientSecretJdbcRepository implements SecurityClientSecretR
                     new SqlParameterValue(Types.TIMESTAMP, Timestamp.valueOf(clientSecret.getSecretExpiresAt())),
                     new SqlParameterValue(Types.BOOLEAN, clientSecret.isDeleted()),
                     new SqlParameterValue(Types.TIMESTAMP, Timestamp.valueOf(clientSecret.getCreateTime())),
-                    new SqlParameterValue(Types.TIMESTAMP, Timestamp.valueOf(clientSecret.getDeleteTime()))
+                    new SqlParameterValue(Types.TIMESTAMP, !ObjectUtils.isEmpty(clientSecret.getDeleteTime()) ?
+                            Timestamp.valueOf(clientSecret.getDeleteTime()) : null)
             );
             // @formatter:on
         }
