@@ -17,10 +17,10 @@
 
 package org.minbox.framework.on.security.core.authorization.data.client;
 
-import org.minbox.framework.on.security.core.authorization.AuthorizationGrantType;
-import org.minbox.framework.on.security.core.authorization.AuthorizationMethod;
 import org.minbox.framework.on.security.core.authorization.SignatureAlgorithm;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -41,7 +41,7 @@ public class SecurityClientAuthentication implements Serializable {
     private String jwksUrl;
     private boolean consentRequired;
     private SignatureAlgorithm signatureAlgorithm;
-    private Set<AuthorizationMethod> authorizationMethods;
+    private Set<ClientAuthenticationMethod> authorizationMethods;
     private Set<AuthorizationGrantType> grantTypes;
     private SignatureAlgorithm idTokenSignatureAlgorithm;
     private int authorizationCodeExpirationTime;
@@ -77,7 +77,7 @@ public class SecurityClientAuthentication implements Serializable {
         return signatureAlgorithm;
     }
 
-    public Set<AuthorizationMethod> getAuthorizationMethods() {
+    public Set<ClientAuthenticationMethod> getAuthorizationMethods() {
         return authorizationMethods;
     }
 
@@ -137,7 +137,7 @@ public class SecurityClientAuthentication implements Serializable {
         private String jwksUrl;
         private boolean consentRequired;
         private SignatureAlgorithm signatureAlgorithm;
-        private Set<AuthorizationMethod> authorizationMethods;
+        private Set<ClientAuthenticationMethod> authorizationMethods;
         private Set<AuthorizationGrantType> grantTypes;
         private SignatureAlgorithm idTokenSignatureAlgorithm;
         private int authorizationCodeExpirationTime;
@@ -175,7 +175,7 @@ public class SecurityClientAuthentication implements Serializable {
             return this;
         }
 
-        public Builder authorizationMethods(Set<AuthorizationMethod> authorizationMethods) {
+        public Builder authorizationMethods(Set<ClientAuthenticationMethod> authorizationMethods) {
             this.authorizationMethods = authorizationMethods;
             return this;
         }

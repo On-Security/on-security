@@ -17,10 +17,10 @@
 
 package org.minbox.framework.on.security.core.authorization.data.client;
 
-import org.minbox.framework.on.security.core.authorization.AuthorizationGrantType;
 import org.minbox.framework.on.security.core.authorization.ClientProtocol;
 import org.minbox.framework.on.security.core.authorization.ClientRedirectUriType;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
