@@ -19,7 +19,8 @@ package org.minbox.framework.on.security.core.authorization.adapter;
 
 import org.minbox.framework.on.security.core.authorization.ClientProtocol;
 import org.minbox.framework.on.security.core.authorization.data.client.*;
-import org.minbox.framework.on.security.core.authorization.data.client.converter.SecurityRegisteredClientConverter;
+import org.minbox.framework.on.security.core.authorization.data.client.converter.RegisteredToSecurityClientConverter;
+import org.minbox.framework.on.security.core.authorization.data.client.converter.SecurityToRegisteredClientConverter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -29,6 +30,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
+
+import java.util.List;
 
 /**
  * On-Security提供的{@link RegisteredClientRepository}JDBC数据存储方式实现类
@@ -45,9 +48,9 @@ import org.springframework.util.ObjectUtils;
  */
 public final class OnSecurityRegisteredClientJdbcRepository implements RegisteredClientRepository {
     private static final String DEFAULT_SECURITY_REGION_ID = "default";
-    private JdbcOperations jdbcOperations;
     private DataSourceTransactionManager dataSourceTransactionManager;
-    private Converter<RegisteredClient, SecurityClient> converter;
+    private Converter<RegisteredClient, SecurityClient> registeredToSecurityClientConverter;
+    private Converter<SecurityClient, RegisteredClient> securityToRegisteredClientConverter;
     private SecurityClientRepository clientRepository;
     private SecurityClientScopeRepository clientScopeRepository;
     private SecurityClientSecretRepository clientSecretRepository;
@@ -57,9 +60,9 @@ public final class OnSecurityRegisteredClientJdbcRepository implements Registere
     public OnSecurityRegisteredClientJdbcRepository(JdbcOperations jdbcOperations, DataSourceTransactionManager dataSourceTransactionManager) {
         Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
         Assert.notNull(dataSourceTransactionManager, "dataSourceTransactionManager cannot be null");
-        this.jdbcOperations = jdbcOperations;
         this.dataSourceTransactionManager = dataSourceTransactionManager;
-        this.converter = new SecurityRegisteredClientConverter();
+        this.registeredToSecurityClientConverter = new RegisteredToSecurityClientConverter();
+        this.securityToRegisteredClientConverter = new SecurityToRegisteredClientConverter();
         this.clientRepository = new SecurityClientJdbcRepository(jdbcOperations);
         this.clientScopeRepository = new SecurityClientScopeJdbcRepository(jdbcOperations);
         this.clientSecretRepository = new SecurityClientSecretJdbcRepository(jdbcOperations);
@@ -69,7 +72,7 @@ public final class OnSecurityRegisteredClientJdbcRepository implements Registere
 
     @Override
     public void save(RegisteredClient registeredClient) {
-        SecurityClient securityClient = converter.convert(registeredClient);
+        SecurityClient securityClient = registeredToSecurityClientConverter.convert(registeredClient);
         securityClient = SecurityClient.with(securityClient)
                 .regionId(DEFAULT_SECURITY_REGION_ID) // use default regionId
                 .protocol(ClientProtocol.OIDC)
@@ -107,13 +110,58 @@ public final class OnSecurityRegisteredClientJdbcRepository implements Registere
 
     @Override
     public RegisteredClient findById(String id) {
-        // TODO 将SecurityClient转换为RegisteredClient
-        return null;
+        Assert.hasText(id, "id cannot be empty");
+        // Load client
+        SecurityClient securityClient = clientRepository.findById(id);
+        Assert.notNull(securityClient, "Based on Client ID: " + id + ", no data was retrieved");
+
+        // Build client
+        securityClient = this.buildSecurityClient(securityClient);
+        return securityToRegisteredClientConverter.convert(securityClient);
     }
 
     @Override
     public RegisteredClient findByClientId(String clientId) {
-        // TODO 将SecurityClient转换为RegisteredClient
-        return null;
+        Assert.hasText(clientId, "clientId cannot be empty");
+        // Load client
+        SecurityClient securityClient = clientRepository.findByClientId(clientId);
+        Assert.notNull(securityClient, "Based on Client ClientId: " + clientId + ", no data was retrieved");
+
+        // Build client
+        securityClient = this.buildSecurityClient(securityClient);
+        return securityToRegisteredClientConverter.convert(securityClient);
+    }
+
+    /**
+     * 根据客户端基本信息构建相关数据
+     *
+     * @param securityClient {@link SecurityClient}
+     * @return 构建填充数据后的客户端对象实例 {@link SecurityClient}
+     */
+    private SecurityClient buildSecurityClient(SecurityClient securityClient) {
+        // Load client authentication
+        SecurityClient.Builder builder = SecurityClient.with(securityClient);
+        SecurityClientAuthentication clientAuthentication = clientAuthenticationRepository.findByClientId(securityClient.getId());
+        Assert.notNull(clientAuthentication, "No client authentication information was retrieved based on client ID: " + securityClient.getId());
+        builder.authentication(clientAuthentication);
+
+        // Load client scopes
+        List<SecurityClientScope> clientScopeList = clientScopeRepository.findByClientId(securityClient.getId());
+        if (!ObjectUtils.isEmpty(clientScopeList)) {
+            builder.scopes(clientScopeList);
+        }
+
+        // Load client redirect uris
+        List<SecurityClientRedirectUri> redirectUris = clientRedirectUriRepository.findByClientId(securityClient.getId());
+        if (!ObjectUtils.isEmpty(redirectUris)) {
+            builder.redirectUris(redirectUris);
+        }
+
+        // Load client secrets
+        List<SecurityClientSecret> secrets = clientSecretRepository.findByClientId(securityClient.getId());
+        if (!ObjectUtils.isEmpty(secrets)) {
+            builder.secrets(secrets);
+        }
+        return builder.build();
     }
 }

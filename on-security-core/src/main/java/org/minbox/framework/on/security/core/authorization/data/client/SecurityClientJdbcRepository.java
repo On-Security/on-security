@@ -50,6 +50,7 @@ public class SecurityClientJdbcRepository implements SecurityClientRepository {
     // @formatter:on
     private static final String TABLE_NAME = "security_client";
     private static final String ID_FILTER = "id = ?";
+    private static final String CLIENT_ID_FILTER = "client_id = ?";
     private static final String SELECT_CLIENT_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
     // @formatter:off
     private static final String INSERT_CLIENT_SQL = "INSERT INTO " + TABLE_NAME
@@ -79,6 +80,18 @@ public class SecurityClientJdbcRepository implements SecurityClientRepository {
         } else {
             this.insertClient(client);
         }
+    }
+
+    @Override
+    public SecurityClient findById(String id) {
+        Assert.hasText(id, "id cannot be empty");
+        return this.findBy(ID_FILTER, id);
+    }
+
+    @Override
+    public SecurityClient findByClientId(String clientId) {
+        Assert.hasText(clientId, "clientId cannot be empty");
+        return this.findBy(CLIENT_ID_FILTER, clientId);
     }
 
     private void updateClient(SecurityClient client) {

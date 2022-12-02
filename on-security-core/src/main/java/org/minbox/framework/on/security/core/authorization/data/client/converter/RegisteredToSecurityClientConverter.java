@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public final class SecurityRegisteredClientConverter implements Converter<RegisteredClient, SecurityClient> {
+public final class RegisteredToSecurityClientConverter implements Converter<RegisteredClient, SecurityClient> {
     /**
      * 将{@link RegisteredClient}转换为{@link SecurityClient}
      *
@@ -49,7 +49,7 @@ public final class SecurityRegisteredClientConverter implements Converter<Regist
     @Override
     public SecurityClient convert(RegisteredClient registeredClient) {
         // @formatter:off
-        String id = UUID.randomUUID().toString();
+        String id = registeredClient.getId();
         SecurityClient.Builder builder = SecurityClient.withId(id);
         builder.clientId(registeredClient.getClientId())
                 .enabled(true)

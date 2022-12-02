@@ -47,6 +47,7 @@ public class SecurityClientScopeJdbcRepository implements SecurityClientScopeRep
     // @formatter:on
     private static final String TABLE_NAME = "security_client_scope";
     private static final String ID_FILTER = "id = ?";
+    private static final String CLIENT_ID_FILTER = "client_id = ?";
     private static final String SELECT_CLIENT_SCOPE_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
     // @formatter:off
     private static final String INSERT_CLIENT_SCOPE_SQL = "INSERT INTO " + TABLE_NAME
@@ -78,6 +79,12 @@ public class SecurityClientScopeJdbcRepository implements SecurityClientScopeRep
         }
     }
 
+    @Override
+    public List<SecurityClientScope> findByClientId(String clientId) {
+        Assert.hasText(clientId, "clientId cannot be empty");
+        return this.findListBy(CLIENT_ID_FILTER, clientId);
+    }
+
     private void updateClientScope(SecurityClientScope clientScope) {
         List<SqlParameterValue> parameters = new ArrayList<>(this.clientScopeParametersMapper.apply(clientScope));
         SqlParameterValue id = parameters.remove(0); // remove id
@@ -98,6 +105,12 @@ public class SecurityClientScopeJdbcRepository implements SecurityClientScopeRep
         List<SecurityClientScope> result = this.jdbcOperations.query(
                 SELECT_CLIENT_SCOPE_SQL + filter, this.clientScopeRowMapper, args);
         return !result.isEmpty() ? result.get(0) : null;
+    }
+
+    private List<SecurityClientScope> findListBy(String filter, Object... args) {
+        List<SecurityClientScope> result = this.jdbcOperations.query(
+                SELECT_CLIENT_SCOPE_SQL + filter, this.clientScopeRowMapper, args);
+        return result;
     }
 
     /**

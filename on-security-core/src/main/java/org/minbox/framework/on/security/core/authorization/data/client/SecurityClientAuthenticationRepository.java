@@ -32,4 +32,20 @@ public interface SecurityClientAuthenticationRepository {
      * @param clientAuthentication {@link SecurityClientAuthentication} 客户端安全认证对象实例
      */
     void save(SecurityClientAuthentication clientAuthentication);
+
+    /**
+     * 根据{@link SecurityClientAuthentication#getId()}查询客户端认证信息
+     *
+     * @param id {@link SecurityClientAuthentication#getId()}
+     * @return 客户端认证信息对象实例 {@link SecurityClientAuthentication}
+     */
+    SecurityClientAuthentication findById(String id);
+
+    /**
+     * 根据{@link SecurityClient#getId()}查询客户端认证信息
+     *
+     * @param clientId 客户端ID {@link SecurityClientAuthentication#getClientId()}
+     * @return 客户端认证信息对象实例 {@link SecurityClientAuthentication}
+     */
+    SecurityClientAuthentication findByClientId(String clientId);
 }

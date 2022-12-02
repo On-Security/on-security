@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.client;
 
+import java.util.List;
+
 /**
  * 客户端跳转地址数据存储库接口
  *
@@ -32,4 +34,12 @@ public interface SecurityClientRedirectUriRepository {
      * @param clientRedirectUri {@link SecurityClientRedirectUri} 客户端跳转地址对象实例
      */
     void save(SecurityClientRedirectUri clientRedirectUri);
+
+    /**
+     * 根据{@link SecurityClient#getId()}查询客户端跳转地址列表
+     *
+     * @param clientId 客户端ID {@link SecurityClientRedirectUri#getClientId()}
+     * @return 客户端跳转地址对象列表 {@link SecurityClientRedirectUri}
+     */
+    List<SecurityClientRedirectUri> findByClientId(String clientId);
 }

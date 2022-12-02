@@ -45,6 +45,7 @@ public class SecurityClientRedirectUriJdbcRepository implements SecurityClientRe
     // @formatter:on
     private static final String TABLE_NAME = "security_client_redirect_uris";
     private static final String ID_FILTER = "id = ?";
+    private static final String CLIENT_ID_FILTER = "client_id = ?";
     private static final String SELECT_CLIENT_REDIRECT_URI_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
     // @formatter:off
     private static final String INSERT_CLIENT_REDIRECT_URI_SQL = "INSERT INTO " + TABLE_NAME
@@ -75,6 +76,12 @@ public class SecurityClientRedirectUriJdbcRepository implements SecurityClientRe
         }
     }
 
+    @Override
+    public List<SecurityClientRedirectUri> findByClientId(String clientId) {
+        Assert.hasText(clientId, "clientId cannot be empty");
+        return this.findListBy(CLIENT_ID_FILTER, clientId);
+    }
+
     private void updateClientRedirectUri(SecurityClientRedirectUri clientRedirectUri) {
         List<SqlParameterValue> parameters = new ArrayList<>(this.clientRedirectUriParametersMapper.apply(clientRedirectUri));
         SqlParameterValue id = parameters.remove(0); // remove id
@@ -95,6 +102,12 @@ public class SecurityClientRedirectUriJdbcRepository implements SecurityClientRe
         List<SecurityClientRedirectUri> result = this.jdbcOperations.query(
                 SELECT_CLIENT_REDIRECT_URI_SQL + filter, this.clientRedirectUriRowMapper, args);
         return !result.isEmpty() ? result.get(0) : null;
+    }
+
+    private List<SecurityClientRedirectUri> findListBy(String filter, Object... args) {
+        List<SecurityClientRedirectUri> result = this.jdbcOperations.query(
+                SELECT_CLIENT_REDIRECT_URI_SQL + filter, this.clientRedirectUriRowMapper, args);
+        return result;
     }
 
 

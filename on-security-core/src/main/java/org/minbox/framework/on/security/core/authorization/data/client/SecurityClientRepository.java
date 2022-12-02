@@ -32,4 +32,20 @@ public interface SecurityClientRepository {
      * @param client {@link SecurityClient} 客户端对象实例
      */
     void save(SecurityClient client);
+
+    /**
+     * 根据{@link SecurityClient#getId()}查询客户端信息
+     *
+     * @param id {@link SecurityClient#getId()} 主键编号
+     * @return {@link SecurityClient}
+     */
+    SecurityClient findById(String id);
+
+    /**
+     * 根据{@link SecurityClient#getClientId()}查询客户端信息
+     *
+     * @param clientId {@link SecurityClient#getClientId()}
+     * @return {@link SecurityClient}
+     */
+    SecurityClient findByClientId(String clientId);
 }

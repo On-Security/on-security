@@ -47,6 +47,7 @@ public class SecurityClientSecretJdbcRepository implements SecurityClientSecretR
     // @formatter:on
     private static final String TABLE_NAME = "security_client_secret";
     private static final String ID_FILTER = "id = ?";
+    private static final String CLIENT_ID_FILTER = "client_id = ?";
     private static final String SELECT_CLIENT_SECRET_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
     // @formatter:off
     private static final String INSERT_CLIENT_SECRET_SQL = "INSERT INTO " + TABLE_NAME
@@ -77,6 +78,12 @@ public class SecurityClientSecretJdbcRepository implements SecurityClientSecretR
         }
     }
 
+    @Override
+    public List<SecurityClientSecret> findByClientId(String clientId) {
+        Assert.hasText(clientId, "clientId cannot be empty");
+        return this.findListBy(CLIENT_ID_FILTER, clientId);
+    }
+
     private void updateClientSecret(SecurityClientSecret clientSecret) {
         List<SqlParameterValue> parameters = new ArrayList<>(this.clientSecretParametersMapper.apply(clientSecret));
         SqlParameterValue id = parameters.remove(0); // remove id
@@ -99,18 +106,26 @@ public class SecurityClientSecretJdbcRepository implements SecurityClientSecretR
         return !result.isEmpty() ? result.get(0) : null;
     }
 
+    private List<SecurityClientSecret> findListBy(String filter, Object... args) {
+        List<SecurityClientSecret> result = this.jdbcOperations.query(
+                SELECT_CLIENT_SECRET_SQL + filter, this.clientSecretRowMapper, args);
+        return result;
+    }
+
 
     public static class SecurityClientSecretRowMapper implements RowMapper<SecurityClientSecret> {
         @Override
         public SecurityClientSecret mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Timestamp deleteTime = rs.getTimestamp("delete_time");
+            Timestamp secretExpiresAt = rs.getTimestamp("secret_expires_at");
             // @formatter:off
             SecurityClientSecret clientSecret = SecurityClientSecret.withId(rs.getString("id"))
                     .clientId(rs.getString("client_id"))
                     .clientSecret(rs.getString("client_secret"))
-                    .secretExpiresAt(rs.getTimestamp("secret_expires_at").toLocalDateTime())
+                    .secretExpiresAt(secretExpiresAt != null ? secretExpiresAt.toLocalDateTime() : null)
                     .createTime(rs.getTimestamp("create_time").toLocalDateTime())
                     .deleted(rs.getBoolean("deleted"))
-                    .deleteTime(rs.getTimestamp("delete_time").toLocalDateTime())
+                    .deleteTime(deleteTime != null ? deleteTime.toLocalDateTime() : null)
                     .build();
             return clientSecret;
             // @formatter:on

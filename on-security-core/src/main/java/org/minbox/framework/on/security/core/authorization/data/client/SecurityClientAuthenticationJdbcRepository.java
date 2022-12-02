@@ -61,6 +61,7 @@ public class SecurityClientAuthenticationJdbcRepository implements SecurityClien
     // @formatter:on
     private static final String TABLE_NAME = "security_client_authentication";
     private static final String ID_FILTER = "id = ?";
+    private static final String CLIENT_ID_FILTER = "client_id = ?";
     private static final String SELECT_CLIENT_AUTHENTICATION_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
     // @formatter:off
     private static final String INSERT_CLIENT_AUTHENTICATION_SQL = "INSERT INTO " + TABLE_NAME
@@ -92,6 +93,18 @@ public class SecurityClientAuthenticationJdbcRepository implements SecurityClien
         } else {
             this.insertClientAuthentication(clientAuthentication);
         }
+    }
+
+    @Override
+    public SecurityClientAuthentication findById(String id) {
+        Assert.hasText(id, "id cannot be empty");
+        return this.findBy(ID_FILTER, id);
+    }
+
+    @Override
+    public SecurityClientAuthentication findByClientId(String clientId) {
+        Assert.hasText(clientId, "clientId cannot be empty");
+        return this.findBy(CLIENT_ID_FILTER, clientId);
     }
 
     private void updateClientAuthentication(SecurityClientAuthentication clientAuthentication) {
@@ -131,6 +144,8 @@ public class SecurityClientAuthenticationJdbcRepository implements SecurityClien
             String scopeId = rs.getString("id");
             Set<String> clientAuthenticationMethods = StringUtils.commaDelimitedListToSet(rs.getString("authentication_methods"));
             Set<String> authorizationGrantTypes = StringUtils.commaDelimitedListToSet(rs.getString("authorization_grant_types"));
+            String authenticationSigningAlgorithm = rs.getString("authentication_signing_algorithm");
+            String idTokenSignatureAlgorithm = rs.getString("id_token_signature_algorithm");
 
             // @formatter:off
             SecurityClientAuthentication clientAuthentication = SecurityClientAuthentication.withId(scopeId)
@@ -141,13 +156,15 @@ public class SecurityClientAuthenticationJdbcRepository implements SecurityClien
                             clientAuthenticationMethods.stream().map(method -> new ClientAuthenticationMethod(method))
                                     .collect(Collectors.toSet())
                     )
-                    .signatureAlgorithm(new SignatureAlgorithm(rs.getString("authentication_signing_algorithm")))
+                    .signatureAlgorithm(!ObjectUtils.isEmpty(authenticationSigningAlgorithm) ?
+                            new SignatureAlgorithm(authenticationSigningAlgorithm) : null)
                     .grantTypes(
                             authorizationGrantTypes.stream().map(grantType -> new AuthorizationGrantType(grantType))
                                     .collect(Collectors.toSet())
                     )
                     .consentRequired(rs.getBoolean("consent_required"))
-                    .idTokenSignatureAlgorithm(new SignatureAlgorithm(rs.getString("id_token_signature_algorithm")))
+                    .idTokenSignatureAlgorithm(!ObjectUtils.isEmpty(idTokenSignatureAlgorithm) ?
+                            new SignatureAlgorithm(idTokenSignatureAlgorithm) : null)
                     .authorizationCodeExpirationTime(rs.getInt("authorization_code_expiration_time"))
                     .accessTokenExpirationTime(rs.getInt("access_token_expiration_time"))
                     .refreshTokenExpirationTime(rs.getInt("refresh_token_expiration_time"))
