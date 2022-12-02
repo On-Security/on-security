@@ -28,6 +28,7 @@ import java.util.Set;
  * 安全组基本信息
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecurityGroup implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;

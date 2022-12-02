@@ -17,10 +17,10 @@
 
 package org.minbox.framework.on.security.core.authorization.data.session;
 
-import org.minbox.framework.on.security.core.authorization.AuthorizationGrantType;
 import org.minbox.framework.on.security.core.authorization.SessionState;
 import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientScope;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -31,6 +31,7 @@ import java.util.Set;
  * 认证会话
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecuritySession implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;

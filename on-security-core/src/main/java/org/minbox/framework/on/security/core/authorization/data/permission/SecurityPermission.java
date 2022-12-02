@@ -29,6 +29,7 @@ import java.util.Set;
  * 权限基本信息
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecurityPermission implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;

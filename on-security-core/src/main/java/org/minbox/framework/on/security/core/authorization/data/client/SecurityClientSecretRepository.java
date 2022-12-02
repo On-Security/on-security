@@ -17,10 +17,29 @@
 
 package org.minbox.framework.on.security.core.authorization.data.client;
 
+import java.util.List;
+
 /**
  * 客户端秘钥存储库接口
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public interface SecurityClientSecretRepository {
+    /**
+     * 保存客户端秘钥
+     * <p>
+     * 根据{@link SecurityClientSecret#getId()}判定，如果已经存在执行更新，否则执行新增
+     *
+     * @param clientSecret {@link SecurityClientSecret} 对象实例
+     */
+    void save(SecurityClientSecret clientSecret);
+
+    /**
+     * 根据{@link SecurityClient#getId()}查询客户端秘钥列表
+     *
+     * @param clientId 客户端ID {@link SecurityClientSecret#getClientId()}
+     * @return 客户端秘钥对象列表 {@link SecurityClientSecret}
+     */
+    List<SecurityClientSecret> findByClientId(String clientId);
 }

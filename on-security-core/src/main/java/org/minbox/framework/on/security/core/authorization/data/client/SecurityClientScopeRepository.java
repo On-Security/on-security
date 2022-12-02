@@ -17,10 +17,29 @@
 
 package org.minbox.framework.on.security.core.authorization.data.client;
 
+import java.util.List;
+
 /**
  * 客户端范围数据存储库接口
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public interface SecurityClientScopeRepository {
+    /**
+     * 保存客户端范围基本信息
+     * <p>
+     * 新增或更新客户端范围基本信息，根据{@link SecurityClientScope#getId()}查询如果已经存在则执行更新否则执行新增
+     *
+     * @param clientScope {@link SecurityClientScope} 客户端范围实例
+     */
+    void save(SecurityClientScope clientScope);
+
+    /**
+     * 根据{@link SecurityClient#getId()}查询客户端范围列表
+     *
+     * @param clientId 客户端ID {@link SecurityClientScope#getClientId()}
+     * @return 客户端绑定的范围列表 {@link SecurityClientScope}
+     */
+    List<SecurityClientScope> findByClientId(String clientId);
 }

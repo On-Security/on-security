@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
  * 安全组授权客户端存储库JDBC实现类
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class SecurityGroupAuthorizeClientJdbcRepository implements SecurityGroupAuthorizeClientRepository {
     private JdbcOperations jdbcOperations;

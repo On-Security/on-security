@@ -126,6 +126,7 @@ public class SecurityClientScope implements Serializable {
             Assert.hasText(this.clientId, "clientId cannot be empty");
             Assert.hasText(this.scopeName, "scopeName cannot be empty");
             Assert.hasText(this.scopeCode, "scopeCode cannot be empty");
+            Assert.notNull(this.createTime, "createTime cannot be null");
             this.type = ObjectUtils.isEmpty(this.type) ? ClientScopeType.DEFAULT : this.type;
             return this.create();
         }

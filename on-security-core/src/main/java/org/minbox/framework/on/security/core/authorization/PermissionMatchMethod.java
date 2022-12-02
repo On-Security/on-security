@@ -25,6 +25,7 @@ import java.io.Serializable;
  * 权限匹配方式
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class PermissionMatchMethod implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
