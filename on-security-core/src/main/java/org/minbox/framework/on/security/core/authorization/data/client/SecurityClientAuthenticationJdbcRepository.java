@@ -141,14 +141,13 @@ public class SecurityClientAuthenticationJdbcRepository implements SecurityClien
     public static class SecurityClientAuthenticationRowMapper implements RowMapper<SecurityClientAuthentication> {
         @Override
         public SecurityClientAuthentication mapRow(ResultSet rs, int rowNum) throws SQLException {
-            String scopeId = rs.getString("id");
             Set<String> clientAuthenticationMethods = StringUtils.commaDelimitedListToSet(rs.getString("authentication_methods"));
             Set<String> authorizationGrantTypes = StringUtils.commaDelimitedListToSet(rs.getString("authorization_grant_types"));
             String authenticationSigningAlgorithm = rs.getString("authentication_signing_algorithm");
             String idTokenSignatureAlgorithm = rs.getString("id_token_signature_algorithm");
 
             // @formatter:off
-            SecurityClientAuthentication clientAuthentication = SecurityClientAuthentication.withId(scopeId)
+            SecurityClientAuthentication clientAuthentication = SecurityClientAuthentication.withId(rs.getString("id"))
                     .clientId(rs.getString("client_id"))
                     .confidential(rs.getBoolean("confidential"))
                     .jwksUrl(rs.getString("jwks_url"))
