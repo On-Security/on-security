@@ -24,4 +24,11 @@ package org.minbox.framework.on.security.core.authorization.data.role;
  * @since 0.0.1
  */
 public interface SecurityRoleRepository {
+    /**
+     * 根据角色ID查询角色基本信息
+     *
+     * @param id {@link SecurityRole#getId()} 角色ID
+     * @return {@link SecurityRole} 角色基本信息对象实例
+     */
+    SecurityRole findById(String id);
 }

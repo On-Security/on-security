@@ -130,9 +130,8 @@ public class SecurityClientJdbcRepository implements SecurityClientRepository {
     public static class SecurityClientRowMapper implements RowMapper<SecurityClient> {
         @Override
         public SecurityClient mapRow(ResultSet rs, int rowNum) throws SQLException {
-            String scopeId = rs.getString("id");
             // @formatter:off
-            SecurityClient client = SecurityClient.withId(scopeId)
+            SecurityClient client = SecurityClient.withId(rs.getString("id"))
                     .clientId(rs.getString("client_id"))
                     .regionId(rs.getString("region_id"))
                     .protocol(new ClientProtocol(rs.getString("protocol_id")))

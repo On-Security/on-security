@@ -24,4 +24,19 @@ package org.minbox.framework.on.security.core.authorization.data.user;
  * @since 0.0.1
  */
 public interface SecurityUserRepository {
+    /**
+     * 根据用户ID查询用户基本信息
+     *
+     * @param id {@link SecurityUser#getId()} 用户ID
+     * @return {@link SecurityUser}
+     */
+    SecurityUser findById(String id);
+
+    /**
+     * 根据用户名查询用户基本信息
+     *
+     * @param username {@link SecurityUser#getUsername()}
+     * @return {@link SecurityUser}
+     */
+    SecurityUser findByUsername(String username);
 }

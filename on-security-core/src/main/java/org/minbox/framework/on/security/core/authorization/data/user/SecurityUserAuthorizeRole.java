@@ -54,6 +54,11 @@ public class SecurityUserAuthorizeRole implements Serializable {
         return "SecurityUserAuthorizeRole(userId=" + this.userId + ", roleId=" + this.roleId + ", authorizeTime=" + this.authorizeTime + ")";
     }
 
+    public static Builder withUserId(String userId) {
+        Assert.hasText(userId, "userId cannot be empty");
+        return new Builder(userId);
+    }
+
     /**
      * {@link SecurityUserAuthorizeRole} 对象创建者
      */

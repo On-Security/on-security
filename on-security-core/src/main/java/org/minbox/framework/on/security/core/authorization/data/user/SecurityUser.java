@@ -298,6 +298,7 @@ public class SecurityUser implements Serializable {
             user.password = this.password;
             user.email = this.email;
             user.phone = this.phone;
+            user.name = this.name;
             user.nickname = this.nickname;
             user.birthday = this.birthday;
             user.gender = this.gender;
