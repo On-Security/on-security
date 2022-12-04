@@ -18,6 +18,7 @@
 package org.minbox.framework.on.security.core.authorization.data.session;
 
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.util.Assert;
 
 /**
@@ -32,5 +33,25 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
     public SecuritySessionJdbcRepository(JdbcOperations jdbcOperations) {
         Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
         this.jdbcOperations = jdbcOperations;
+    }
+
+    @Override
+    public void save(SecuritySession session) {
+
+    }
+
+    @Override
+    public void remove(SecuritySession session) {
+
+    }
+
+    @Override
+    public SecuritySession findById(String id) {
+        return null;
+    }
+
+    @Override
+    public SecuritySession findByToken(String token, OAuth2TokenType tokenType) {
+        return null;
     }
 }

@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.session;
 
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
+
 /**
  * 会话数据存储库
  *
@@ -24,4 +26,36 @@ package org.minbox.framework.on.security.core.authorization.data.session;
  * @since 0.0.1
  */
 public interface SecuritySessionRepository {
+    /**
+     * 保存会话
+     * <p>
+     * 新增或更新会话基本信息，根据{@link SecuritySession#getId()}查询如果已经存在则执行更新否则执行新增
+     *
+     * @param session 会话实例 {@link SecuritySession}
+     */
+    void save(SecuritySession session);
+
+    /**
+     * 删除会话
+     *
+     * @param session 会话实例 {@link SecuritySession}
+     */
+    void remove(SecuritySession session);
+
+    /**
+     * 根据会话ID查询
+     *
+     * @param id 会话ID {@link SecuritySession#getId()}
+     * @return 会话实例 {@link SecuritySession}
+     */
+    SecuritySession findById(String id);
+
+    /**
+     * 根据会话令牌查询
+     *
+     * @param token     令牌内容
+     * @param tokenType 令牌类型 {@link OAuth2TokenType}
+     * @return {@link SecuritySession}
+     */
+    SecuritySession findByToken(String token, OAuth2TokenType tokenType);
 }
