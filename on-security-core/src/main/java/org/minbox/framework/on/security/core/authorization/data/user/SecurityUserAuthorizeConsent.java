@@ -22,6 +22,7 @@ import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * 用户授权许可关系
@@ -32,8 +33,9 @@ import java.time.LocalDateTime;
 public class SecurityUserAuthorizeConsent implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private String userId;
+    private String username;
     private String clientId;
-    private String scopeId;
+    private Set<String> authorities;
     private LocalDateTime authorizeTime;
 
     protected SecurityUserAuthorizeConsent() {
@@ -43,12 +45,16 @@ public class SecurityUserAuthorizeConsent implements Serializable {
         return userId;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public String getClientId() {
         return clientId;
     }
 
-    public String getScopeId() {
-        return scopeId;
+    public Set<String> getAuthorities() {
+        return authorities;
     }
 
     public LocalDateTime getAuthorizeTime() {
@@ -62,8 +68,8 @@ public class SecurityUserAuthorizeConsent implements Serializable {
 
     public String toString() {
         // @formatter:off
-        return "SecurityUserAuthorizeConsent(userId=" + this.userId + ", clientId=" + this.clientId + ", scopeId=" +
-                this.scopeId + ", authorizeTime=" + this.authorizeTime + ")";
+        return "SecurityUserAuthorizeConsent(userId=" + this.userId + ", clientId=" + this.clientId + ", authorities=" +
+                this.authorities + ", authorizeTime=" + this.authorizeTime + ")";
         // @formatter:on
     }
 
@@ -73,8 +79,9 @@ public class SecurityUserAuthorizeConsent implements Serializable {
     public static class Builder implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String userId;
+        private String username;
         private String clientId;
-        private String scopeId;
+        private Set<String> authorities;
         private LocalDateTime authorizeTime;
 
         protected Builder(String userId) {
@@ -86,8 +93,13 @@ public class SecurityUserAuthorizeConsent implements Serializable {
             return this;
         }
 
-        public Builder scopeId(String scopeId) {
-            this.scopeId = scopeId;
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder authorities(Set<String> authorities) {
+            this.authorities = authorities;
             return this;
         }
 
@@ -97,8 +109,9 @@ public class SecurityUserAuthorizeConsent implements Serializable {
         }
 
         public SecurityUserAuthorizeConsent build() {
+            Assert.hasText(this.username, "username cannot be empty");
             Assert.hasText(this.clientId, "clientId cannot be empty");
-            Assert.hasText(this.scopeId, "scopeId cannot be empty");
+            Assert.notEmpty(this.authorities, "authorities cannot be empty");
             Assert.notNull(this.authorizeTime, "authorizeTime cannot be null");
             return this.create();
         }
@@ -106,16 +119,17 @@ public class SecurityUserAuthorizeConsent implements Serializable {
         private SecurityUserAuthorizeConsent create() {
             SecurityUserAuthorizeConsent userAuthorizeConsent = new SecurityUserAuthorizeConsent();
             userAuthorizeConsent.userId = this.userId;
+            userAuthorizeConsent.username = this.username;
             userAuthorizeConsent.clientId = this.clientId;
-            userAuthorizeConsent.scopeId = this.scopeId;
+            userAuthorizeConsent.authorities = this.authorities;
             userAuthorizeConsent.authorizeTime = this.authorizeTime;
             return userAuthorizeConsent;
         }
 
         public String toString() {
             // @formatter:off
-            return "SecurityUserAuthorizeConsent.Builder(userId=" + this.userId + ", clientId=" + this.clientId +
-                    ", scopeId=" + this.scopeId + ", authorizeTime=" + this.authorizeTime + ")";
+            return "SecurityUserAuthorizeConsent.Builder(userId=" + this.userId + "username="+this.username+", clientId=" + this.clientId +
+                    ", authorities=" + this.authorities + ", authorizeTime=" + this.authorizeTime + ")";
             // @formatter:on
         }
     }

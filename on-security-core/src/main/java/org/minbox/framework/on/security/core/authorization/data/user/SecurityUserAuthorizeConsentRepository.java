@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.user;
 
+import org.minbox.framework.on.security.core.authorization.data.client.SecurityClient;
+
 /**
  * 用户授权许可数据存储库
  *
@@ -24,4 +26,30 @@ package org.minbox.framework.on.security.core.authorization.data.user;
  * @since 0.0.1
  */
 public interface SecurityUserAuthorizeConsentRepository {
+    /**
+     * 保存授权许可信息
+     * <p>
+     * 根据{@link SecurityUserAuthorizeConsent#getClientId()}以及{@link SecurityUserAuthorizeConsent#getUserId()}判定是否存在
+     * 如果已经存在则更新{@link SecurityUserAuthorizeConsent#getAuthorities()}，否则执行新增
+     *
+     * @param userAuthorizeConsent 授权许可对象实例 {@link SecurityUserAuthorizeConsent}
+     */
+    void save(SecurityUserAuthorizeConsent userAuthorizeConsent);
+
+    /**
+     * 删除授权许可
+     *
+     * @param securityClientId 客户端ID {@link SecurityClient#getId()}
+     * @param securityUserId   用户ID {@link SecurityUser#getId()}
+     */
+    void remove(String securityUserId, String securityClientId);
+
+    /**
+     * 查询授权许可
+     *
+     * @param securityClientId 客户端ID {@link SecurityClient#getId()}
+     * @param securityUserId   用户ID {@link SecurityUser#getId()}
+     * @return 用户授权许可对象实例 {@link SecurityUserAuthorizeConsent}
+     */
+    SecurityUserAuthorizeConsent findByUserIdAndClientId(String securityUserId, String securityClientId);
 }

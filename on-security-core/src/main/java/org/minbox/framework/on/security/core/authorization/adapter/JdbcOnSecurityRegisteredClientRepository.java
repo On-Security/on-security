@@ -46,7 +46,7 @@ import java.util.List;
  * @see JdbcOperations
  * @since 0.0.1
  */
-public final class OnSecurityRegisteredClientJdbcRepository implements RegisteredClientRepository {
+public final class JdbcOnSecurityRegisteredClientRepository implements RegisteredClientRepository {
     private static final String DEFAULT_SECURITY_REGION_ID = "default";
     private DataSourceTransactionManager dataSourceTransactionManager;
     private Converter<RegisteredClient, SecurityClient> registeredToSecurityClientConverter;
@@ -57,7 +57,7 @@ public final class OnSecurityRegisteredClientJdbcRepository implements Registere
     private SecurityClientRedirectUriRepository clientRedirectUriRepository;
     private SecurityClientAuthenticationRepository clientAuthenticationRepository;
 
-    public OnSecurityRegisteredClientJdbcRepository(JdbcOperations jdbcOperations, DataSourceTransactionManager dataSourceTransactionManager) {
+    public JdbcOnSecurityRegisteredClientRepository(JdbcOperations jdbcOperations, DataSourceTransactionManager dataSourceTransactionManager) {
         Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
         Assert.notNull(dataSourceTransactionManager, "dataSourceTransactionManager cannot be null");
         this.dataSourceTransactionManager = dataSourceTransactionManager;
