@@ -17,6 +17,7 @@
 
 package org.minbox.framework.on.security.core.authorization.data.session.converter;
 
+import org.minbox.framework.on.security.core.authorization.AccessTokenType;
 import org.minbox.framework.on.security.core.authorization.data.session.SecuritySession;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
@@ -65,7 +66,7 @@ public final class OAuth2AuthorizationToSecuritySessionConverter implements Conv
             OAuth2AccessToken accessToken = authorizationAccessToken.getToken();
             // @formatter:off
             builder.accessTokenValue(accessToken.getTokenValue())
-                    .accessTokenType(accessToken.getTokenType())
+                    .accessTokenType(new AccessTokenType(accessToken.getTokenType().getValue()))
                     .accessTokenIssuedAt(LocalDateTime.ofInstant(accessToken.getIssuedAt(), ZoneId.systemDefault()))
                     .accessTokenExpiresAt(LocalDateTime.ofInstant(accessToken.getExpiresAt(), ZoneId.systemDefault()))
                     .accessTokenMetadata(authorizationAccessToken.getMetadata());

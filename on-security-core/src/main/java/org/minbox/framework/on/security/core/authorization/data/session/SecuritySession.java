@@ -17,10 +17,10 @@
 
 package org.minbox.framework.on.security.core.authorization.data.session;
 
+import org.minbox.framework.on.security.core.authorization.AccessTokenType;
 import org.minbox.framework.on.security.core.authorization.SessionState;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -56,7 +56,7 @@ public class SecuritySession implements Serializable {
     private LocalDateTime accessTokenIssuedAt;
     private LocalDateTime accessTokenExpiresAt;
     private Map<String, Object> accessTokenMetadata;
-    private OAuth2AccessToken.TokenType accessTokenType;
+    private AccessTokenType accessTokenType;
     private Set<String> accessTokenScopes;
     private String oidcIdTokenValue;
     private LocalDateTime oidcIdTokenIssuedAt;
@@ -139,7 +139,7 @@ public class SecuritySession implements Serializable {
         return accessTokenMetadata;
     }
 
-    public OAuth2AccessToken.TokenType getAccessTokenType() {
+    public AccessTokenType getAccessTokenType() {
         return accessTokenType;
     }
 
@@ -233,7 +233,7 @@ public class SecuritySession implements Serializable {
         private LocalDateTime accessTokenIssuedAt;
         private LocalDateTime accessTokenExpiresAt;
         private Map<String, Object> accessTokenMetadata;
-        private OAuth2AccessToken.TokenType accessTokenType;
+        private AccessTokenType accessTokenType;
         private Set<String> accessTokenScopes;
         private String oidcIdTokenValue;
         private LocalDateTime oidcIdTokenIssuedAt;
@@ -365,7 +365,7 @@ public class SecuritySession implements Serializable {
             return this;
         }
 
-        public Builder accessTokenType(OAuth2AccessToken.TokenType accessTokenType) {
+        public Builder accessTokenType(AccessTokenType accessTokenType) {
             this.accessTokenType = accessTokenType;
             return this;
         }

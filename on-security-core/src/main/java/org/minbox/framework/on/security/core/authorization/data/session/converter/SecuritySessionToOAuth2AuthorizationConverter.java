@@ -67,7 +67,7 @@ public class SecuritySessionToOAuth2AuthorizationConverter implements Converter<
         if (!ObjectUtils.isEmpty(session.getAccessTokenValue())) {
             // @formatter:off
             OAuth2AccessToken accessToken = new OAuth2AccessToken(
-                    session.getAccessTokenType(),
+                    OAuth2AccessToken.TokenType.BEARER,
                     session.getAccessTokenValue(),
                     session.getAccessTokenIssuedAt().atZone(ZoneId.systemDefault()).toInstant(),
                     session.getAccessTokenExpiresAt().atZone(ZoneId.systemDefault()).toInstant(),
