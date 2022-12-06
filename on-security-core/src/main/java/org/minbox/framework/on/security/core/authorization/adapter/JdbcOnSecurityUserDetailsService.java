@@ -39,12 +39,12 @@ import java.util.stream.Collectors;
  * @see org.springframework.jdbc.core.JdbcOperations
  * @since 0.0.1
  */
-public final class OnSecurityUserDetailsJdbcService implements UserDetailsService {
+public final class JdbcOnSecurityUserDetailsService implements UserDetailsService {
     private SecurityUserRepository userRepository;
     private SecurityUserAuthorizeRoleRepository userAuthorizeRoleRepository;
     private SecurityRoleRepository roleRepository;
 
-    public OnSecurityUserDetailsJdbcService(JdbcOperations jdbcOperations) {
+    public JdbcOnSecurityUserDetailsService(JdbcOperations jdbcOperations) {
         this.userRepository = new SecurityUserJdbcRepository(jdbcOperations);
         this.userAuthorizeRoleRepository = new SecurityUserAuthorizeRoleJdbcRepository(jdbcOperations);
         this.roleRepository = new SecurityRoleJdbcRepository(jdbcOperations);

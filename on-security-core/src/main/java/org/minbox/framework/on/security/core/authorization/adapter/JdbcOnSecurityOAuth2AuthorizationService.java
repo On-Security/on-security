@@ -43,14 +43,14 @@ import org.springframework.util.Assert;
  * @see OAuth2Authorization
  * @since 0.0.1
  */
-public class OnSecurityOAuth2AuthorizationJdbcService implements OAuth2AuthorizationService {
+public class JdbcOnSecurityOAuth2AuthorizationService implements OAuth2AuthorizationService {
     private Converter<OAuth2Authorization, SecuritySession> oAuth2AuthorizationToSecuritySessionConverter;
     private Converter<SecuritySession, OAuth2Authorization> securitySessionToOAuth2AuthorizationConverter;
     private SecuritySessionRepository sessionRepository;
     private SecurityClientRepository clientRepository;
     private SecurityUserRepository userRepository;
 
-    public OnSecurityOAuth2AuthorizationJdbcService(JdbcOperations jdbcOperations) {
+    public JdbcOnSecurityOAuth2AuthorizationService(JdbcOperations jdbcOperations) {
         this.oAuth2AuthorizationToSecuritySessionConverter = new OAuth2AuthorizationToSecuritySessionConverter();
         this.securitySessionToOAuth2AuthorizationConverter = new SecuritySessionToOAuth2AuthorizationConverter();
         this.sessionRepository = new SecuritySessionJdbcRepository(jdbcOperations);
