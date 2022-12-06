@@ -18,14 +18,22 @@
 package org.minbox.framework.on.security.core.authorization.data.session.converter;
 
 import org.minbox.framework.on.security.core.authorization.AccessTokenType;
+import org.minbox.framework.on.security.core.authorization.SessionState;
+import org.minbox.framework.on.security.core.authorization.data.client.SecurityClient;
+import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientRepository;
 import org.minbox.framework.on.security.core.authorization.data.session.SecuritySession;
+import org.minbox.framework.on.security.core.authorization.data.user.SecurityUser;
+import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserRepository;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
+import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationCode;
+import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -39,16 +47,42 @@ import java.time.ZoneId;
  * @since 0.0.1
  */
 public final class OAuth2AuthorizationToSecuritySessionConverter implements Converter<OAuth2Authorization, SecuritySession> {
+    private SecurityClientRepository clientRepository;
+    private SecurityUserRepository userRepository;
+
+    public OAuth2AuthorizationToSecuritySessionConverter(SecurityClientRepository clientRepository, SecurityUserRepository userRepository) {
+        this.clientRepository = clientRepository;
+        this.userRepository = userRepository;
+    }
+
     @Override
     public SecuritySession convert(OAuth2Authorization authorization) {
+        // Load security client
+        SecurityClient securityClient = clientRepository.findById(authorization.getRegisteredClientId());
+        Assert.notNull(securityClient, "Client ID: " + authorization.getRegisteredClientId() + ", no data retrieved");
+
+        // Load security user
+        SecurityUser securityUser = userRepository.findByUsername(authorization.getPrincipalName());
+        Assert.notNull(securityUser, "Username: " + authorization.getPrincipalName() + ", no data retrieved");
+
         String authorizationId = authorization.getId();
         // @formatter:off
         SecuritySession.Builder builder = SecuritySession.withId(authorizationId)
+                .regionId(securityClient.getRegionId())
+                .clientId(securityClient.getId())
+                .userId(securityUser.getId())
+                .sessionState(SessionState.NORMAL)
                 .username(authorization.getPrincipalName())
                 .attributes(authorization.getAttributes())
                 .authorizationGrantType(authorization.getAuthorizationGrantType())
                 .authorizationScopes(authorization.getAuthorizedScopes());
         // @formatter:on
+
+        String authorizationState = authorization.getAttribute(OAuth2ParameterNames.STATE);
+        if (StringUtils.hasText(authorizationState)) {
+            builder.state(authorizationState);
+        }
+
         // Convert OAuth2AuthorizationCode
         OAuth2Authorization.Token<OAuth2AuthorizationCode> authorizationCodeToken = authorization.getToken(OAuth2AuthorizationCode.class);
         if (!ObjectUtils.isEmpty(authorizationCodeToken)) {

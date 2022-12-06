@@ -17,24 +17,24 @@
 
 package org.minbox.framework.on.security.core.authorization.adapter;
 
-import org.minbox.framework.on.security.core.authorization.SessionState;
-import org.minbox.framework.on.security.core.authorization.data.client.SecurityClient;
-import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientJdbcRepository;
-import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientRepository;
+import org.minbox.framework.on.security.core.authorization.data.client.*;
 import org.minbox.framework.on.security.core.authorization.data.session.SecuritySession;
 import org.minbox.framework.on.security.core.authorization.data.session.SecuritySessionJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.session.SecuritySessionRepository;
 import org.minbox.framework.on.security.core.authorization.data.session.converter.OAuth2AuthorizationToSecuritySessionConverter;
 import org.minbox.framework.on.security.core.authorization.data.session.converter.SecuritySessionToOAuth2AuthorizationConverter;
-import org.minbox.framework.on.security.core.authorization.data.user.SecurityUser;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserRepository;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.util.Assert;
+
+import java.time.LocalDateTime;
 
 /**
  * On-Security提供的{@link OAuth2AuthorizationService}JDBC数据存储实现类
@@ -48,42 +48,55 @@ public class JdbcOnSecurityOAuth2AuthorizationService implements OAuth2Authoriza
     private Converter<SecuritySession, OAuth2Authorization> securitySessionToOAuth2AuthorizationConverter;
     private SecuritySessionRepository sessionRepository;
     private SecurityClientRepository clientRepository;
+    private SecurityClientAuthenticationRepository clientAuthenticationRepository;
     private SecurityUserRepository userRepository;
 
-    public JdbcOnSecurityOAuth2AuthorizationService(JdbcOperations jdbcOperations) {
-        this.oAuth2AuthorizationToSecuritySessionConverter = new OAuth2AuthorizationToSecuritySessionConverter();
-        this.securitySessionToOAuth2AuthorizationConverter = new SecuritySessionToOAuth2AuthorizationConverter();
+    public JdbcOnSecurityOAuth2AuthorizationService(JdbcOperations jdbcOperations, RegisteredClientRepository registeredClientRepository) {
         this.sessionRepository = new SecuritySessionJdbcRepository(jdbcOperations);
         this.clientRepository = new SecurityClientJdbcRepository(jdbcOperations);
+        this.clientAuthenticationRepository = new SecurityClientAuthenticationJdbcRepository(jdbcOperations);
         this.userRepository = new SecurityUserJdbcRepository(jdbcOperations);
+        this.securitySessionToOAuth2AuthorizationConverter =
+                new SecuritySessionToOAuth2AuthorizationConverter(registeredClientRepository);
+        this.oAuth2AuthorizationToSecuritySessionConverter =
+                new OAuth2AuthorizationToSecuritySessionConverter(clientRepository, userRepository);
     }
 
     @Override
     public void save(OAuth2Authorization authorization) {
-        // Load security client
-        SecurityClient securityClient = clientRepository.findById(authorization.getRegisteredClientId());
-        Assert.notNull(securityClient, "Client ID: " + authorization.getRegisteredClientId() + ", no data retrieved");
-
-        // Load security user
-        SecurityUser securityUser = userRepository.findByUsername(authorization.getPrincipalName());
-        Assert.notNull(securityUser, "Username: " + authorization.getPrincipalName() + ", no data retrieved");
-
         SecuritySession securitySession = oAuth2AuthorizationToSecuritySessionConverter.convert(authorization);
         SecuritySession.Builder builder = SecuritySession.with(securitySession);
-        // @formatter:off
-        builder.regionId(securityClient.getRegionId())
-                .clientId(securityClient.getId())
-                .userId(securityUser.getId())
-                .state(SessionState.NORMAL);
-        // @formatter:on
+        SecurityClientAuthentication clientAuthentication = clientAuthenticationRepository.findByClientId(securitySession.getClientId());
+        LocalDateTime issuedAt = LocalDateTime.now();
+        // set access token expire time
+        // authorization_code || password || client_credentials
+        if (AuthorizationGrantType.AUTHORIZATION_CODE == authorization.getAuthorizationGrantType() ||
+                AuthorizationGrantType.PASSWORD == authorization.getAuthorizationGrantType() ||
+                AuthorizationGrantType.CLIENT_CREDENTIALS == authorization.getAuthorizationGrantType()) {
+            builder.accessTokenIssuedAt(issuedAt)
+                    .accessTokenExpiresAt(issuedAt.plusSeconds(clientAuthentication.getAccessTokenExpirationTime()));
+        }
+        // set oidc id token expire time
+        builder.oidcIdTokenIssuedAt(issuedAt)
+                .oidcIdTokenExpiresAt(issuedAt.plusSeconds(clientAuthentication.getAccessTokenExpirationTime()));
 
-        sessionRepository.save(builder.build());
+        // authorization_code
+        if (AuthorizationGrantType.AUTHORIZATION_CODE == authorization.getAuthorizationGrantType()) {
+            builder.authorizationCodeIssuedAt(issuedAt)
+                    .authorizationCodeExpiresAt(issuedAt.plusSeconds(clientAuthentication.getAuthorizationCodeExpirationTime()));
+        }
+        // refresh_token
+        else if (AuthorizationGrantType.REFRESH_TOKEN == authorization.getAuthorizationGrantType()) {
+            builder.refreshTokenIssuedAt(issuedAt)
+                    .refreshTokenExpiresAt(issuedAt.plusSeconds(clientAuthentication.getRefreshTokenExpirationTime()));
+        }
+        SecuritySession session = builder.build();
+        sessionRepository.save(session);
     }
 
     @Override
     public void remove(OAuth2Authorization authorization) {
-        SecuritySession securitySession = oAuth2AuthorizationToSecuritySessionConverter.convert(authorization);
-        sessionRepository.remove(securitySession);
+        sessionRepository.removeById(authorization.getId());
     }
 
     @Override

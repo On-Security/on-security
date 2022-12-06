@@ -25,6 +25,7 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationCode;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
@@ -40,11 +41,18 @@ import java.util.Map;
  * @since
  */
 public class SecuritySessionToOAuth2AuthorizationConverter implements Converter<SecuritySession, OAuth2Authorization> {
+    private RegisteredClientRepository registeredClientRepository;
+
+    public SecuritySessionToOAuth2AuthorizationConverter(RegisteredClientRepository registeredClientRepository) {
+        this.registeredClientRepository = registeredClientRepository;
+    }
+
     @Override
     public OAuth2Authorization convert(SecuritySession session) {
+        RegisteredClient registeredClient = registeredClientRepository.findById(session.getClientId());
         // @formatter:off
         OAuth2Authorization.Builder builder = OAuth2Authorization
-                .withRegisteredClient(RegisteredClient.withId(session.getClientId()).build())
+                .withRegisteredClient(registeredClient)
                 .id(session.getId())
                 .principalName(session.getUsername())
                 .authorizationGrantType(session.getAuthorizationGrantType())
@@ -53,14 +61,16 @@ public class SecuritySessionToOAuth2AuthorizationConverter implements Converter<
         // @formatter:on
 
         // Convert OAuth2AuthorizationCode
-        OAuth2AuthorizationCode auth2AuthorizationCode = new OAuth2AuthorizationCode(
-                session.getAuthorizationCodeValue(),
-                session.getAuthorizationCodeIssuedAt().atZone(ZoneId.systemDefault()).toInstant(),
-                session.getAuthorizationCodeExpiresAt().atZone(ZoneId.systemDefault()).toInstant());
-        if (!ObjectUtils.isEmpty(session.getAuthorizationCodeMetadata())) {
-            builder.token(auth2AuthorizationCode, (metadata) -> metadata.putAll(session.getAuthorizationCodeMetadata()));
-        } else {
-            builder.token(auth2AuthorizationCode);
+        if (!ObjectUtils.isEmpty(session.getAuthorizationCodeValue())) {
+            OAuth2AuthorizationCode auth2AuthorizationCode = new OAuth2AuthorizationCode(
+                    session.getAuthorizationCodeValue(),
+                    session.getAuthorizationCodeIssuedAt().atZone(ZoneId.systemDefault()).toInstant(),
+                    session.getAuthorizationCodeExpiresAt().atZone(ZoneId.systemDefault()).toInstant());
+            if (!ObjectUtils.isEmpty(session.getAuthorizationCodeMetadata())) {
+                builder.token(auth2AuthorizationCode, (metadata) -> metadata.putAll(session.getAuthorizationCodeMetadata()));
+            } else {
+                builder.token(auth2AuthorizationCode);
+            }
         }
 
         // Convert OAuth2AccessToken

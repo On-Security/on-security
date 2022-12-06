@@ -79,6 +79,7 @@ public class JdbcOnSecurityOAuth2AuthorizationConsentService implements OAuth2Au
         Assert.notNull(securityUser, "Based on username: " + principalName + ", no user was retrieved.");
         SecurityUserAuthorizeConsent userAuthorizeConsent =
                 userAuthorizeConsentRepository.findByUserIdAndClientId(securityUser.getId(), registeredClientId);
-        return userAuthorizeConsentToAuthorizationConsentConverter.convert(userAuthorizeConsent);
+        return userAuthorizeConsent != null ? userAuthorizeConsentToAuthorizationConsentConverter.convert(userAuthorizeConsent)
+                : null;
     }
 }

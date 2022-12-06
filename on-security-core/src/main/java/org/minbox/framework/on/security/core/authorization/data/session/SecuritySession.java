@@ -44,7 +44,8 @@ public class SecuritySession implements Serializable {
     private String clientId;
     private String userId;
     private String username;
-    private SessionState state;
+    private String state;
+    private SessionState sessionState;
     private Map<String, Object> attributes;
     private AuthorizationGrantType authorizationGrantType;
     private Set<String> authorizationScopes;
@@ -91,8 +92,12 @@ public class SecuritySession implements Serializable {
         return username;
     }
 
-    public SessionState getState() {
+    public String getState() {
         return state;
+    }
+
+    public SessionState getSessionState() {
+        return sessionState;
     }
 
     public Map<String, Object> getAttributes() {
@@ -221,7 +226,8 @@ public class SecuritySession implements Serializable {
         private String clientId;
         private String userId;
         private String username;
-        private SessionState state;
+        private SessionState sessionState;
+        private String state;
         private Map<String, Object> attributes;
         private AuthorizationGrantType authorizationGrantType;
         private Set<String> authorizationScopes;
@@ -255,6 +261,7 @@ public class SecuritySession implements Serializable {
             this.clientId = session.clientId;
             this.userId = session.userId;
             this.username = session.username;
+            this.sessionState = session.sessionState;
             this.state = session.state;
             this.attributes = session.attributes;
             this.authorizationGrantType = session.authorizationGrantType;
@@ -305,7 +312,12 @@ public class SecuritySession implements Serializable {
             return this;
         }
 
-        public Builder state(SessionState state) {
+        public Builder sessionState(SessionState sessionState) {
+            this.sessionState = sessionState;
+            return this;
+        }
+
+        public Builder state(String state) {
             this.state = state;
             return this;
         }
@@ -428,7 +440,9 @@ public class SecuritySession implements Serializable {
             Assert.hasText(this.username, "username cannot be empty");
             Assert.notNull(this.state, "state cannot be null");
             Assert.notNull(this.authorizationGrantType, "authorizationGrantType cannot be empty");
-            Assert.notNull(this.createTime, "createTime cannot be null");
+            if (this.createTime == null) {
+                this.createTime = LocalDateTime.now();
+            }
             return this.create();
         }
 
@@ -440,6 +454,7 @@ public class SecuritySession implements Serializable {
             session.userId = this.userId;
             session.username = this.username;
             session.state = this.state;
+            session.sessionState = this.sessionState;
             session.attributes = this.attributes;
             session.authorizationGrantType = this.authorizationGrantType;
             session.authorizationScopes = this.authorizationScopes;
