@@ -17,18 +17,21 @@
 
 package org.minbox.framework.on.security.core.authorization.data.session;
 
+import org.minbox.framework.on.security.core.authorization.AccessTokenType;
 import org.minbox.framework.on.security.core.authorization.SessionState;
-import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientScope;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * 认证会话
+ * <p>
+ * 存储每次授权的会话详细信息
  *
  * @author 恒宇少年
  * @since 0.0.1
@@ -40,28 +43,29 @@ public class SecuritySession implements Serializable {
     private String regionId;
     private String clientId;
     private String userId;
+    private String username;
     private SessionState state;
-    private String attributes;
-    private Set<AuthorizationGrantType> grantTypes;
-    private Set<SecurityClientScope> authorizationScopes;
+    private Map<String, Object> attributes;
+    private AuthorizationGrantType authorizationGrantType;
+    private Set<String> authorizationScopes;
     private String authorizationCodeValue;
     private LocalDateTime authorizationCodeIssuedAt;
     private LocalDateTime authorizationCodeExpiresAt;
-    private String authorizationCodeMetadata;
+    private Map<String, Object> authorizationCodeMetadata;
     private String accessTokenValue;
     private LocalDateTime accessTokenIssuedAt;
     private LocalDateTime accessTokenExpiresAt;
-    private String accessTokenMetadata;
-    private String accessTokenType;
-    private Set<SecurityClientScope> accessTokenScopes;
+    private Map<String, Object> accessTokenMetadata;
+    private AccessTokenType accessTokenType;
+    private Set<String> accessTokenScopes;
     private String oidcIdTokenValue;
     private LocalDateTime oidcIdTokenIssuedAt;
     private LocalDateTime oidcIdTokenExpiresAt;
-    private String oidcIdTokenMetadata;
+    private Map<String, Object> oidcIdTokenMetadata;
     private String refreshTokenValue;
     private LocalDateTime refreshTokenIssuedAt;
     private LocalDateTime refreshTokenExpiresAt;
-    private String refreshTokenMetadata;
+    private Map<String, Object> refreshTokenMetadata;
     private LocalDateTime createTime;
 
     protected SecuritySession() {
@@ -83,19 +87,23 @@ public class SecuritySession implements Serializable {
         return userId;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public SessionState getState() {
         return state;
     }
 
-    public String getAttributes() {
+    public Map<String, Object> getAttributes() {
         return attributes;
     }
 
-    public Set<AuthorizationGrantType> getGrantTypes() {
-        return grantTypes;
+    public AuthorizationGrantType getAuthorizationGrantType() {
+        return authorizationGrantType;
     }
 
-    public Set<SecurityClientScope> getAuthorizationScopes() {
+    public Set<String> getAuthorizationScopes() {
         return authorizationScopes;
     }
 
@@ -111,7 +119,7 @@ public class SecuritySession implements Serializable {
         return authorizationCodeExpiresAt;
     }
 
-    public String getAuthorizationCodeMetadata() {
+    public Map<String, Object> getAuthorizationCodeMetadata() {
         return authorizationCodeMetadata;
     }
 
@@ -127,15 +135,15 @@ public class SecuritySession implements Serializable {
         return accessTokenExpiresAt;
     }
 
-    public String getAccessTokenMetadata() {
+    public Map<String, Object> getAccessTokenMetadata() {
         return accessTokenMetadata;
     }
 
-    public String getAccessTokenType() {
+    public AccessTokenType getAccessTokenType() {
         return accessTokenType;
     }
 
-    public Set<SecurityClientScope> getAccessTokenScopes() {
+    public Set<String> getAccessTokenScopes() {
         return accessTokenScopes;
     }
 
@@ -151,7 +159,7 @@ public class SecuritySession implements Serializable {
         return oidcIdTokenExpiresAt;
     }
 
-    public String getOidcIdTokenMetadata() {
+    public Map<String, Object> getOidcIdTokenMetadata() {
         return oidcIdTokenMetadata;
     }
 
@@ -167,7 +175,7 @@ public class SecuritySession implements Serializable {
         return refreshTokenExpiresAt;
     }
 
-    public String getRefreshTokenMetadata() {
+    public Map<String, Object> getRefreshTokenMetadata() {
         return refreshTokenMetadata;
     }
 
@@ -180,11 +188,16 @@ public class SecuritySession implements Serializable {
         return new Builder(id);
     }
 
+    public static Builder with(SecuritySession session) {
+        Assert.notNull(session, "session cannot be null");
+        return new Builder(session);
+    }
+
     public String toString() {
         // @formatter:off
         return "SecuritySession(id=" + this.id + ", regionId=" + this.regionId + ", clientId=" + this.clientId +
-                ", userId=" + this.userId + ", state=" + this.state + ", attributes=" + this.attributes +
-                ", grantTypes=" + this.grantTypes + ", authorizationScopes=" + this.authorizationScopes +
+                ", userId=" + this.userId + ", username=" + this.username + ", state=" + this.state + ", attributes=" + this.attributes +
+                ", grantTypes=" + this.authorizationGrantType + ", authorizationScopes=" + this.authorizationScopes +
                 ", authorizationCodeValue=" + this.authorizationCodeValue + ", authorizationCodeIssuedAt=" +
                 this.authorizationCodeIssuedAt + ", authorizationCodeExpiresAt=" + this.authorizationCodeExpiresAt +
                 ", authorizationCodeMetadata=" + this.authorizationCodeMetadata + ", accessTokenValue=" + this.accessTokenValue +
@@ -207,32 +220,69 @@ public class SecuritySession implements Serializable {
         private String regionId;
         private String clientId;
         private String userId;
+        private String username;
         private SessionState state;
-        private String attributes;
-        private Set<AuthorizationGrantType> grantTypes;
-        private Set<SecurityClientScope> authorizationScopes;
+        private Map<String, Object> attributes;
+        private AuthorizationGrantType authorizationGrantType;
+        private Set<String> authorizationScopes;
         private String authorizationCodeValue;
         private LocalDateTime authorizationCodeIssuedAt;
         private LocalDateTime authorizationCodeExpiresAt;
-        private String authorizationCodeMetadata;
+        private Map<String, Object> authorizationCodeMetadata;
         private String accessTokenValue;
         private LocalDateTime accessTokenIssuedAt;
         private LocalDateTime accessTokenExpiresAt;
-        private String accessTokenMetadata;
-        private String accessTokenType;
-        private Set<SecurityClientScope> accessTokenScopes;
+        private Map<String, Object> accessTokenMetadata;
+        private AccessTokenType accessTokenType;
+        private Set<String> accessTokenScopes;
         private String oidcIdTokenValue;
         private LocalDateTime oidcIdTokenIssuedAt;
         private LocalDateTime oidcIdTokenExpiresAt;
-        private String oidcIdTokenMetadata;
+        private Map<String, Object> oidcIdTokenMetadata;
         private String refreshTokenValue;
         private LocalDateTime refreshTokenIssuedAt;
         private LocalDateTime refreshTokenExpiresAt;
-        private String refreshTokenMetadata;
+        private Map<String, Object> refreshTokenMetadata;
         private LocalDateTime createTime;
 
         protected Builder(String id) {
             this.id = id;
+        }
+
+        protected Builder(SecuritySession session) {
+            this.id = session.id;
+            this.regionId = session.regionId;
+            this.clientId = session.clientId;
+            this.userId = session.userId;
+            this.username = session.username;
+            this.state = session.state;
+            this.attributes = session.attributes;
+            this.authorizationGrantType = session.authorizationGrantType;
+            this.authorizationScopes = session.authorizationScopes;
+            this.authorizationCodeValue = session.authorizationCodeValue;
+            this.authorizationCodeIssuedAt = session.authorizationCodeIssuedAt;
+            this.authorizationCodeExpiresAt = session.authorizationCodeExpiresAt;
+            this.authorizationCodeMetadata = session.authorizationCodeMetadata;
+            this.accessTokenValue = session.accessTokenValue;
+            this.accessTokenIssuedAt = session.accessTokenIssuedAt;
+            this.accessTokenExpiresAt = session.accessTokenExpiresAt;
+            this.accessTokenMetadata = session.accessTokenMetadata;
+            this.accessTokenType = session.accessTokenType;
+            this.accessTokenScopes = session.accessTokenScopes;
+            this.oidcIdTokenValue = session.oidcIdTokenValue;
+            this.oidcIdTokenIssuedAt = session.oidcIdTokenIssuedAt;
+            this.oidcIdTokenExpiresAt = session.oidcIdTokenExpiresAt;
+            this.oidcIdTokenMetadata = session.oidcIdTokenMetadata;
+            this.refreshTokenValue = session.refreshTokenValue;
+            this.refreshTokenIssuedAt = session.refreshTokenIssuedAt;
+            this.refreshTokenExpiresAt = session.refreshTokenExpiresAt;
+            this.refreshTokenMetadata = session.refreshTokenMetadata;
+            this.createTime = session.createTime;
+        }
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
         }
 
         public Builder regionId(String regionId) {
@@ -250,22 +300,27 @@ public class SecuritySession implements Serializable {
             return this;
         }
 
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+
         public Builder state(SessionState state) {
             this.state = state;
             return this;
         }
 
-        public Builder attributes(String attributes) {
+        public Builder attributes(Map<String, Object> attributes) {
             this.attributes = attributes;
             return this;
         }
 
-        public Builder grantTypes(Set<AuthorizationGrantType> grantTypes) {
-            this.grantTypes = grantTypes;
+        public Builder authorizationGrantType(AuthorizationGrantType authorizationGrantType) {
+            this.authorizationGrantType = authorizationGrantType;
             return this;
         }
 
-        public Builder authorizationScopes(Set<SecurityClientScope> authorizationScopes) {
+        public Builder authorizationScopes(Set<String> authorizationScopes) {
             this.authorizationScopes = authorizationScopes;
             return this;
         }
@@ -285,7 +340,7 @@ public class SecuritySession implements Serializable {
             return this;
         }
 
-        public Builder authorizationCodeMetadata(String authorizationCodeMetadata) {
+        public Builder authorizationCodeMetadata(Map<String, Object> authorizationCodeMetadata) {
             this.authorizationCodeMetadata = authorizationCodeMetadata;
             return this;
         }
@@ -305,17 +360,17 @@ public class SecuritySession implements Serializable {
             return this;
         }
 
-        public Builder accessTokenMetadata(String accessTokenMetadata) {
+        public Builder accessTokenMetadata(Map<String, Object> accessTokenMetadata) {
             this.accessTokenMetadata = accessTokenMetadata;
             return this;
         }
 
-        public Builder accessTokenType(String accessTokenType) {
+        public Builder accessTokenType(AccessTokenType accessTokenType) {
             this.accessTokenType = accessTokenType;
             return this;
         }
 
-        public Builder accessTokenScopes(Set<SecurityClientScope> accessTokenScopes) {
+        public Builder accessTokenScopes(Set<String> accessTokenScopes) {
             this.accessTokenScopes = accessTokenScopes;
             return this;
         }
@@ -335,7 +390,7 @@ public class SecuritySession implements Serializable {
             return this;
         }
 
-        public Builder oidcIdTokenMetadata(String oidcIdTokenMetadata) {
+        public Builder oidcIdTokenMetadata(Map<String, Object> oidcIdTokenMetadata) {
             this.oidcIdTokenMetadata = oidcIdTokenMetadata;
             return this;
         }
@@ -355,7 +410,7 @@ public class SecuritySession implements Serializable {
             return this;
         }
 
-        public Builder refreshTokenMetadata(String refreshTokenMetadata) {
+        public Builder refreshTokenMetadata(Map<String, Object> refreshTokenMetadata) {
             this.refreshTokenMetadata = refreshTokenMetadata;
             return this;
         }
@@ -366,6 +421,14 @@ public class SecuritySession implements Serializable {
         }
 
         public SecuritySession build() {
+            Assert.hasText(this.id, "id cannot be empty");
+            Assert.hasText(this.regionId, "regionId cannot be empty");
+            Assert.hasText(this.clientId, "clientId cannot be empty");
+            Assert.hasText(this.userId, "userId cannot be empty");
+            Assert.hasText(this.username, "username cannot be empty");
+            Assert.notNull(this.state, "state cannot be null");
+            Assert.notNull(this.authorizationGrantType, "authorizationGrantType cannot be empty");
+            Assert.notNull(this.createTime, "createTime cannot be null");
             return this.create();
         }
 
@@ -375,9 +438,10 @@ public class SecuritySession implements Serializable {
             session.regionId = this.regionId;
             session.clientId = this.clientId;
             session.userId = this.userId;
+            session.username = this.username;
             session.state = this.state;
             session.attributes = this.attributes;
-            session.grantTypes = this.grantTypes;
+            session.authorizationGrantType = this.authorizationGrantType;
             session.authorizationScopes = this.authorizationScopes;
             session.authorizationCodeValue = this.authorizationCodeValue;
             session.authorizationCodeIssuedAt = this.authorizationCodeIssuedAt;
@@ -404,8 +468,8 @@ public class SecuritySession implements Serializable {
         public String toString() {
             // @formatter:off
             return "SecuritySession.Builder(id=" + this.id + ", regionId=" + this.regionId + ", clientId=" + this.clientId +
-                    ", userId=" + this.userId + ", state=" + this.state + ", attributes=" + this.attributes + ", grantTypes=" +
-                    this.grantTypes + ", authorizationScopes=" + this.authorizationScopes + ", authorizationCodeValue=" +
+                    ", userId=" + this.userId + ", username=" + this.username + ", state=" + this.state + ", attributes=" + this.attributes + ", grantTypes=" +
+                    this.authorizationGrantType + ", authorizationScopes=" + this.authorizationScopes + ", authorizationCodeValue=" +
                     this.authorizationCodeValue + ", authorizationCodeIssuedAt=" + this.authorizationCodeIssuedAt +
                     ", authorizationCodeExpiresAt=" + this.authorizationCodeExpiresAt + ", authorizationCodeMetadata=" +
                     this.authorizationCodeMetadata + ", accessTokenValue=" + this.accessTokenValue + ", accessTokenIssuedAt=" +
