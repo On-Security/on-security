@@ -25,6 +25,8 @@ import java.io.Serializable;
  * 请求令牌类型定义
  *
  * @author 恒宇少年
+ * @see org.springframework.security.oauth2.core.OAuth2AccessToken.TokenType
+ * @since 0.0.1
  */
 public final class AccessTokenType implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
