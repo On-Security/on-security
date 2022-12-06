@@ -38,9 +38,9 @@ public interface SecuritySessionRepository {
     /**
      * 删除会话
      *
-     * @param session 会话实例 {@link SecuritySession}
+     * @param sessionId 会话ID {@link SecuritySession#getId()}
      */
-    void remove(SecuritySession session);
+    void removeById(String sessionId);
 
     /**
      * 根据会话ID查询

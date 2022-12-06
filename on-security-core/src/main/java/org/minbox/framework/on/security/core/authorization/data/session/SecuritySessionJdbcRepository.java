@@ -137,10 +137,10 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
     }
 
     @Override
-    public void remove(SecuritySession session) {
-        Assert.notNull(session, "session cannot be null");
+    public void removeById(String sessionId) {
+        Assert.hasText(sessionId, "sessionId cannot be null");
         SqlParameterValue[] parameterValues = new SqlParameterValue[]{
-                new SqlParameterValue(Types.VARCHAR, session.getId())
+                new SqlParameterValue(Types.VARCHAR, sessionId)
         };
         PreparedStatementSetter pass = new ArgumentPreparedStatementSetter(parameterValues);
         this.jdbcOperations.update(REMOVE_SESSION_BY_PK_SQL, pass);
