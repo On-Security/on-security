@@ -101,6 +101,7 @@ public final class OAuth2AuthorizationToSecuritySessionConverter implements Conv
             // @formatter:off
             builder.accessTokenValue(accessToken.getTokenValue())
                     .accessTokenType(new AccessTokenType(accessToken.getTokenType().getValue()))
+                    .accessTokenScopes(accessToken.getScopes())
                     .accessTokenIssuedAt(LocalDateTime.ofInstant(accessToken.getIssuedAt(), ZoneId.systemDefault()))
                     .accessTokenExpiresAt(LocalDateTime.ofInstant(accessToken.getExpiresAt(), ZoneId.systemDefault()))
                     .accessTokenMetadata(authorizationAccessToken.getMetadata());
