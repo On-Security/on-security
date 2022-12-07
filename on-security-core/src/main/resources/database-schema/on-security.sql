@@ -90,7 +90,7 @@ CREATE TABLE `security_client` (
                                    `client_id` varchar(20) NOT NULL COMMENT '客户端ID',
                                    `region_id` varchar(36) NOT NULL COMMENT '所属安全域',
                                    `protocol_id` varchar(36) NOT NULL COMMENT '协议编号',
-                                   `display_name` varchar(20) DEFAULT NULL COMMENT '显示名称',
+                                   `display_name` varchar(50) DEFAULT NULL COMMENT '显示名称',
                                    `describe` varchar(100) DEFAULT NULL COMMENT '描述',
                                    `enabled` bit(1) NOT NULL DEFAULT b'1' COMMENT '是否启用',
                                    `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
@@ -363,9 +363,10 @@ CREATE TABLE `security_session` (
                                     `region_id` varchar(36) NOT NULL COMMENT '安全域ID',
                                     `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
                                     `user_id` varchar(36) NOT NULL COMMENT '用户ID',
+                                    `username` varchar(30) NOT NULL COMMENT '用户名',
                                     `state` varchar(15) NOT NULL DEFAULT 'normal' COMMENT '状态，normal：正常，forced_offline：强制下线，active_offline：主动下线',
                                     `attributes` text DEFAULT NULL COMMENT '属性',
-                                    `authorization_grant_types` varchar(100) NOT NULL COMMENT '授权类型',
+                                    `authorization_grant_type` varchar(100) NOT NULL COMMENT '授权类型',
                                     `authorization_scopes` varchar(100) DEFAULT NULL COMMENT '授权范围',
                                     `authorization_code_value` text DEFAULT NULL COMMENT '授权码值',
                                     `authorization_code_issued_at` datetime DEFAULT NULL COMMENT '授权码发布时间',
@@ -437,20 +438,20 @@ CREATE TABLE `security_user_authorize_clients` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `security_user_authorize_consent`
+-- Table structure for table `security_user_authorize_consents`
 --
 
-DROP TABLE IF EXISTS `security_user_authorize_consent`;
+DROP TABLE IF EXISTS `security_user_authorize_consents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `security_user_authorize_consent` (
-                                                   `id` varchar(36) NOT NULL COMMENT 'ID',
-                                                   `user_id` varchar(36) NOT NULL COMMENT '用户ID',
-                                                   `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
-                                                   `scope_id` varchar(36) NOT NULL COMMENT '同意授权范围ID',
-                                                   `authorize_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '授权时间',
-                                                   PRIMARY KEY (`id`),
-                                                   KEY `security_user_authorize_consent_user_id_index` (`user_id`)
+CREATE TABLE `security_user_authorize_consents` (
+                                                    `user_id` varchar(36) NOT NULL COMMENT '用户ID',
+                                                    `username` varchar(30) NOT NULL COMMENT '用户名',
+                                                    `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
+                                                    `authorities` varchar(100) NOT NULL COMMENT '同意授权列表',
+                                                    `authorize_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '授权时间',
+                                                    PRIMARY KEY (`user_id`,`client_id`),
+                                                    KEY `security_user_authorize_consents_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户授权同意信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 

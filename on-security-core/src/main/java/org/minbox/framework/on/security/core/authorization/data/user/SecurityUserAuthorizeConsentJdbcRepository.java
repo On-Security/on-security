@@ -81,11 +81,11 @@ public class SecurityUserAuthorizeConsentJdbcRepository implements SecurityUserA
 
     private void updateUserAuthorizeConsent(SecurityUserAuthorizeConsent userAuthorizeConsent) {
         List<SqlParameterValue> parameters = new ArrayList<>(this.userAuthorizeConsentParametersMapper.apply(userAuthorizeConsent));
-        SqlParameterValue id = parameters.remove(0); // remove id
-        parameters.remove(0); // remove user_id
-        parameters.remove(1); // remove client_id
+        SqlParameterValue userId = parameters.remove(0); // remove user_id
+        SqlParameterValue clientId = parameters.remove(1); // remove client_id
         parameters.remove(2); // remove authorize_time
-        parameters.add(id); // add where id
+        parameters.add(userId); // add where user_id
+        parameters.add(clientId); // add where client_id
         PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
         this.jdbcOperations.update(UPDATE_USER_AUTHORIZE_CONSENT_SQL, pss);
     }

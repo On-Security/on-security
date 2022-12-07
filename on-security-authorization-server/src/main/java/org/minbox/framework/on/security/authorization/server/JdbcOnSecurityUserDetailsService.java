@@ -15,8 +15,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.adapter;
+package org.minbox.framework.on.security.authorization.server;
 
+import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUserDetails;
 import org.minbox.framework.on.security.core.authorization.data.role.SecurityRole;
 import org.minbox.framework.on.security.core.authorization.data.role.SecurityRoleJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.role.SecurityRoleRepository;

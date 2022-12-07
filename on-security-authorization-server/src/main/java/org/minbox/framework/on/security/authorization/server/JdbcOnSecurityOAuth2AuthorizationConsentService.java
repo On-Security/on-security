@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.adapter;
+package org.minbox.framework.on.security.authorization.server;
 
 import org.minbox.framework.on.security.core.authorization.data.user.*;
 import org.minbox.framework.on.security.core.authorization.data.user.convert.AuthorizationConsentToUserAuthorizeConsentConverter;
@@ -79,6 +79,7 @@ public class JdbcOnSecurityOAuth2AuthorizationConsentService implements OAuth2Au
         Assert.notNull(securityUser, "Based on username: " + principalName + ", no user was retrieved.");
         SecurityUserAuthorizeConsent userAuthorizeConsent =
                 userAuthorizeConsentRepository.findByUserIdAndClientId(securityUser.getId(), registeredClientId);
-        return userAuthorizeConsentToAuthorizationConsentConverter.convert(userAuthorizeConsent);
+        return userAuthorizeConsent != null ? userAuthorizeConsentToAuthorizationConsentConverter.convert(userAuthorizeConsent)
+                : null;
     }
 }
