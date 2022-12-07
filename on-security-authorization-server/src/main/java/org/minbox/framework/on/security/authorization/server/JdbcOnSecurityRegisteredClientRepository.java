@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.adapter;
+package org.minbox.framework.on.security.authorization.server;
 
 import org.minbox.framework.on.security.core.authorization.ClientProtocol;
 import org.minbox.framework.on.security.core.authorization.data.client.*;

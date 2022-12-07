@@ -40,6 +40,11 @@
         <dependencies>
             <dependency>
                 <groupId>org.minbox.framework</groupId>
+                <artifactId>on-security-authorization-server</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.minbox.framework</groupId>
                 <artifactId>on-security-core</artifactId>
                 <version>${revision}</version>
             </dependency>

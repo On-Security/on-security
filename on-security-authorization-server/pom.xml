@@ -19,17 +19,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>on-security-dependencies</artifactId>
+        <artifactId>on-security-bom</artifactId>
         <groupId>org.minbox.framework</groupId>
         <version>${revision}</version>
-        <relativePath>../on-security-dependencies</relativePath>
+        <relativePath>../on-security-bom</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>on-security-core</artifactId>
+    <artifactId>on-security-authorization-server</artifactId>
     <description>
-        On-Security核心模块。
+        On-Security授权服务器.
     </description>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -38,6 +38,10 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.minbox.framework</groupId>
+            <artifactId>on-security-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <optional>true</optional>
@@ -45,7 +49,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-authorization-server</artifactId>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 </project>
