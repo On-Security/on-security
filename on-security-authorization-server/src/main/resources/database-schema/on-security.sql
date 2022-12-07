@@ -362,9 +362,10 @@ CREATE TABLE `security_session` (
                                     `id` varchar(36) NOT NULL COMMENT 'ID',
                                     `region_id` varchar(36) NOT NULL COMMENT '安全域ID',
                                     `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
-                                    `user_id` varchar(36) NOT NULL COMMENT '用户ID',
+                                    `user_id` varchar(36) DEFAULT NULL COMMENT '用户ID',
                                     `username` varchar(30) NOT NULL COMMENT '用户名',
-                                    `state` varchar(15) NOT NULL DEFAULT 'normal' COMMENT '状态，normal：正常，forced_offline：强制下线，active_offline：主动下线',
+                                    `state` varchar(100) DEFAULT NULL,
+                                    `session_state` varchar(15) NOT NULL DEFAULT 'normal' COMMENT '状态，normal：正常，forced_offline：强制下线，active_offline：主动下线',
                                     `attributes` text DEFAULT NULL COMMENT '属性',
                                     `authorization_grant_type` varchar(100) NOT NULL COMMENT '授权类型',
                                     `authorization_scopes` varchar(100) DEFAULT NULL COMMENT '授权范围',
@@ -521,7 +522,8 @@ CREATE TABLE `security_user_login_log` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-30 16:37:00
+-- Dump completed on 2022-12-07 19:28:18
+
 
 LOCK TABLES `gloabl_data_authorization_grant` WRITE;
 /*!40000 ALTER TABLE `gloabl_data_authorization_grant` DISABLE KEYS */;
