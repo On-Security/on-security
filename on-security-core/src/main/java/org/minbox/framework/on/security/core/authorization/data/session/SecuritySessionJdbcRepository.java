@@ -18,10 +18,13 @@
 package org.minbox.framework.on.security.core.authorization.data.session;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.minbox.framework.on.security.core.authorization.AccessTokenType;
 import org.minbox.framework.on.security.core.authorization.SessionState;
+import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityAuthorizationServerJackson2Module;
 import org.springframework.jdbc.core.*;
+import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
@@ -186,6 +189,13 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
     public static class SecuritySessionRowMapper implements RowMapper<SecuritySession> {
         private ObjectMapper objectMapper = new ObjectMapper();
 
+        public SecuritySessionRowMapper() {
+            ClassLoader classLoader = SecuritySessionJdbcRepository.class.getClassLoader();
+            List<Module> securityModules = SecurityJackson2Modules.getModules(classLoader);
+            this.objectMapper.registerModules(securityModules);
+            this.objectMapper.registerModule(new OnSecurityAuthorizationServerJackson2Module());
+        }
+
         @Override
         public SecuritySession mapRow(ResultSet rs, int rowNum) throws SQLException {
             SecuritySession.Builder builder = SecuritySession.withId(rs.getString("id"));
@@ -292,6 +302,13 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
     public static class SecuritySessionParametersMapper implements Function<SecuritySession, List<SqlParameterValue>> {
         private ObjectMapper objectMapper = new ObjectMapper();
 
+        public SecuritySessionParametersMapper() {
+            ClassLoader classLoader = SecuritySessionJdbcRepository.class.getClassLoader();
+            List<Module> securityModules = SecurityJackson2Modules.getModules(classLoader);
+            this.objectMapper.registerModules(securityModules);
+            this.objectMapper.registerModule(new OnSecurityAuthorizationServerJackson2Module());
+        }
+
         @Override
         public List<SqlParameterValue> apply(SecuritySession session) {
             List<SqlParameterValue> parameters = new ArrayList<>();
@@ -302,7 +319,7 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
             parameters.add(new SqlParameterValue(Types.VARCHAR, session.getUsername()));
             parameters.add(new SqlParameterValue(Types.VARCHAR, session.getState()));
             String sessionState = null;
-            if (!ObjectUtils.isEmpty(session.getState())) {
+            if (!ObjectUtils.isEmpty(session.getSessionState())) {
                 sessionState = session.getSessionState().getValue();
             }
             parameters.add(new SqlParameterValue(Types.VARCHAR, sessionState));
@@ -317,18 +334,14 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
 
             // authorizationCode
             parameters.add(new SqlParameterValue(Types.VARCHAR, session.getAuthorizationCodeValue()));
-            parameters.add(new SqlParameterValue(Types.TIMESTAMP,
-                    session.getAuthorizationCodeIssuedAt() != null ? Timestamp.valueOf(session.getAuthorizationCodeIssuedAt()) : null));
-            parameters.add(new SqlParameterValue(Types.TIMESTAMP,
-                    session.getAuthorizationCodeExpiresAt() != null ? Timestamp.valueOf(session.getAuthorizationCodeExpiresAt()) : null));
+            parameters.add(new SqlParameterValue(Types.TIMESTAMP, this.localDateTimeToTimestamp(session.getAuthorizationCodeIssuedAt())));
+            parameters.add(new SqlParameterValue(Types.TIMESTAMP, this.localDateTimeToTimestamp(session.getAuthorizationCodeExpiresAt())));
             parameters.add(new SqlParameterValue(Types.VARCHAR, writeMap(session.getAuthorizationCodeMetadata())));
 
             // accessToken
             parameters.add(new SqlParameterValue(Types.VARCHAR, session.getAccessTokenValue()));
-            parameters.add(new SqlParameterValue(Types.TIMESTAMP,
-                    session.getAccessTokenIssuedAt() != null ? Timestamp.valueOf(session.getAccessTokenIssuedAt()) : null));
-            parameters.add(new SqlParameterValue(Types.TIMESTAMP,
-                    session.getAccessTokenExpiresAt() != null ? Timestamp.valueOf(session.getAccessTokenExpiresAt()) : null));
+            parameters.add(new SqlParameterValue(Types.TIMESTAMP, this.localDateTimeToTimestamp(session.getAccessTokenIssuedAt())));
+            parameters.add(new SqlParameterValue(Types.TIMESTAMP, this.localDateTimeToTimestamp(session.getAccessTokenExpiresAt())));
             parameters.add(new SqlParameterValue(Types.VARCHAR, writeMap(session.getAccessTokenMetadata())));
             parameters.add(new SqlParameterValue(Types.VARCHAR,
                     session.getAccessTokenType() != null ? session.getAccessTokenType().getValue() : null));
@@ -340,18 +353,14 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
 
             // oidcIdToken
             parameters.add(new SqlParameterValue(Types.VARCHAR, session.getOidcIdTokenValue()));
-            parameters.add(new SqlParameterValue(Types.TIMESTAMP,
-                    session.getOidcIdTokenIssuedAt() != null ? Timestamp.valueOf(session.getOidcIdTokenIssuedAt()) : null));
-            parameters.add(new SqlParameterValue(Types.TIMESTAMP,
-                    session.getOidcIdTokenExpiresAt() != null ? Timestamp.valueOf(session.getOidcIdTokenExpiresAt()) : null));
+            parameters.add(new SqlParameterValue(Types.TIMESTAMP, this.localDateTimeToTimestamp(session.getAccessTokenIssuedAt())));
+            parameters.add(new SqlParameterValue(Types.TIMESTAMP, this.localDateTimeToTimestamp(session.getAccessTokenExpiresAt())));
             parameters.add(new SqlParameterValue(Types.VARCHAR, writeMap(session.getOidcIdTokenMetadata())));
 
             // refreshToken
             parameters.add(new SqlParameterValue(Types.VARCHAR, session.getRefreshTokenValue()));
-            parameters.add(new SqlParameterValue(Types.TIMESTAMP,
-                    session.getRefreshTokenIssuedAt() != null ? Timestamp.valueOf(session.getRefreshTokenIssuedAt()) : null));
-            parameters.add(new SqlParameterValue(Types.TIMESTAMP,
-                    session.getRefreshTokenExpiresAt() != null ? Timestamp.valueOf(session.getRefreshTokenExpiresAt()) : null));
+            parameters.add(new SqlParameterValue(Types.TIMESTAMP, this.localDateTimeToTimestamp(session.getRefreshTokenIssuedAt())));
+            parameters.add(new SqlParameterValue(Types.TIMESTAMP, this.localDateTimeToTimestamp(session.getRefreshTokenExpiresAt())));
             parameters.add(new SqlParameterValue(Types.VARCHAR, writeMap(session.getRefreshTokenMetadata())));
 
             LocalDateTime createTime = session.getCreateTime();
@@ -372,6 +381,10 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
             } catch (Exception ex) {
                 throw new IllegalArgumentException(ex.getMessage(), ex);
             }
+        }
+
+        private Timestamp localDateTimeToTimestamp(LocalDateTime dateTime) {
+            return dateTime != null ? Timestamp.valueOf(dateTime) : null;
         }
     }
 }
