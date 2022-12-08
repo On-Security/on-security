@@ -25,6 +25,7 @@ import org.minbox.framework.on.security.core.authorization.data.session.Security
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUser;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserRepository;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
@@ -61,16 +62,20 @@ public final class OAuth2AuthorizationToSecuritySessionConverter implements Conv
         SecurityClient securityClient = clientRepository.findById(authorization.getRegisteredClientId());
         Assert.notNull(securityClient, "Client ID: " + authorization.getRegisteredClientId() + ", no data retrieved");
 
-        // Load security user
-        SecurityUser securityUser = userRepository.findByUsername(authorization.getPrincipalName());
-        Assert.notNull(securityUser, "Username: " + authorization.getPrincipalName() + ", no data retrieved");
-
         String authorizationId = authorization.getId();
+        SecuritySession.Builder builder = SecuritySession.withId(authorizationId);
+
+        if (AuthorizationGrantType.CLIENT_CREDENTIALS != authorization.getAuthorizationGrantType()) {
+            // Load security user
+            SecurityUser securityUser = userRepository.findByUsername(authorization.getPrincipalName());
+            Assert.notNull(securityUser, "Username: " + authorization.getPrincipalName() + ", no data retrieved");
+            builder.userId(securityUser.getId());
+        }
+
         // @formatter:off
-        SecuritySession.Builder builder = SecuritySession.withId(authorizationId)
+        builder
                 .regionId(securityClient.getRegionId())
                 .clientId(securityClient.getId())
-                .userId(securityUser.getId())
                 .sessionState(SessionState.NORMAL)
                 .username(authorization.getPrincipalName())
                 .attributes(authorization.getAttributes())

@@ -436,7 +436,6 @@ public class SecuritySession implements Serializable {
             Assert.hasText(this.id, "id cannot be empty");
             Assert.hasText(this.regionId, "regionId cannot be empty");
             Assert.hasText(this.clientId, "clientId cannot be empty");
-            Assert.hasText(this.userId, "userId cannot be empty");
             Assert.hasText(this.username, "username cannot be empty");
             Assert.notNull(this.sessionState, "sessionState cannot be null");
             Assert.notNull(this.authorizationGrantType, "authorizationGrantType cannot be empty");
