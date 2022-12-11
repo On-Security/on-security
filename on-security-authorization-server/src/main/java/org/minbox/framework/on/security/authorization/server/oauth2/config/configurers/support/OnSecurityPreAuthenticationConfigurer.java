@@ -15,38 +15,37 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.authorization.server.oauth2.config.configurers;
+package org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support;
 
+import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.AbstractOnSecurityOAuth2Configurer;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 /**
- * On-Security自定义认证配置抽象实现类
- *
  * @author 恒宇少年
- * @see HttpSecurity
- * @see RequestMatcher
- * @since 0.0.1
  */
-public abstract class AbstractOnSecurityOAuth2Configurer {
-    private final ObjectPostProcessor<Object> objectPostProcessor;
+public class OnSecurityPreAuthenticationConfigurer extends AbstractOnSecurityOAuth2Configurer {
+    private RequestMatcher allEndpointMatcher;
 
-    protected AbstractOnSecurityOAuth2Configurer(ObjectPostProcessor<Object> objectPostProcessor) {
-        this.objectPostProcessor = objectPostProcessor;
+    public OnSecurityPreAuthenticationConfigurer(ObjectPostProcessor<Object> objectPostProcessor, RequestMatcher allEndpointMatcher) {
+        super(objectPostProcessor);
+        this.allEndpointMatcher = allEndpointMatcher;
     }
 
-    protected abstract void init(HttpSecurity httpSecurity);
-
-    protected abstract void configure(HttpSecurity httpSecurity);
-
-    public abstract RequestMatcher getRequestMatcher();
-
-    protected final <T> T postProcess(T object) {
-        return (T) this.objectPostProcessor.postProcess(object);
+    @Override
+    protected void init(HttpSecurity httpSecurity) {
+        // TODO 初始化requestMatcher
+        // TODO 注册OnSecurityAuthenticationPreProvider
     }
 
-    protected final ObjectPostProcessor<Object> getObjectPostProcessor() {
-        return this.objectPostProcessor;
+    @Override
+    protected void configure(HttpSecurity httpSecurity) {
+        // TODO 注册OnSecurityAuthenticationPreFilter
+    }
+
+    @Override
+    public RequestMatcher getRequestMatcher() {
+        return this.allEndpointMatcher;
     }
 }
