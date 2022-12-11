@@ -113,8 +113,9 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
         Assert.hasText(id, "id cannot be empty");
         // Load client
         SecurityClient securityClient = clientRepository.findById(id);
-        Assert.notNull(securityClient, "Based on Client ID: " + id + ", no data was retrieved");
-
+        if (securityClient == null) {
+            return null;
+        }
         // Build client
         securityClient = this.buildSecurityClient(securityClient);
         return securityToRegisteredClientConverter.convert(securityClient);
@@ -125,8 +126,9 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
         Assert.hasText(clientId, "clientId cannot be empty");
         // Load client
         SecurityClient securityClient = clientRepository.findByClientId(clientId);
-        Assert.notNull(securityClient, "Based on Client ClientId: " + clientId + ", no data was retrieved");
-
+        if (securityClient == null) {
+            return null;
+        }
         // Build client
         securityClient = this.buildSecurityClient(securityClient);
         return securityToRegisteredClientConverter.convert(securityClient);
