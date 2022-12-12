@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.user;
 
+import org.minbox.framework.on.security.core.authorization.data.client.SecurityClient;
+
 import java.util.List;
 
 /**
@@ -26,6 +28,21 @@ import java.util.List;
  * @since 0.0.1
  */
 public interface SecurityUserAuthorizeClientRepository {
+    /**
+     * 新增用户授权客户端
+     *
+     * @param userAuthorizeClient {@link SecurityUserAuthorizeClient}
+     */
+    void insert(SecurityUserAuthorizeClient userAuthorizeClient);
+
+    /**
+     * 删除用户授权的客户端
+     *
+     * @param securityUserId   用户ID {@link SecurityUser#getId()}
+     * @param securityClientId 客户端ID {@link SecurityClient#getId()}
+     */
+    void remove(String securityUserId, String securityClientId);
+
     /**
      * 查询用户授权的客户端列表
      *
