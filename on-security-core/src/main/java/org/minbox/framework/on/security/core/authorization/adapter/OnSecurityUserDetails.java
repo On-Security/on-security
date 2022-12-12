@@ -113,6 +113,14 @@ public final class OnSecurityUserDetails implements UserDetails, CredentialsCont
         this.password = null;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getRegionId() {
+        return regionId;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof OnSecurityUserDetails) {

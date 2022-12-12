@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.user;
 
+import java.util.List;
+
 /**
  * 用户授权客户端数据存储库
  *
@@ -24,4 +26,11 @@ package org.minbox.framework.on.security.core.authorization.data.user;
  * @since 0.0.1
  */
 public interface SecurityUserAuthorizeClientRepository {
+    /**
+     * 查询用户授权的客户端列表
+     *
+     * @param userId {@link SecurityUser#getId()} 用户ID
+     * @return 用户授权的客户端列表 {@link SecurityUserAuthorizeClient}
+     */
+    List<SecurityUserAuthorizeClient> findByUserId(String userId);
 }

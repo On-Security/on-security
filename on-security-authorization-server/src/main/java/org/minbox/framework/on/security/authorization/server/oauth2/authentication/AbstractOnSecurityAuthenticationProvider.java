@@ -23,7 +23,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import java.util.Map;
 
 /**
+ * 身份认证验证提供者
+ *
  * @author 恒宇少年
+ * @see AuthenticationProvider
+ * @since 0.0.1
  */
 public abstract class AbstractOnSecurityAuthenticationProvider implements AuthenticationProvider {
     /**
@@ -38,9 +42,13 @@ public abstract class AbstractOnSecurityAuthenticationProvider implements Authen
      * @see org.springframework.security.authentication.AuthenticationManager
      * @see HttpSecurity#getSharedObjects()
      */
-    protected Map<Class<?>, Object> sharedObjects;
+    private Map<Class<?>, Object> sharedObjects;
 
     public AbstractOnSecurityAuthenticationProvider(Map<Class<?>, Object> sharedObjects) {
         this.sharedObjects = sharedObjects;
+    }
+
+    protected  <C> C getSharedObject(Class<C> sharedType) {
+        return (C) this.sharedObjects.get(sharedType);
     }
 }

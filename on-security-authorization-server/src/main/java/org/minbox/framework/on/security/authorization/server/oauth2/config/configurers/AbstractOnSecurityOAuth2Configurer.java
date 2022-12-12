@@ -40,7 +40,9 @@ public abstract class AbstractOnSecurityOAuth2Configurer {
 
     protected abstract void configure(HttpSecurity httpSecurity);
 
-    public abstract RequestMatcher getRequestMatcher();
+    public RequestMatcher getRequestMatcher() {
+        return null;
+    }
 
     protected final <T> T postProcess(T object) {
         return (T) this.objectPostProcessor.postProcess(object);

@@ -18,49 +18,33 @@
 package org.minbox.framework.on.security.authorization.server.oauth2.authentication.support;
 
 import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUserDetails;
-import org.minbox.framework.on.security.core.authorization.data.client.SecurityClient;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
-import org.springframework.util.Assert;
 
-import java.util.Collection;
 import java.util.Collections;
 
 /**
  * 身份认证前置认证请求实体
  *
  * @author 恒宇少年
+ * @since 0.0.1
  */
 public class OnSecurityPreAuthenticationToken extends AbstractAuthenticationToken {
     private String clientId;
-    private RegisteredClient registeredClient;
-    private Authentication principal;
+    private String grantType;
+    private OnSecurityUserDetails userDetails;
 
     /**
      * 实例化OnSecurityPreAuthenticationToken构造函数
      *
-     * @param clientId         客户端ID {@link RegisteredClient#getId()}
-     * @param registeredClient 客户端实例 {@link SecurityClient}
-     * @param principal        资源所有者，用户对象实例 {@link OnSecurityUserDetails}
+     * @param clientId    客户端ID {@link RegisteredClient#getId()}
+     * @param userDetails 资源所有者，用户对象实例 {@link OnSecurityUserDetails}
      */
-    public OnSecurityPreAuthenticationToken(String clientId, RegisteredClient registeredClient, Authentication principal) {
+    public OnSecurityPreAuthenticationToken(String clientId, String grantType, OnSecurityUserDetails userDetails) {
         super(Collections.emptyList());
         this.clientId = clientId;
-        Assert.notNull(clientId, "clientId cannot be null");
-        this.registeredClient = registeredClient;
-        this.principal = principal;
-    }
-
-    /**
-     * Creates a token with the supplied array of authorities.
-     *
-     * @param authorities the collection of <tt>GrantedAuthority</tt>s for the principal
-     *                    represented by this authentication object.
-     */
-    public OnSecurityPreAuthenticationToken(Collection<? extends GrantedAuthority> authorities) {
-        super(authorities);
+        this.grantType = grantType;
+        this.userDetails = userDetails;
     }
 
     @Override
@@ -70,14 +54,18 @@ public class OnSecurityPreAuthenticationToken extends AbstractAuthenticationToke
 
     @Override
     public Object getPrincipal() {
-        return this.principal;
+        return this.userDetails;
     }
 
     public String getClientId() {
         return clientId;
     }
 
-    public RegisteredClient getRegisteredClient() {
-        return registeredClient;
+    public OnSecurityUserDetails getUserDetails() {
+        return userDetails;
+    }
+
+    public String getGrantType() {
+        return grantType;
     }
 }

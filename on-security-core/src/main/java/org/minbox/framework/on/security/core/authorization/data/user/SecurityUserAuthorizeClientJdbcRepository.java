@@ -20,6 +20,8 @@ package org.minbox.framework.on.security.core.authorization.data.user;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.util.Assert;
 
+import java.util.List;
+
 /**
  * 用户授权客户端数据存储库JDBC实现类
  *
@@ -32,5 +34,10 @@ public class SecurityUserAuthorizeClientJdbcRepository implements SecurityUserAu
     public SecurityUserAuthorizeClientJdbcRepository(JdbcOperations jdbcOperations) {
         Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
         this.jdbcOperations = jdbcOperations;
+    }
+
+    @Override
+    public List<SecurityUserAuthorizeClient> findByUserId(String userId) {
+        return null;
     }
 }

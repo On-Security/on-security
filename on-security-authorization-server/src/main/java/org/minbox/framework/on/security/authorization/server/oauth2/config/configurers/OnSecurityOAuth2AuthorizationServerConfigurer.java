@@ -45,8 +45,7 @@ import java.util.*;
  * @see HttpSecurity#authenticationProvider
  * @see AbstractOnSecurityOAuth2Configurer
  */
-public final class OnSecurityOAuth2AuthorizationServerConfigurer
-        extends AbstractHttpConfigurer<OnSecurityOAuth2AuthorizationServerConfigurer, HttpSecurity> {
+public final class OnSecurityOAuth2AuthorizationServerConfigurer extends AbstractHttpConfigurer<OnSecurityOAuth2AuthorizationServerConfigurer, HttpSecurity> {
     private Map<Class<? extends AbstractOnSecurityOAuth2Configurer>, AbstractOnSecurityOAuth2Configurer> configurers;
     private RequestMatcher endpointsMatcher;
     private OAuth2AuthorizationServerConfigurer authorizationServerConfigurer;
@@ -201,7 +200,10 @@ public final class OnSecurityOAuth2AuthorizationServerConfigurer
         List<RequestMatcher> requestMatchers = Arrays.asList(this.authorizationServerConfigurer.getEndpointsMatcher());
         this.configurers.values().forEach(configurer -> {
             configurer.init(httpSecurity);
-            requestMatchers.add(configurer.getRequestMatcher());
+            RequestMatcher requestMatcher = configurer.getRequestMatcher();
+            if (requestMatcher != null) {
+                requestMatchers.add(requestMatcher);
+            }
         });
         this.endpointsMatcher = new OrRequestMatcher(requestMatchers);
     }
@@ -216,7 +218,7 @@ public final class OnSecurityOAuth2AuthorizationServerConfigurer
         // @formatter:off
         // Put OnSecurityPreAuthenticationConfigurer
         configurers.put(OnSecurityPreAuthenticationConfigurer.class,
-                postProcess(new OnSecurityPreAuthenticationConfigurer(this::postProcess, this.authorizationServerConfigurer.getEndpointsMatcher())));
+                postProcess(new OnSecurityPreAuthenticationConfigurer(this::postProcess)));
         // @formatter:on
         return configurers;
     }
@@ -236,6 +238,8 @@ public final class OnSecurityOAuth2AuthorizationServerConfigurer
     }
 
     public RequestMatcher getEndpointsMatcher() {
-        return endpointsMatcher;
+        // Return a deferred RequestMatcher
+        // since endpointsMatcher is constructed in init(HttpSecurity).
+        return (request) -> this.endpointsMatcher.matches(request);
     }
 }
