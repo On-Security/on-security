@@ -17,13 +17,12 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.web;
 
+import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityPreAuthenticationToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.converter.OnSecurityPreAuthenticationConverter;
 import org.springframework.core.log.LogMessage;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -35,7 +34,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 /**
  * 身份认证前置认证过滤器
@@ -49,7 +47,7 @@ public class OnSecurityPreAuthenticationFilter extends OncePerRequestFilter {
     private final RequestMatcher preAuthenticationMatcher;
     private final AuthenticationManager authenticationManager;
     private AuthenticationConverter authenticationConverter;
-    private AuthenticationFailureHandler authenticationFailureHandler = this::defaultErrorHandler;
+    private AuthenticationFailureHandler authenticationFailureHandler;
 
     public OnSecurityPreAuthenticationFilter(RequestMatcher preAuthenticationMatcher, AuthenticationManager authenticationManager) {
         Assert.notNull(authenticationManager, "authenticationManager cannot be null");
@@ -57,6 +55,7 @@ public class OnSecurityPreAuthenticationFilter extends OncePerRequestFilter {
         this.preAuthenticationMatcher = preAuthenticationMatcher;
         this.authenticationManager = authenticationManager;
         this.authenticationConverter = new OnSecurityPreAuthenticationConverter();
+        this.authenticationFailureHandler = new OnSecurityDefaultAuthenticationFailureHandler();
     }
 
     @Override
@@ -68,8 +67,8 @@ public class OnSecurityPreAuthenticationFilter extends OncePerRequestFilter {
                 OnSecurityPreAuthenticationToken preAuthenticationToken = (OnSecurityPreAuthenticationToken) authenticationConverter.convert(request);
                 authenticationManager.authenticate(preAuthenticationToken);
                 filterChain.doFilter(request, response);
-            } catch (OAuth2AuthenticationException exception) {
-                logger.error(LogMessage.format("The pre-authentication filter encountered an exception: %s", exception.getError()), exception);
+            } catch (AuthenticationException exception) {
+                logger.error(LogMessage.format("The pre-authentication filter encountered an exception: %s", exception.getMessage()), exception);
                 authenticationFailureHandler.onAuthenticationFailure(request, response, exception);
             }
         }
@@ -78,18 +77,5 @@ public class OnSecurityPreAuthenticationFilter extends OncePerRequestFilter {
     public void setAuthenticationFailureHandler(AuthenticationFailureHandler authenticationFailureHandler) {
         Assert.notNull(authenticationFailureHandler, "authenticationFailureHandler cannot be null");
         this.authenticationFailureHandler = authenticationFailureHandler;
-    }
-
-    /**
-     * 定义默认的执行失败处理器
-     *
-     * @param request   {@link HttpServletRequest}
-     * @param response  {@link HttpServletResponse}
-     * @param exception {@link AuthenticationException} 认证异常实例
-     */
-    private void defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setContentType(MediaType.APPLICATION_JSON.toString());
-        response.getWriter().write("{\"code\":-1,\"msg\":\"认证失败\"}");
     }
 }

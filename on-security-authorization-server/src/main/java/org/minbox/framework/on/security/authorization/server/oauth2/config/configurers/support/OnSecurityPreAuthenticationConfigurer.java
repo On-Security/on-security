@@ -109,7 +109,7 @@ public class OnSecurityPreAuthenticationConfigurer extends AbstractOnSecurityOAu
      *
      * @param authenticationFailureHandler {@link AuthenticationFailureHandler}
      */
-    public void setAuthenticationFailureHandler(AuthenticationFailureHandler authenticationFailureHandler) {
+    public void authenticationFailureHandler(AuthenticationFailureHandler authenticationFailureHandler) {
         this.authenticationFailureHandler = authenticationFailureHandler;
     }
 }

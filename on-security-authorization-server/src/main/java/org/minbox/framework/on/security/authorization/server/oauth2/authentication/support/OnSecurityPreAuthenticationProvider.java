@@ -18,11 +18,13 @@
 package org.minbox.framework.on.security.authorization.server.oauth2.authentication.support;
 
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.AbstractOnSecurityAuthenticationProvider;
+import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityErrorCodes;
 import org.minbox.framework.on.security.authorization.server.utils.OnSecurityThrowErrorUtils;
 import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUserDetails;
 import org.minbox.framework.on.security.core.authorization.data.client.SecurityClient;
 import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientRepository;
+import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionRepository;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeClient;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeClientJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeClientRepository;
@@ -30,7 +32,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.util.ObjectUtils;
 
@@ -49,6 +50,7 @@ import java.util.stream.Collectors;
 public class OnSecurityPreAuthenticationProvider extends AbstractOnSecurityAuthenticationProvider {
     private SecurityClientRepository securityClientRepository;
     private SecurityUserAuthorizeClientRepository userAuthorizeClientRepository;
+    private SecurityRegionRepository regionRepository;
 
     public OnSecurityPreAuthenticationProvider(Map<Class<?>, Object> sharedObjects) {
         super(sharedObjects);
@@ -65,21 +67,31 @@ public class OnSecurityPreAuthenticationProvider extends AbstractOnSecurityAuthe
         // Verification ClientId && Verification UserDetails
         if (!ObjectUtils.isEmpty(preAuthenticationToken.getClientId()) && onSecurityUserDetails != null) {
             SecurityClient securityClient = securityClientRepository.findByClientId(preAuthenticationToken.getClientId());
-            if (securityClient == null) {
-                OnSecurityThrowErrorUtils.throwError(OAuth2ErrorCodes.INVALID_CLIENT, OAuth2ParameterNames.CLIENT_ID);
+            if (securityClient == null || !securityClient.isEnabled() || securityClient.isDeleted()) {
+                //@formatter:off
+                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_CLIENT,
+                        OAuth2ParameterNames.CLIENT_ID,
+                        "Invalid Client：" + preAuthenticationToken.getClientId() + "，Please check data validity.");
+                // @formatter:on
             }
             // @formatter:off
             List<SecurityUserAuthorizeClient> userAuthorizeClientList =
                     userAuthorizeClientRepository.findByUserId(onSecurityUserDetails.getUserId());
             if(ObjectUtils.isEmpty(userAuthorizeClientList)) {
-                OnSecurityThrowErrorUtils.throwError(OAuth2ErrorCodes.UNAUTHORIZED_CLIENT, OAuth2ParameterNames.CLIENT_ID);
+                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
+                        OAuth2ParameterNames.CLIENT_ID,
+                        "User: " + onSecurityUserDetails.getUsername() + ", not authorized to bind client: " + preAuthenticationToken.getClientId());
             }
             List<String> userAuthorizeClientIds = userAuthorizeClientList.stream()
                     .map(SecurityUserAuthorizeClient::getClientId)
                     .collect(Collectors.toList());
             // @formatter:on
             if (!userAuthorizeClientIds.contains(securityClient.getId())) {
-                OnSecurityThrowErrorUtils.throwError(OAuth2ErrorCodes.UNAUTHORIZED_CLIENT, OAuth2ParameterNames.CLIENT_ID);
+                // @formatter:off
+                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
+                        OAuth2ParameterNames.CLIENT_ID,
+                        "User: " + onSecurityUserDetails.getUsername() + ", not authorized to bind client: " + preAuthenticationToken.getClientId());
+                // @formatter:on
             }
         }
         return preAuthenticationToken;
