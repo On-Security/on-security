@@ -59,7 +59,15 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
         return http.build();
     }
 
-    public void defaultOnSecurityAuthorizationServer(HttpSecurity http) throws Exception {
+    /**
+     * 默认的OnSecurity授权认证服务器配置
+     * <p>
+     * 如果需要自定义，则可以重写该方法
+     *
+     * @param http {@link HttpSecurity}
+     * @throws Exception
+     */
+    protected void defaultOnSecurityAuthorizationServer(HttpSecurity http) throws Exception {
         OnSecurityOAuth2AuthorizationServerConfigurer authorizationServerConfigurer = new OnSecurityOAuth2AuthorizationServerConfigurer();
         // Configure default authentication failure handler
         AuthenticationFailureHandler onSecurityFailureHandler = new OnSecurityDefaultAuthenticationFailureHandler();

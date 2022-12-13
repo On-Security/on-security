@@ -41,6 +41,10 @@ import java.util.stream.Collectors;
  * @since 0.0.1
  */
 public final class JdbcOnSecurityUserDetailsService implements UserDetailsService {
+    /**
+     * The name of bean in IOC
+     */
+    public static final String BEAN_NAME = "jdbcOnSecurityUserDetailsService";
     private SecurityUserRepository userRepository;
     private SecurityUserAuthorizeRoleRepository userAuthorizeRoleRepository;
     private SecurityRoleRepository roleRepository;
