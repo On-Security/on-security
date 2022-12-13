@@ -24,6 +24,8 @@ import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUse
 import org.minbox.framework.on.security.core.authorization.data.client.SecurityClient;
 import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientRepository;
+import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
+import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionRepository;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeClient;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeClientJdbcRepository;
@@ -58,6 +60,7 @@ public class OnSecurityPreAuthenticationProvider extends AbstractOnSecurityAuthe
         JdbcOperations jdbcOperations = applicationContext.getBean(JdbcOperations.class);
         this.securityClientRepository = new SecurityClientJdbcRepository(jdbcOperations);
         this.userAuthorizeClientRepository = new SecurityUserAuthorizeClientJdbcRepository(jdbcOperations);
+        this.regionRepository = new SecurityRegionJdbcRepository(jdbcOperations);
     }
 
     @Override
@@ -72,6 +75,15 @@ public class OnSecurityPreAuthenticationProvider extends AbstractOnSecurityAuthe
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_CLIENT,
                         OAuth2ParameterNames.CLIENT_ID,
                         "Invalid Client：" + preAuthenticationToken.getClientId() + "，Please check data validity.");
+                // @formatter:on
+            }
+            SecurityRegion securityRegion = regionRepository.findById(securityClient.getRegionId());
+            if (securityRegion == null || !securityRegion.isEnabled() || securityRegion.isDeleted()) {
+                //@formatter:off
+                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_REGION,
+                        null,
+                        "Invalid Region：" + (securityRegion == null ? securityClient.getRegionId() : securityRegion.getRegionId()) +
+                                "，Please check data validity.");
                 // @formatter:on
             }
             // @formatter:off
