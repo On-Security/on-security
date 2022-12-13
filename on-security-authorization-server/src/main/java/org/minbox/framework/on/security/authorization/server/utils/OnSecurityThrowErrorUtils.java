@@ -28,7 +28,6 @@ public class OnSecurityThrowErrorUtils {
     }
 
     public static void throwError(OnSecurityErrorCodes errorCode, String parameterName, String description) {
-        Assert.hasText(parameterName, "parameterName cannot be empty.");
         Assert.hasText(description, "description cannot be empty.");
         throwError(errorCode, parameterName, description, DEFAULT_HELP_URI);
     }

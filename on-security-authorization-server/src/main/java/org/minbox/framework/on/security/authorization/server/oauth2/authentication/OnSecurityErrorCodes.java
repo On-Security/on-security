@@ -26,9 +26,14 @@ package org.minbox.framework.on.security.authorization.server.oauth2.authenticat
 public enum OnSecurityErrorCodes {
     /**
      * 无效的客户端
-     * 未查询到客户端或客户端状态不正常时使用的错误码
+     * 未查询到客户端或客户端状态不正常或已被删除时使用的错误码
      */
     INVALID_CLIENT("invalid_client"),
+    /**
+     * 无效的安全域
+     * 未查询到安全域或安全域状态不正常或已被删除时使用的错误码
+     */
+    INVALID_REGION("invalid_region"),
     /**
      * 未授权客户端
      * 用户在请求授权时，判定用户是否授权了发起请求的客户端
