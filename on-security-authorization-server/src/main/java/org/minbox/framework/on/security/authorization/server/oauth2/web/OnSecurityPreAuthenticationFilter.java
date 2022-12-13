@@ -69,9 +69,7 @@ public class OnSecurityPreAuthenticationFilter extends OncePerRequestFilter {
                 authenticationManager.authenticate(preAuthenticationToken);
                 filterChain.doFilter(request, response);
             } catch (OAuth2AuthenticationException exception) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug(LogMessage.format("The pre-authentication filter encountered an exception: %s", exception.getError()), exception);
-                }
+                logger.error(LogMessage.format("The pre-authentication filter encountered an exception: %s", exception.getError()), exception);
                 authenticationFailureHandler.onAuthenticationFailure(request, response, exception);
             }
         }
@@ -90,7 +88,6 @@ public class OnSecurityPreAuthenticationFilter extends OncePerRequestFilter {
      * @param exception {@link AuthenticationException} 认证异常实例
      */
     private void defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-        logger.error(exception.getMessage(), exception);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON.toString());
         response.getWriter().write("{\"code\":-1,\"msg\":\"认证失败\"}");

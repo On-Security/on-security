@@ -46,7 +46,7 @@ import java.util.*;
  * @see AbstractOnSecurityOAuth2Configurer
  */
 public final class OnSecurityOAuth2AuthorizationServerConfigurer extends AbstractHttpConfigurer<OnSecurityOAuth2AuthorizationServerConfigurer, HttpSecurity> {
-    private Map<Class<? extends AbstractOnSecurityOAuth2Configurer>, AbstractOnSecurityOAuth2Configurer> configurers;
+    private Map<Class<? extends AbstractOnSecurityOAuth2Configurer>, AbstractOnSecurityOAuth2Configurer> configurers = createConfigurers();
     private RequestMatcher endpointsMatcher;
     private OAuth2AuthorizationServerConfigurer authorizationServerConfigurer;
 
@@ -191,12 +191,21 @@ public final class OnSecurityOAuth2AuthorizationServerConfigurer extends Abstrac
         return this;
     }
 
+    /**
+     * Configures Pre Authentication
+     *
+     * @param preAuthenticationCustomizer the {@link Customizer} providing access to the {@link OnSecurityPreAuthenticationConfigurer}
+     * @return the {@link OnSecurityOAuth2AuthorizationServerConfigurer} for further configuration
+     */
+    public OnSecurityOAuth2AuthorizationServerConfigurer preAuthentication(Customizer<OnSecurityPreAuthenticationConfigurer> preAuthenticationCustomizer) {
+        preAuthenticationCustomizer.customize(getConfigurer(OnSecurityPreAuthenticationConfigurer.class));
+        return this;
+    }
+
     @Override
     public void init(HttpSecurity httpSecurity) throws Exception {
         // Apply OAuth2AuthorizationServerConfigurer
         httpSecurity.apply(this.authorizationServerConfigurer);
-        // Load all implementation class instances of AbstractOnSecurityOAuth2Configurer
-        this.configurers = createConfigurers();
         List<RequestMatcher> requestMatchers = Arrays.asList(this.authorizationServerConfigurer.getEndpointsMatcher());
         this.configurers.values().forEach(configurer -> {
             configurer.init(httpSecurity);
