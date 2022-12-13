@@ -33,6 +33,7 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 
@@ -112,7 +113,6 @@ public class JdbcOnSecurityOAuth2AuthorizationService implements OAuth2Authoriza
         Assert.hasText(token, "token cannot be empty");
         Assert.notNull(tokenType, "tokenType cannot be null");
         SecuritySession securitySession = sessionRepository.findByToken(token, tokenType);
-        Assert.notNull(securitySession, "Token: " + token + ", Token Type: " + tokenType.getValue() + ", no session data retrieved");
-        return securitySessionToOAuth2AuthorizationConverter.convert(securitySession);
+        return !ObjectUtils.isEmpty(securitySession) ? securitySessionToOAuth2AuthorizationConverter.convert(securitySession) : null;
     }
 }
