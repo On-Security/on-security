@@ -45,6 +45,10 @@ import java.time.LocalDateTime;
  * @since 0.0.1
  */
 public class JdbcOnSecurityOAuth2AuthorizationService implements OAuth2AuthorizationService {
+    /**
+     * The name of bean in IOC
+     */
+    public static final String BEAN_NAME = "jdbcOnSecurityOAuth2AuthorizationService";
     private Converter<OAuth2Authorization, SecuritySession> oAuth2AuthorizationToSecuritySessionConverter;
     private Converter<SecuritySession, OAuth2Authorization> securitySessionToOAuth2AuthorizationConverter;
     private SecuritySessionRepository sessionRepository;

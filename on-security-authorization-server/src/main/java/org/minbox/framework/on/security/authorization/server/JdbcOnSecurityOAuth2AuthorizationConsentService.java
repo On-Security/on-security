@@ -35,6 +35,10 @@ import org.springframework.util.Assert;
  * @since 0.0.1
  */
 public class JdbcOnSecurityOAuth2AuthorizationConsentService implements OAuth2AuthorizationConsentService {
+    /**
+     * The name of bean in IOC
+     */
+    public static final String BEAN_NAME = "jdbcOnSecurityOAuth2AuthorizationConsentService";
     private SecurityUserAuthorizeConsentRepository userAuthorizeConsentRepository;
     private SecurityUserRepository userRepository;
     private Converter<OAuth2AuthorizationConsent, SecurityUserAuthorizeConsent> authorizationConsentToUserAuthorizeConsentConverter;

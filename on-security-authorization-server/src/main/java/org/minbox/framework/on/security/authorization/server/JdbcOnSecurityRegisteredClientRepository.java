@@ -47,6 +47,10 @@ import java.util.List;
  * @since 0.0.1
  */
 public final class JdbcOnSecurityRegisteredClientRepository implements RegisteredClientRepository {
+    /**
+     * The name of bean in IOC
+     */
+    public static final String BEAN_NAME = "jdbcOnSecurityRegisteredClientRepository";
     private static final String DEFAULT_SECURITY_REGION_ID = "default";
     private DataSourceTransactionManager dataSourceTransactionManager;
     private Converter<RegisteredClient, SecurityClient> registeredToSecurityClientConverter;

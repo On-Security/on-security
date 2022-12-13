@@ -55,5 +55,9 @@
             <artifactId>javax.servlet-api</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.minbox.framework</groupId>
+            <artifactId>minbox-core</artifactId>
+        </dependency>
     </dependencies>
 </project>
