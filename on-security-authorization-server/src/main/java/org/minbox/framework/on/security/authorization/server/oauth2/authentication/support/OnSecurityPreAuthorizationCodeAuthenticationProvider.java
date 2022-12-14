@@ -42,19 +42,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 认证前置验证身份提供者
+ * 授权码方式前置认证身份提供者
  * <p>
  * 用于验证请求数据有效性，如：安全域有效性、客户端是否属于安全域、用户是否绑定了认证客户端等等
  *
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class OnSecurityPreAuthenticationProvider extends AbstractOnSecurityAuthenticationProvider {
+public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends AbstractOnSecurityAuthenticationProvider {
     private SecurityClientRepository securityClientRepository;
     private SecurityUserAuthorizeClientRepository userAuthorizeClientRepository;
     private SecurityRegionRepository regionRepository;
 
-    public OnSecurityPreAuthenticationProvider(Map<Class<?>, Object> sharedObjects) {
+    public OnSecurityPreAuthorizationCodeAuthenticationProvider(Map<Class<?>, Object> sharedObjects) {
         super(sharedObjects);
         ApplicationContext applicationContext = (ApplicationContext) sharedObjects.get(ApplicationContext.class);
         JdbcOperations jdbcOperations = applicationContext.getBean(JdbcOperations.class);
@@ -65,7 +65,7 @@ public class OnSecurityPreAuthenticationProvider extends AbstractOnSecurityAuthe
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        OnSecurityPreAuthenticationToken preAuthenticationToken = (OnSecurityPreAuthenticationToken) authentication;
+        OnSecurityPreAuthorizationCodeAuthenticationToken preAuthenticationToken = (OnSecurityPreAuthorizationCodeAuthenticationToken) authentication;
         OnSecurityUserDetails onSecurityUserDetails = preAuthenticationToken.getUserDetails();
         // Verification ClientId
         if (!ObjectUtils.isEmpty(preAuthenticationToken.getClientId())) {
@@ -114,6 +114,6 @@ public class OnSecurityPreAuthenticationProvider extends AbstractOnSecurityAuthe
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return OnSecurityPreAuthenticationToken.class.isAssignableFrom(authentication);
+        return OnSecurityPreAuthorizationCodeAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }

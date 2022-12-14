@@ -24,12 +24,12 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import java.util.Collections;
 
 /**
- * 身份认证前置认证请求实体
+ * 授权码方式前置认证请求实体
  *
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class OnSecurityPreAuthenticationToken extends AbstractAuthenticationToken {
+public class OnSecurityPreAuthorizationCodeAuthenticationToken extends AbstractAuthenticationToken {
     private String clientId;
     private String grantType;
     private OnSecurityUserDetails userDetails;
@@ -40,7 +40,7 @@ public class OnSecurityPreAuthenticationToken extends AbstractAuthenticationToke
      * @param clientId    客户端ID {@link RegisteredClient#getId()}
      * @param userDetails 资源所有者，用户对象实例 {@link OnSecurityUserDetails}
      */
-    public OnSecurityPreAuthenticationToken(String clientId, String grantType, OnSecurityUserDetails userDetails) {
+    public OnSecurityPreAuthorizationCodeAuthenticationToken(String clientId, String grantType, OnSecurityUserDetails userDetails) {
         super(Collections.emptyList());
         this.clientId = clientId;
         this.grantType = grantType;

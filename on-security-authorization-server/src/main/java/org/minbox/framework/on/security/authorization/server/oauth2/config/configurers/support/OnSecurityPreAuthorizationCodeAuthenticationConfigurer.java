@@ -17,10 +17,10 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support;
 
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityPreAuthenticationProvider;
+import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityPreAuthorizationCodeAuthenticationProvider;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.AbstractOnSecurityOAuth2Configurer;
-import org.minbox.framework.on.security.authorization.server.oauth2.web.OnSecurityPreAuthenticationFilter;
-import org.springframework.context.ApplicationContext;
+import org.minbox.framework.on.security.authorization.server.oauth2.web.OnSecurityPreAuthorizationCodeAuthenticationFilter;
+import org.minbox.framework.on.security.authorization.server.utils.HttpSecuritySharedObjectUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
@@ -34,33 +34,33 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 /**
- * 请求认证前置验证配置
+ * 授权码方式前置认证配置
  *
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class OnSecurityPreAuthenticationConfigurer extends AbstractOnSecurityOAuth2Configurer {
+public class OnSecurityPreAuthorizationCodeAuthenticationConfigurer extends AbstractOnSecurityOAuth2Configurer {
     private RequestMatcher preAuthenticationRequestMatcher;
     private AuthenticationFailureHandler authenticationFailureHandler;
 
-    public OnSecurityPreAuthenticationConfigurer(ObjectPostProcessor<Object> objectPostProcessor) {
+    public OnSecurityPreAuthorizationCodeAuthenticationConfigurer(ObjectPostProcessor<Object> objectPostProcessor) {
         super(objectPostProcessor);
     }
 
     @Override
     protected void init(HttpSecurity httpSecurity) {
-        AuthorizationServerSettings authorizationServerSettings = this.getAuthorizationServerSettings(httpSecurity);
+        AuthorizationServerSettings authorizationServerSettings = HttpSecuritySharedObjectUtils.getAuthorizationServerSettings(httpSecurity);
         this.initPreAuthenticationMatcher(authorizationServerSettings);
-        OnSecurityPreAuthenticationProvider preAuthenticationProvider =
-                new OnSecurityPreAuthenticationProvider(httpSecurity.getSharedObjects());
+        OnSecurityPreAuthorizationCodeAuthenticationProvider preAuthenticationProvider =
+                new OnSecurityPreAuthorizationCodeAuthenticationProvider(httpSecurity.getSharedObjects());
         httpSecurity.authenticationProvider(preAuthenticationProvider);
     }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) {
-        AuthenticationManager authenticationManager = httpSecurity.getSharedObject(AuthenticationManager.class);
-        OnSecurityPreAuthenticationFilter preAuthenticationFilter =
-                new OnSecurityPreAuthenticationFilter(this.preAuthenticationRequestMatcher, authenticationManager);
+        AuthenticationManager authenticationManager = HttpSecuritySharedObjectUtils.getAuthenticationManager(httpSecurity);
+        OnSecurityPreAuthorizationCodeAuthenticationFilter preAuthenticationFilter =
+                new OnSecurityPreAuthorizationCodeAuthenticationFilter(this.preAuthenticationRequestMatcher, authenticationManager);
         if (this.authenticationFailureHandler != null) {
             preAuthenticationFilter.setAuthenticationFailureHandler(this.authenticationFailureHandler);
         }
@@ -91,15 +91,6 @@ public class OnSecurityPreAuthenticationConfigurer extends AbstractOnSecurityOAu
                         authorizationServerSettings.getTokenIntrospectionEndpoint(),
                         HttpMethod.POST.name()));
         // @formatter:on
-    }
-
-    private AuthorizationServerSettings getAuthorizationServerSettings(HttpSecurity httpSecurity) {
-        AuthorizationServerSettings authorizationServerSettings = httpSecurity.getSharedObject(AuthorizationServerSettings.class);
-        if (authorizationServerSettings == null) {
-            authorizationServerSettings = httpSecurity.getSharedObject(ApplicationContext.class).getBean(AuthorizationServerSettings.class);
-            httpSecurity.setSharedObject(AuthorizationServerSettings.class, authorizationServerSettings);
-        }
-        return authorizationServerSettings;
     }
 
     /**
