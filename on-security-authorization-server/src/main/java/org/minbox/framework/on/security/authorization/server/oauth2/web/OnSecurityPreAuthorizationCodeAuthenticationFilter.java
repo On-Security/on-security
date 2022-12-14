@@ -18,8 +18,8 @@
 package org.minbox.framework.on.security.authorization.server.oauth2.web;
 
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityPreAuthenticationToken;
-import org.minbox.framework.on.security.authorization.server.oauth2.web.converter.OnSecurityPreAuthenticationConverter;
+import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityPreAuthorizationCodeAuthenticationToken;
+import org.minbox.framework.on.security.authorization.server.oauth2.web.converter.OnSecurityPreAuthorizationCodeAuthenticationConverter;
 import org.springframework.core.log.LogMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;
@@ -36,25 +36,25 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 身份认证前置认证过滤器
+ * 授权码方式前置认证过滤器
  * <p>
  * 该过滤器需要拦截全部"认证地址"，每次执行认证之前都需要执行该过滤器
  *
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class OnSecurityPreAuthenticationFilter extends OncePerRequestFilter {
+public class OnSecurityPreAuthorizationCodeAuthenticationFilter extends OncePerRequestFilter {
     private final RequestMatcher preAuthenticationMatcher;
     private final AuthenticationManager authenticationManager;
     private AuthenticationConverter authenticationConverter;
     private AuthenticationFailureHandler authenticationFailureHandler;
 
-    public OnSecurityPreAuthenticationFilter(RequestMatcher preAuthenticationMatcher, AuthenticationManager authenticationManager) {
+    public OnSecurityPreAuthorizationCodeAuthenticationFilter(RequestMatcher preAuthenticationMatcher, AuthenticationManager authenticationManager) {
         Assert.notNull(authenticationManager, "authenticationManager cannot be null");
         Assert.notNull(preAuthenticationMatcher, "preAuthenticationMatcher cannot be null");
         this.preAuthenticationMatcher = preAuthenticationMatcher;
         this.authenticationManager = authenticationManager;
-        this.authenticationConverter = new OnSecurityPreAuthenticationConverter();
+        this.authenticationConverter = new OnSecurityPreAuthorizationCodeAuthenticationConverter();
         this.authenticationFailureHandler = new OnSecurityDefaultAuthenticationFailureHandler();
     }
 
@@ -64,7 +64,7 @@ public class OnSecurityPreAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } else {
             try {
-                OnSecurityPreAuthenticationToken preAuthenticationToken = (OnSecurityPreAuthenticationToken) authenticationConverter.convert(request);
+                OnSecurityPreAuthorizationCodeAuthenticationToken preAuthenticationToken = (OnSecurityPreAuthorizationCodeAuthenticationToken) authenticationConverter.convert(request);
                 authenticationManager.authenticate(preAuthenticationToken);
                 filterChain.doFilter(request, response);
             } catch (AuthenticationException exception) {

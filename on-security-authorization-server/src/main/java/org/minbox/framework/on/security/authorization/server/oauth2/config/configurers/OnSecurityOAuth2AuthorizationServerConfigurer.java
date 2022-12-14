@@ -17,7 +17,8 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.config.configurers;
 
-import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityPreAuthenticationConfigurer;
+import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityOAuth2UsernamePasswordConfigurer;
+import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityPreAuthorizationCodeAuthenticationConfigurer;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -194,11 +195,11 @@ public final class OnSecurityOAuth2AuthorizationServerConfigurer extends Abstrac
     /**
      * Configures Pre Authentication
      *
-     * @param preAuthenticationCustomizer the {@link Customizer} providing access to the {@link OnSecurityPreAuthenticationConfigurer}
+     * @param preAuthenticationCustomizer the {@link Customizer} providing access to the {@link OnSecurityPreAuthorizationCodeAuthenticationConfigurer}
      * @return the {@link OnSecurityOAuth2AuthorizationServerConfigurer} for further configuration
      */
-    public OnSecurityOAuth2AuthorizationServerConfigurer preAuthentication(Customizer<OnSecurityPreAuthenticationConfigurer> preAuthenticationCustomizer) {
-        preAuthenticationCustomizer.customize(getConfigurer(OnSecurityPreAuthenticationConfigurer.class));
+    public OnSecurityOAuth2AuthorizationServerConfigurer preAuthentication(Customizer<OnSecurityPreAuthorizationCodeAuthenticationConfigurer> preAuthenticationCustomizer) {
+        preAuthenticationCustomizer.customize(getConfigurer(OnSecurityPreAuthorizationCodeAuthenticationConfigurer.class));
         return this;
     }
 
@@ -206,7 +207,8 @@ public final class OnSecurityOAuth2AuthorizationServerConfigurer extends Abstrac
     public void init(HttpSecurity httpSecurity) throws Exception {
         // Apply OAuth2AuthorizationServerConfigurer
         httpSecurity.apply(this.authorizationServerConfigurer);
-        List<RequestMatcher> requestMatchers = Arrays.asList(this.authorizationServerConfigurer.getEndpointsMatcher());
+        List<RequestMatcher> requestMatchers = new ArrayList<>();
+        requestMatchers.add(this.authorizationServerConfigurer.getEndpointsMatcher());
         this.configurers.values().forEach(configurer -> {
             configurer.init(httpSecurity);
             RequestMatcher requestMatcher = configurer.getRequestMatcher();
@@ -226,8 +228,11 @@ public final class OnSecurityOAuth2AuthorizationServerConfigurer extends Abstrac
         Map<Class<? extends AbstractOnSecurityOAuth2Configurer>, AbstractOnSecurityOAuth2Configurer> configurers = new LinkedHashMap<>();
         // @formatter:off
         // Put OnSecurityPreAuthenticationConfigurer
-        configurers.put(OnSecurityPreAuthenticationConfigurer.class,
-                postProcess(new OnSecurityPreAuthenticationConfigurer(this::postProcess)));
+        configurers.put(OnSecurityPreAuthorizationCodeAuthenticationConfigurer.class,
+                postProcess(new OnSecurityPreAuthorizationCodeAuthenticationConfigurer(this::postProcess)));
+        // Put OnSecurityOAuth2UsernamePasswordConfigurer
+        configurers.put(OnSecurityOAuth2UsernamePasswordConfigurer.class,
+                postProcess(new OnSecurityOAuth2UsernamePasswordConfigurer(this::postProcess)));
         // @formatter:on
         return configurers;
     }

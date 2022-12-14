@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.authentication;
 
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+
 /**
  * 定义OnSecurity所使用的异常码
  *
@@ -26,19 +28,52 @@ package org.minbox.framework.on.security.authorization.server.oauth2.authenticat
 public enum OnSecurityErrorCodes {
     /**
      * 无效的客户端
+     * <p>
      * 未查询到客户端或客户端状态不正常或已被删除时使用的错误码
      */
     INVALID_CLIENT("invalid_client"),
     /**
+     * 无效的用户
+     * <p>
+     * 未查询到客户或者客户状态不正常时使用的错误码
+     */
+    INVALID_USER("invalid_user"),
+    /**
+     * 无效的用户名
+     * <p>
+     * 未传递"username"参数时使用
+     */
+    INVALID_USERNAME("invalid_username"),
+    /**
+     * 无效的密码
+     * <p>
+     * 未传递"password"参数时使用
+     */
+    INVALID_PASSWORD("invalid_password"),
+    /**
+     * 身份验证失败
+     * <p>
+     * 用户名或密码错误时使用
+     */
+    AUTHENTICATION_FAILED("authentication_failed"),
+    /**
      * 无效的安全域
+     * <p>
      * 未查询到安全域或安全域状态不正常或已被删除时使用的错误码
      */
     INVALID_REGION("invalid_region"),
     /**
      * 未授权客户端
+     * <p>
      * 用户在请求授权时，判定用户是否授权了发起请求的客户端
      */
     UNAUTHORIZED_CLIENT("unauthorized_client"),
+    /**
+     * 不支持的授权类型
+     * <p>
+     * 未传递"grant_type"参数或者不存在于{@link AuthorizationGrantType}定义时使用的错误码
+     */
+    UNSUPPORTED_GRANT_TYPE("unsupported_grant_type"),
     /**
      * 未知的异常
      */

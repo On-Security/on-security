@@ -17,7 +17,7 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.web.converter;
 
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityPreAuthenticationToken;
+import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityPreAuthorizationCodeAuthenticationToken;
 import org.minbox.framework.on.security.authorization.server.utils.RequestParameterUtils;
 import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,13 +30,13 @@ import org.springframework.util.MultiValueMap;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 转换前置身份认证器请求Token
+ * 转换授权码方式前置认证所需要的Token实体
  *
  * @author 恒宇少年
- * @see OnSecurityPreAuthenticationToken
+ * @see OnSecurityPreAuthorizationCodeAuthenticationToken
  * @since 0.0.1
  */
-public class OnSecurityPreAuthenticationConverter implements AuthenticationConverter {
+public class OnSecurityPreAuthorizationCodeAuthenticationConverter implements AuthenticationConverter {
 
     @Override
     public Authentication convert(HttpServletRequest request) {
@@ -49,7 +49,7 @@ public class OnSecurityPreAuthenticationConverter implements AuthenticationConve
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) authentication;
             onSecurityUserDetails = (OnSecurityUserDetails) usernamePasswordAuthenticationToken.getPrincipal();
         }
-        return new OnSecurityPreAuthenticationToken(clientId, grantType, onSecurityUserDetails);
+        return new OnSecurityPreAuthorizationCodeAuthenticationToken(clientId, grantType, onSecurityUserDetails);
     }
 
 
