@@ -18,7 +18,8 @@
 package org.minbox.framework.on.security.authorization.server.oauth2.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityPreAuthenticationConfigurer;
+import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityPreAuthorizationCodeAuthenticationConfigurer;
+import org.minbox.framework.on.security.authorization.server.oauth2.web.OnSecurityPreAuthorizationCodeAuthenticationFilter;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -44,11 +45,11 @@ import static org.minbox.framework.on.security.authorization.server.utils.OnSecu
  * {@link OAuth2TokenEndpointConfigurer#errorResponseHandler(AuthenticationFailureHandler)}、
  * {@link OAuth2TokenIntrospectionEndpointConfigurer#errorResponseHandler(AuthenticationFailureHandler)}、
  * {@link  OAuth2TokenRevocationEndpointConfigurer#errorResponseHandler(AuthenticationFailureHandler)}、
- * {@link OnSecurityPreAuthenticationConfigurer#authenticationFailureHandler(AuthenticationFailureHandler)}
+ * {@link OnSecurityPreAuthorizationCodeAuthenticationConfigurer#authenticationFailureHandler(AuthenticationFailureHandler)}
  * 默认情况下以上全部的异常处理方法都会使用本处理器进行处理{@link AuthenticationException}异常
  *
  * @author 恒宇少年
- * @see org.minbox.framework.on.security.authorization.server.oauth2.web.OnSecurityPreAuthenticationFilter
+ * @see OnSecurityPreAuthorizationCodeAuthenticationFilter
  * @since 0.0.1
  */
 public class OnSecurityDefaultAuthenticationFailureHandler implements AuthenticationFailureHandler {

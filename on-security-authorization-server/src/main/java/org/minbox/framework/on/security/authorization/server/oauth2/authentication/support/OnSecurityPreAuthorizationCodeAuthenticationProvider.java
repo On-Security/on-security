@@ -68,8 +68,9 @@ public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends Abstra
         OnSecurityPreAuthorizationCodeAuthenticationToken preAuthenticationToken = (OnSecurityPreAuthorizationCodeAuthenticationToken) authentication;
         OnSecurityUserDetails onSecurityUserDetails = preAuthenticationToken.getUserDetails();
         // Verification ClientId
+        SecurityClient securityClient = null;
         if (!ObjectUtils.isEmpty(preAuthenticationToken.getClientId())) {
-            SecurityClient securityClient = securityClientRepository.findByClientId(preAuthenticationToken.getClientId());
+            securityClient = securityClientRepository.findByClientId(preAuthenticationToken.getClientId());
             if (securityClient == null || !securityClient.isEnabled() || securityClient.isDeleted()) {
                 //@formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_CLIENT,
@@ -101,7 +102,7 @@ public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends Abstra
                     .map(SecurityUserAuthorizeClient::getClientId)
                     .collect(Collectors.toList());
             // @formatter:on
-            if (!userAuthorizeClientIds.contains(preAuthenticationToken.getClientId())) {
+            if (!userAuthorizeClientIds.contains(securityClient.getId())) {
                 // @formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
                         OAuth2ParameterNames.CLIENT_ID,
