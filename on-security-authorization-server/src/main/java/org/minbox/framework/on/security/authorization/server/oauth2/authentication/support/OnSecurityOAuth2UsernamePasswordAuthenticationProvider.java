@@ -30,6 +30,7 @@ import org.minbox.framework.on.security.core.authorization.data.region.SecurityR
 import org.minbox.framework.on.security.core.authorization.data.user.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -52,6 +53,7 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -141,10 +143,11 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
             usernamePasswordAuthenticationToken.setUserDetails(userDetails);
             SecurityContext securityContext = SecurityContextHolder.getContext();
             OAuth2ClientAuthenticationToken clientAuthenticationToken = (OAuth2ClientAuthenticationToken) securityContext.getAuthentication();
+            UsernamePasswordAuthenticationToken principalAuthentication = new UsernamePasswordAuthenticationToken(userDetails, null);
             // @formatter:off
             DefaultOAuth2TokenContext.Builder tokenContextBuilder = DefaultOAuth2TokenContext.builder()
                     .registeredClient(registeredClient)
-                    .principal(usernamePasswordAuthenticationToken)
+                    .principal(principalAuthentication)
                     .authorizationGrant(clientAuthenticationToken)
                     .authorizedScopes(registeredClient.getScopes())
                     .authorizationGrantType(AuthorizationGrantType.PASSWORD);
@@ -156,7 +159,8 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
                     .id(UUID.randomUUID().toString())
                     .principalName(usernamePasswordAuthenticationToken.getUsername())
                     .authorizedScopes(registeredClient.getScopes())
-                    .authorizationGrantType(AuthorizationGrantType.PASSWORD);
+                    .authorizationGrantType(AuthorizationGrantType.PASSWORD)
+                    .attribute(Principal.class.getName(), principalAuthentication);
             // @formatter:on
 
             // ----- Access token -----
