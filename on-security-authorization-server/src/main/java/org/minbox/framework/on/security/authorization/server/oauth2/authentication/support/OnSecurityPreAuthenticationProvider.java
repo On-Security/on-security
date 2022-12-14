@@ -67,8 +67,8 @@ public class OnSecurityPreAuthenticationProvider extends AbstractOnSecurityAuthe
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         OnSecurityPreAuthenticationToken preAuthenticationToken = (OnSecurityPreAuthenticationToken) authentication;
         OnSecurityUserDetails onSecurityUserDetails = preAuthenticationToken.getUserDetails();
-        // Verification ClientId && Verification UserDetails
-        if (!ObjectUtils.isEmpty(preAuthenticationToken.getClientId()) && onSecurityUserDetails != null) {
+        // Verification ClientId
+        if (!ObjectUtils.isEmpty(preAuthenticationToken.getClientId())) {
             SecurityClient securityClient = securityClientRepository.findByClientId(preAuthenticationToken.getClientId());
             if (securityClient == null || !securityClient.isEnabled() || securityClient.isDeleted()) {
                 //@formatter:off
@@ -86,6 +86,9 @@ public class OnSecurityPreAuthenticationProvider extends AbstractOnSecurityAuthe
                                 "，Please check data validity.");
                 // @formatter:on
             }
+        }
+        // Verification UserDetails
+        if (onSecurityUserDetails != null) {
             // @formatter:off
             List<SecurityUserAuthorizeClient> userAuthorizeClientList =
                     userAuthorizeClientRepository.findByUserId(onSecurityUserDetails.getUserId());
@@ -98,7 +101,7 @@ public class OnSecurityPreAuthenticationProvider extends AbstractOnSecurityAuthe
                     .map(SecurityUserAuthorizeClient::getClientId)
                     .collect(Collectors.toList());
             // @formatter:on
-            if (!userAuthorizeClientIds.contains(securityClient.getId())) {
+            if (!userAuthorizeClientIds.contains(preAuthenticationToken.getClientId())) {
                 // @formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
                         OAuth2ParameterNames.CLIENT_ID,
