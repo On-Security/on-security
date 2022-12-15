@@ -96,6 +96,14 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
         RegisteredClient registeredClient = usernamePasswordAuthenticationToken.getRegisteredClient();
         String clientId = registeredClient.getId();
         try {
+            if (ObjectUtils.isEmpty(registeredClient.getAuthorizationGrantTypes()) ||
+                    !registeredClient.getAuthorizationGrantTypes().contains(AuthorizationGrantType.PASSWORD)) {
+                // @formatter:off
+                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNSUPPORTED_GRANT_TYPE,
+                        OAuth2ParameterNames.GRANT_TYPE,
+                        "Unauthorized grant_type : " + AuthorizationGrantType.PASSWORD.getValue());
+                // @formatter:on
+            }
             SecurityUser securityUser = userRepository.findByUsername(usernamePasswordAuthenticationToken.getUsername());
             if (securityUser == null || !securityUser.isEnabled() || securityUser.isDeleted()) {
                 // @formatter:off
