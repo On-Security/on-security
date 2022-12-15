@@ -18,14 +18,17 @@
 package org.minbox.framework.on.security.authorization.server.oauth2.web;
 
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
+import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityErrorCodes;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityOAuth2UsernamePasswordAuthenticationToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.converter.OnSecurityOAuth2UsernamePasswordAuthenticationConverter;
+import org.minbox.framework.on.security.authorization.server.utils.OnSecurityThrowErrorUtils;
 import org.minbox.framework.on.security.authorization.server.utils.RequestParameterUtils;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
@@ -39,6 +42,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -78,7 +82,12 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationFilter extends OncePe
         } else {
             MultiValueMap<String, String> parameters = RequestParameterUtils.getParameters(request);
             // Skip the filter when there are no username and password parameters
-            if (!parameters.containsKey(OAuth2ParameterNames.USERNAME) || !parameters.containsKey(OAuth2ParameterNames.PASSWORD)) {
+            String grantType = parameters.getFirst(OAuth2ParameterNames.GRANT_TYPE);
+            if (!StringUtils.hasText(grantType)) {
+                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_GRANT_TYPE,
+                        OAuth2ParameterNames.GRANT_TYPE);
+            }
+            if (!AuthorizationGrantType.PASSWORD.getValue().equals(grantType)) {
                 filterChain.doFilter(request, response);
             } else {
                 try {

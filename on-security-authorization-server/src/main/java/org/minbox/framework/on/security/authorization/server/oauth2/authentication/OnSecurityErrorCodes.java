@@ -39,6 +39,10 @@ public enum OnSecurityErrorCodes {
      */
     INVALID_USER("invalid_user"),
     /**
+     * 无效的授权方式
+     */
+    INVALID_GRANT_TYPE("invalid_grant_type"),
+    /**
      * 无效的用户名
      * <p>
      * 未传递"username"参数时使用
