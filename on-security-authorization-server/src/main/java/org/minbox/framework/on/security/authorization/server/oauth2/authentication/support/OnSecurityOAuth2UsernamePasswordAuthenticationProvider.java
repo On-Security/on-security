@@ -41,6 +41,10 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
+import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
@@ -69,6 +73,7 @@ import java.util.stream.Collectors;
  */
 public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends AbstractOnSecurityAuthenticationProvider {
     private final Log logger = LogFactory.getLog(getClass());
+    private static final OAuth2TokenType ID_TOKEN_TOKEN_TYPE = new OAuth2TokenType(OidcParameterNames.ID_TOKEN);
     private SecurityUserRepository userRepository;
     private SecurityUserAuthorizeClientRepository userAuthorizeClientRepository;
     private SecurityRegionRepository regionRepository;
@@ -224,6 +229,37 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
                 authorizationBuilder.refreshToken(refreshToken);
             }
 
+            // ----- ID token -----
+            OidcIdToken idToken;
+            if (registeredClient.getScopes().contains(OidcScopes.OPENID)) {
+                // @formatter:off
+                tokenContext = tokenContextBuilder
+                        .tokenType(ID_TOKEN_TOKEN_TYPE)
+                        .authorization(authorizationBuilder.build())	// ID token customizer may need access to the access token and/or refresh token
+                        .build();
+                // @formatter:on
+                OAuth2Token generatedIdToken = tokenGenerator.generate(tokenContext);
+                if (!(generatedIdToken instanceof Jwt)) {
+                    // @formatter:off
+                    OnSecurityError onSecurityError = new OnSecurityError(OnSecurityErrorCodes.UNKNOWN_EXCEPTION.getValue(),
+                            null,
+                            "The token generator failed to generate the ID token.",
+                            OnSecurityThrowErrorUtils.DEFAULT_HELP_URI);
+                    // @formatter:on
+                    throw new OnSecurityOAuth2AuthenticationException(onSecurityError);
+                }
+
+                if (this.logger.isTraceEnabled()) {
+                    this.logger.trace("Generated id token");
+                }
+
+                idToken = new OidcIdToken(generatedIdToken.getTokenValue(), generatedIdToken.getIssuedAt(),
+                        generatedIdToken.getExpiresAt(), ((Jwt) generatedIdToken).getClaims());
+                authorizationBuilder.token(idToken, (metadata) ->
+                        metadata.put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME, idToken.getClaims()));
+            } else {
+                idToken = null;
+            }
 
             OAuth2Authorization authorization = authorizationBuilder.build();
 
