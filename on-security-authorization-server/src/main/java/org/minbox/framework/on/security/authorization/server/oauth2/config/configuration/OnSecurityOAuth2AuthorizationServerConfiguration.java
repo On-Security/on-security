@@ -75,6 +75,8 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
         authorizationServerConfigurer
                 .authorizationEndpoint(config -> config.errorResponseHandler(onSecurityFailureHandler))
                 .tokenEndpoint(config -> config.errorResponseHandler(onSecurityFailureHandler))
+                .tokenIntrospectionEndpoint(config -> config.errorResponseHandler(onSecurityFailureHandler))
+                .tokenRevocationEndpoint(config -> config.errorResponseHandler(onSecurityFailureHandler))
                 // Enable OpenID Connect 1.0
                 .oidc(Customizer.withDefaults());
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
