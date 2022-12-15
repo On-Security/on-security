@@ -66,6 +66,11 @@ public final class AuthenticationFailureResponse implements Serializable {
         return new Builder(errorCode);
     }
 
+    public static Builder withFailureResponse(AuthenticationFailureResponse failureResponse) {
+        Assert.notNull(failureResponse, "failureResponse cannot be null.");
+        return new Builder(failureResponse);
+    }
+
     public static class Builder implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String errorCode;
@@ -75,6 +80,13 @@ public final class AuthenticationFailureResponse implements Serializable {
         private Builder(String errorCode) {
             this.errorCode = errorCode;
         }
+
+        private Builder(AuthenticationFailureResponse failureResponse) {
+            this.errorCode = failureResponse.errorCode;
+            this.description = failureResponse.description;
+            this.helpUri = failureResponse.helpUri;
+        }
+
         public Builder description(String description) {
             this.description = description;
             return this;

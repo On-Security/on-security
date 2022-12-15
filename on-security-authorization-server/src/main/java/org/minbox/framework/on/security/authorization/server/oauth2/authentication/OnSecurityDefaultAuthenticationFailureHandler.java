@@ -29,6 +29,7 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2TokenIntrospectionEndpointConfigurer;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2TokenRevocationEndpointConfigurer;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -84,6 +85,12 @@ public class OnSecurityDefaultAuthenticationFailureHandler implements Authentica
                     .description(oAuth2Error.getDescription())
                     .helpUri(oAuth2Error.getUri())
                     .build();
+            if (!StringUtils.hasText(failureResponse.getHelpUri()) || !StringUtils.hasText(failureResponse.getDescription())) {
+                failureResponse = AuthenticationFailureResponse.withFailureResponse(failureResponse)
+                        .description("An unknown authentication exception has occurred.")
+                        .helpUri(DEFAULT_HELP_URI)
+                        .build();
+            }
         }
         String responseJson = objectMapper.writeValueAsString(failureResponse);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
