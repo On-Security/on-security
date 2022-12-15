@@ -137,6 +137,34 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
      * @return {@link AuthorizationServerSettings}
      */
     protected AuthorizationServerSettings defaultAuthorizationServerSettings() {
-        return AuthorizationServerSettings.builder().build();
+        return OnSecurityAuthorizationServerSettingsBuilder.build();
+    }
+
+    /**
+     * {@link AuthorizationServerSettings}自定义构建器
+     */
+    private static class OnSecurityAuthorizationServerSettingsBuilder {
+        private static final String ON_SECURITY_PREFIX = "/on-security";
+        private static final String ON_SECURITY_TOKEN_ENDPOINT = ON_SECURITY_PREFIX + "/token";
+        private static final String ON_SECURITY_AUTHORIZE_ENDPOINT = ON_SECURITY_PREFIX + "/authorize";
+        private static final String ON_SECURITY_JWKS_ENDPOINT = ON_SECURITY_PREFIX + "/jwks";
+        private static final String ON_SECURITY_REVOKE_ENDPOINT = ON_SECURITY_PREFIX + "/revoke";
+        private static final String ON_SECURITY_INTROSPECT_ENDPOINT = ON_SECURITY_PREFIX + "/introspect";
+        private static final String ON_SECURITY_OIDC_CONNECT_REGISTER_ENDPOINT = ON_SECURITY_PREFIX + "/connect/register";
+        private static final String ON_SECURITY_OIDC_USERINFO_ENDPOINT = ON_SECURITY_PREFIX + "/userinfo";
+
+        public static AuthorizationServerSettings build() {
+            // @formatter:off
+            return AuthorizationServerSettings.builder()
+                    .tokenEndpoint(ON_SECURITY_TOKEN_ENDPOINT)
+                    .authorizationEndpoint(ON_SECURITY_AUTHORIZE_ENDPOINT)
+                    .jwkSetEndpoint(ON_SECURITY_JWKS_ENDPOINT)
+                    .tokenRevocationEndpoint(ON_SECURITY_REVOKE_ENDPOINT)
+                    .tokenIntrospectionEndpoint(ON_SECURITY_INTROSPECT_ENDPOINT)
+                    .oidcClientRegistrationEndpoint(ON_SECURITY_OIDC_CONNECT_REGISTER_ENDPOINT)
+                    .oidcUserInfoEndpoint(ON_SECURITY_OIDC_USERINFO_ENDPOINT)
+                    .build();
+            // @formatter:on
+        }
     }
 }
