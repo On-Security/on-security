@@ -24,7 +24,6 @@ import org.minbox.framework.on.security.authorization.server.utils.RequestParame
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientAuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationConverter;
@@ -47,11 +46,7 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationConverter implements 
     @Override
     public Authentication convert(HttpServletRequest request) {
         MultiValueMap<String, String> parameters = RequestParameterUtils.getParameters(request);
-        // verify grant_type
-        String grantType = parameters.getFirst(OAuth2ParameterNames.GRANT_TYPE);
-        if (!StringUtils.hasText(grantType) || !AuthorizationGrantType.PASSWORD.equals(new AuthorizationGrantType(grantType))) {
-            OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNSUPPORTED_GRANT_TYPE, OAuth2ParameterNames.GRANT_TYPE);
-        }
+
         // verify username
         String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
         if (!StringUtils.hasText(username)) {
