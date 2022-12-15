@@ -115,7 +115,6 @@ public class JdbcOnSecurityOAuth2AuthorizationService implements OAuth2Authoriza
     @Override
     public OAuth2Authorization findByToken(String token, OAuth2TokenType tokenType) {
         Assert.hasText(token, "token cannot be empty");
-        Assert.notNull(tokenType, "tokenType cannot be null");
         SecuritySession securitySession = sessionRepository.findByToken(token, tokenType);
         return !ObjectUtils.isEmpty(securitySession) ? securitySessionToOAuth2AuthorizationConverter.convert(securitySession) : null;
     }
