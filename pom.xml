@@ -60,4 +60,28 @@
             </snapshots>
         </repository>
     </repositories>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven.gpg.plugin.version}</version>
+                <configuration>
+                    <!-- Prevent gpg from using pinentry programs -->
+                    <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </gpgArguments>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
