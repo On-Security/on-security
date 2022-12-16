@@ -54,10 +54,8 @@ jobs:
       # Prepare Release
       - name: Prepare Release
         if: startsWith(github.ref, 'refs/tags/')
-        env:
-          CURRENT_TAG: ${{ steps.get_version.outputs.VERSION }}
         run: |
-          docker run -v "$PWD":/workdir quay.io/git-chglog/git-chglog $CURRENT_TAG > CURRENT_TAG_CHANGELOG.md
+          docker run -v "$PWD":/workdir quay.io/git-chglog/git-chglog ${{ steps.get_version.outputs.VERSION }} > CURRENT_TAG_CHANGELOG.md
           cat CURRENT_TAG_CHANGELOG.md
       # Create Release
       - name: Release
