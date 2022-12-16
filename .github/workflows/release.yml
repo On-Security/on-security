@@ -49,25 +49,20 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.MAVEN_CENTER_USER_NAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTER_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-      # Get Tag Version
-      - name: Get Version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       # Prepare Release
       #- name: Prepare Release
       #  if: startsWith(github.ref, 'refs/tags/')
       #  run: docker run --rm -v "$PWD":/workdir quay.io/git-chglog/git-chglog:latest ${{ steps.get_version.outputs.VERSION }} > CURRENT_TAG_CHANGELOG.txt
       - uses: release-drafter/release-drafter@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # Check CURRENT_TAG_CHANGELOG.txt
-      - name: Check CURRENT_TAG_CHANGELOG
-        run: cat CURRENT_TAG_CHANGELOG.txt
-      # Create Release
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
-          body_path: CURRENT_TAG_CHANGELOG.txt
+          config-name: release-drafter.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Create Release
+      #- name: Release
+      #  uses: softprops/action-gh-release@v1
+      #  if: startsWith(github.ref, 'refs/tags/')
+      #  with:
+      #    body_path: CURRENT_TAG_CHANGELOG.txt
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
