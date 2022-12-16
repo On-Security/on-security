@@ -54,9 +54,10 @@ jobs:
       # Prepare Release
       - name: Prepare Release
         if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          docker run -v "$PWD":/workdir quay.io/git-chglog/git-chglog ${{ steps.get_version.outputs.VERSION }} > CURRENT_TAG_CHANGELOG.md
-          cat CURRENT_TAG_CHANGELOG.md
+        run: docker run -v --rm "$PWD":/workdir quay.io/git-chglog/git-chglog:latest ${{ steps.get_version.outputs.VERSION }} > CURRENT_TAG_CHANGELOG.md
+      # Check CURRENT_TAG_CHANGELOG.md
+      - name: Check CURRENT_TAG_CHANGELOG
+        run: cat CURRENT_TAG_CHANGELOG.md
       # Create Release
       - name: Release
         uses: softprops/action-gh-release@v1
