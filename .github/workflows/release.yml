@@ -39,8 +39,8 @@ jobs:
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      # Compile
-      - run: mvn clean compile
+      # Package
+      - run: mvn -B package
       # Deploy
       - name: Publish to Apache Maven Central
         run: mvn deploy
