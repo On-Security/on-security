@@ -40,7 +40,9 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       # Package
-      - run: mvn -B package
+      - run:
+        - mvn -B package
+        - export GPG_TTY=$(tty)
       # Deploy
       - name: Publish to Apache Maven Central
         run: mvn deploy
