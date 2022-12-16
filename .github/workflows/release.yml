@@ -52,9 +52,12 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       # Prepare Release
-      - name: Prepare Release
-        if: startsWith(github.ref, 'refs/tags/')
-        run: docker run --rm -v "$PWD":/workdir quay.io/git-chglog/git-chglog:latest ${{ steps.get_version.outputs.VERSION }} > CURRENT_TAG_CHANGELOG.txt
+      #- name: Prepare Release
+      #  if: startsWith(github.ref, 'refs/tags/')
+      #  run: docker run --rm -v "$PWD":/workdir quay.io/git-chglog/git-chglog:latest ${{ steps.get_version.outputs.VERSION }} > CURRENT_TAG_CHANGELOG.txt
+      - uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Check CURRENT_TAG_CHANGELOG.txt
       - name: Check CURRENT_TAG_CHANGELOG
         run: cat CURRENT_TAG_CHANGELOG.txt
