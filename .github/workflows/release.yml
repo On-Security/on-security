@@ -53,13 +53,13 @@ jobs:
         env:
           CURRENT_TAG: ${{ steps.version_tag.outputs.VERSION }}
         run: |
-          docker run -v "$PWD":/workdir quay.io/git-chglog/git-chglog $CURRENT_TAG > CHANGELOG.md
-          cat CHANGELOG.md
+          docker run -v "$PWD":/workdir quay.io/git-chglog/git-chglog CURRENT_TAG > CURRENT_TAG_CHANGELOG.md
+          cat CURRENT_TAG_CHANGELOG.md
       # Create Release
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          body_path: CHANGELOG.md
+          body_path: CURRENT_TAG_CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
