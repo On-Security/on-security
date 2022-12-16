@@ -1,13 +1,13 @@
 name-template: 'v$RESOLVED_VERSION 🌈'
 tag-template: 'v$RESOLVED_VERSION'
 categories:
-  - title: '🚀 Features'
+  - title: '⭐ New Features'
     labels:
       - 'feature'
       - 'art'
       - 'enhancement'
       - 'rocket'
-  - title: '🐛 Bug Fixes'
+  - title: '🐞 Bug Fixes'
     labels:
       - 'fix'
       - 'bugfix'
