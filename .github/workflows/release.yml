@@ -47,11 +47,15 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.MAVEN_CENTER_USER_NAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTER_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+      # Get Tag Version
+      - name: Get Version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       # Prepare Release
       - name: Prepare Release
         if: startsWith(github.ref, 'refs/tags/')
         env:
-          CURRENT_TAG: ${{ github.ref }}
+          CURRENT_TAG: ${{ steps.get_version.outputs.VERSION }}
         run: |
           docker run -v "$PWD":/workdir quay.io/git-chglog/git-chglog $CURRENT_TAG > CURRENT_TAG_CHANGELOG.md
           cat CURRENT_TAG_CHANGELOG.md
