@@ -7,7 +7,7 @@ name: On-Security-Release
 on:
   push:
     branches:
-      - master
+      - develop
     tags:
       - "v*"
 
