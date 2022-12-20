@@ -21,6 +21,7 @@ import org.minbox.framework.on.security.core.authorization.SignatureAlgorithm;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -45,6 +46,7 @@ public class SecurityClientAuthentication implements Serializable {
     private Set<AuthorizationGrantType> grantTypes;
     private SignatureAlgorithm idTokenSignatureAlgorithm;
     private int authorizationCodeExpirationTime;
+    private OAuth2TokenFormat accessTokenFormat;
     private int accessTokenExpirationTime;
     private int refreshTokenExpirationTime;
     private boolean reuseRefreshToken;
@@ -93,6 +95,10 @@ public class SecurityClientAuthentication implements Serializable {
         return authorizationCodeExpirationTime;
     }
 
+    public OAuth2TokenFormat getAccessTokenFormat() {
+        return accessTokenFormat;
+    }
+
     public int getAccessTokenExpirationTime() {
         return accessTokenExpirationTime;
     }
@@ -121,7 +127,8 @@ public class SecurityClientAuthentication implements Serializable {
                 ", signatureAlgorithm=" + this.getSignatureAlgorithm() + ", authorizationMethods=" + this.getAuthorizationMethods() +
                 ", grantTypes=" + this.getGrantTypes() + ", idTokenSignatureAlgorithm=" + this.getIdTokenSignatureAlgorithm() +
                 ", authorizationCodeExpirationTime=" + this.getAuthorizationCodeExpirationTime() + ", accessTokenExpirationTime=" +
-                this.getAccessTokenExpirationTime() + ", refreshTokenExpirationTime=" + this.getRefreshTokenExpirationTime() +
+                this.getAccessTokenExpirationTime() + ", accessTokenFormat=" + this.getAccessTokenFormat() +
+                ", refreshTokenExpirationTime=" + this.getRefreshTokenExpirationTime() +
                 ", reuseRefreshToken=" + this.isReuseRefreshToken() + ", createTime=" + this.getCreateTime() + ")";
         // @formatter:on
     }
@@ -141,6 +148,7 @@ public class SecurityClientAuthentication implements Serializable {
         private Set<AuthorizationGrantType> grantTypes;
         private SignatureAlgorithm idTokenSignatureAlgorithm;
         private int authorizationCodeExpirationTime;
+        private OAuth2TokenFormat accessTokenFormat;
         private int accessTokenExpirationTime;
         private int refreshTokenExpirationTime;
         private boolean reuseRefreshToken;
@@ -195,6 +203,11 @@ public class SecurityClientAuthentication implements Serializable {
             return this;
         }
 
+        public Builder accessTokenFormat(OAuth2TokenFormat accessTokenFormat) {
+            this.accessTokenFormat = accessTokenFormat;
+            return this;
+        }
+
         public Builder accessTokenExpirationTime(int accessTokenExpirationTime) {
             this.accessTokenExpirationTime = accessTokenExpirationTime;
             return this;
@@ -222,6 +235,7 @@ public class SecurityClientAuthentication implements Serializable {
             Assert.isTrue(this.authorizationCodeExpirationTime > 0, "authorizationCodeExpirationTime must be greater than 0");
             Assert.isTrue(this.accessTokenExpirationTime > 0, "accessTokenExpirationTime must be greater than 0");
             Assert.isTrue(this.refreshTokenExpirationTime > 0, "refreshTokenExpirationTime must be greater than 0");
+            this.accessTokenFormat = this.accessTokenFormat == null ? OAuth2TokenFormat.SELF_CONTAINED : this.accessTokenFormat;
             return this.create();
         }
 
@@ -237,6 +251,7 @@ public class SecurityClientAuthentication implements Serializable {
             clientAuthentication.consentRequired = this.consentRequired;
             clientAuthentication.idTokenSignatureAlgorithm = this.idTokenSignatureAlgorithm;
             clientAuthentication.authorizationCodeExpirationTime = this.authorizationCodeExpirationTime;
+            clientAuthentication.accessTokenFormat = this.accessTokenFormat;
             clientAuthentication.accessTokenExpirationTime = this.accessTokenExpirationTime;
             clientAuthentication.refreshTokenExpirationTime = this.refreshTokenExpirationTime;
             clientAuthentication.reuseRefreshToken = this.reuseRefreshToken;
@@ -251,6 +266,7 @@ public class SecurityClientAuthentication implements Serializable {
                     this.signatureAlgorithm + ", authorizationMethods=" + this.authorizationMethods + ", grantTypes=" + this.grantTypes +
                     ", idTokenSignatureAlgorithm=" + this.idTokenSignatureAlgorithm + ", authorizationCodeExpirationTime=" +
                     this.authorizationCodeExpirationTime + ", accessTokenExpirationTime=" + this.accessTokenExpirationTime +
+                    ", accessTokenFormat=" + this.accessTokenFormat +
                     ", refreshTokenExpirationTime=" + this.refreshTokenExpirationTime + ", reuseRefreshToken=" + this.reuseRefreshToken +
                     ", createTime=" + this.createTime + ")";
             // @formatter:on

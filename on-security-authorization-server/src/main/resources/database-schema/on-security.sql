@@ -118,6 +118,7 @@ CREATE TABLE `security_client_authentication` (
                                                   `consent_required` bit(1) DEFAULT b'0' COMMENT '是否需要用户授权同意',
                                                   `id_token_signature_algorithm` varchar(10) DEFAULT NULL COMMENT 'id_token签名算法，数据取值：global_data_signature_algorithm#algorithm',
                                                   `authorization_code_expiration_time` int(11) NOT NULL DEFAULT 300 COMMENT '授权码过期时间，单位：秒',
+                                                  `access_token_format` varchar(20) NOT NULL DEFAULT 'self-contained' COMMENT 'access_token生成格式',
                                                   `access_token_expiration_time` int(11) NOT NULL DEFAULT 300 COMMENT 'access_token过期时间，单位：秒',
                                                   `refresh_token_expiration_time` int(11) NOT NULL DEFAULT 900 COMMENT 'refresh_token过期时间，单位：秒',
                                                   `reuse_refresh_token` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否重用刷新令牌',
