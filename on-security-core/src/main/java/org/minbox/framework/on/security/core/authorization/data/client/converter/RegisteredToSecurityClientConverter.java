@@ -64,6 +64,10 @@ public final class RegisteredToSecurityClientConverter implements Converter<Regi
                 .jwksUrl(registeredClient.getClientSettings().getJwkSetUrl())
                 .authorizationMethods(registeredClient.getClientAuthenticationMethods())
                 .grantTypes(registeredClient.getAuthorizationGrantTypes());
+        // AccessTokenFormat
+        if(!ObjectUtils.isEmpty(registeredClient.getTokenSettings().getAccessTokenFormat())) {
+           authenticationBuilder.accessTokenFormat(registeredClient.getTokenSettings().getAccessTokenFormat());
+        }
         // TokenEndpointAuthenticationSigningAlgorithm
         if(!ObjectUtils.isEmpty(registeredClient.getClientSettings().getTokenEndpointAuthenticationSigningAlgorithm())) {
             SignatureAlgorithm signatureAlgorithm =

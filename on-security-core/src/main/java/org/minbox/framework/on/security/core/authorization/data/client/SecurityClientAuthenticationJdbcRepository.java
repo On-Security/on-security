@@ -21,6 +21,7 @@ import org.minbox.framework.on.security.core.authorization.SignatureAlgorithm;
 import org.springframework.jdbc.core.*;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -54,6 +55,7 @@ public class SecurityClientAuthenticationJdbcRepository implements SecurityClien
             + "consent_required, "
             + "id_token_signature_algorithm, "
             + "authorization_code_expiration_time, "
+            + "access_token_format, "
             + "access_token_expiration_time, "
             + "refresh_token_expiration_time, "
             + "reuse_refresh_token, "
@@ -65,11 +67,11 @@ public class SecurityClientAuthenticationJdbcRepository implements SecurityClien
     private static final String SELECT_CLIENT_AUTHENTICATION_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
     // @formatter:off
     private static final String INSERT_CLIENT_AUTHENTICATION_SQL = "INSERT INTO " + TABLE_NAME
-            + "(" + COLUMN_NAMES + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            + "(" + COLUMN_NAMES + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_CLIENT_AUTHENTICATION_SQL = "UPDATE " + TABLE_NAME
             + " SET confidential = ?, jwks_url = ?, authentication_methods = ?, authentication_signing_algorithm = ?, "
             + "authorization_grant_types = ?, consent_required = ?, id_token_signature_algorithm = ?, authorization_code_expiration_time = ?,"
-            + "access_token_expiration_time = ?, refresh_token_expiration_time = ?, reuse_refresh_token = ?"
+            + "access_token_format = ?, access_token_expiration_time = ?, refresh_token_expiration_time = ?, reuse_refresh_token = ?"
             + " WHERE " + ID_FILTER;
     // @formatter:on
 
@@ -111,7 +113,7 @@ public class SecurityClientAuthenticationJdbcRepository implements SecurityClien
         List<SqlParameterValue> parameters = new ArrayList<>(this.clientAuthenticationParametersMapper.apply(clientAuthentication));
         SqlParameterValue id = parameters.remove(0); // remove id
         parameters.remove(0); // remove client_id
-        parameters.remove(11); // remove create_time
+        parameters.remove(12); // remove create_time
         parameters.add(id); // add where id
         PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
         this.jdbcOperations.update(UPDATE_CLIENT_AUTHENTICATION_SQL, pss);
@@ -165,6 +167,7 @@ public class SecurityClientAuthenticationJdbcRepository implements SecurityClien
                     .idTokenSignatureAlgorithm(!ObjectUtils.isEmpty(idTokenSignatureAlgorithm) ?
                             new SignatureAlgorithm(idTokenSignatureAlgorithm) : null)
                     .authorizationCodeExpirationTime(rs.getInt("authorization_code_expiration_time"))
+                    .accessTokenFormat(new OAuth2TokenFormat(rs.getString("access_token_format")))
                     .accessTokenExpirationTime(rs.getInt("access_token_expiration_time"))
                     .refreshTokenExpirationTime(rs.getInt("refresh_token_expiration_time"))
                     .reuseRefreshToken(rs.getBoolean("reuse_refresh_token"))
@@ -200,6 +203,7 @@ public class SecurityClientAuthenticationJdbcRepository implements SecurityClien
                     new SqlParameterValue(Types.VARCHAR, !ObjectUtils.isEmpty(clientAuthentication.getIdTokenSignatureAlgorithm()) ?
                             clientAuthentication.getIdTokenSignatureAlgorithm().getValue() : null),
                     new SqlParameterValue(Types.INTEGER, clientAuthentication.getAuthorizationCodeExpirationTime()),
+                    new SqlParameterValue(Types.VARCHAR, clientAuthentication.getAccessTokenFormat().getValue()),
                     new SqlParameterValue(Types.INTEGER, clientAuthentication.getAccessTokenExpirationTime()),
                     new SqlParameterValue(Types.INTEGER, clientAuthentication.getRefreshTokenExpirationTime()),
                     new SqlParameterValue(Types.BOOLEAN, clientAuthentication.isReuseRefreshToken()),

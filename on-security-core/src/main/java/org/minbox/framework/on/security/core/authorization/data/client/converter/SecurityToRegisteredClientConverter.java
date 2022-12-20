@@ -125,6 +125,7 @@ public class SecurityToRegisteredClientConverter implements Converter<SecurityCl
             TokenSettings tokenSettings =
                     TokenSettings.builder()
                             .authorizationCodeTimeToLive(Duration.ofSeconds(clientAuthentication.getAuthorizationCodeExpirationTime()))
+                            .accessTokenFormat(clientAuthentication.getAccessTokenFormat())
                             .accessTokenTimeToLive(Duration.ofSeconds(clientAuthentication.getAccessTokenExpirationTime()))
                             .reuseRefreshTokens(clientAuthentication.isReuseRefreshToken())
                             .refreshTokenTimeToLive(Duration.ofSeconds(clientAuthentication.getRefreshTokenExpirationTime()))
