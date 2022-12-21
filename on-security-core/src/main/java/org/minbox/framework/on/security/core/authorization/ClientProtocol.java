@@ -30,8 +30,9 @@ import java.io.Serializable;
  */
 public final class ClientProtocol implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
-    public static final ClientProtocol OIDC = new ClientProtocol("OpenID Connect");
-    public static final ClientProtocol SAML = new ClientProtocol("SAML");
+    public static final ClientProtocol OAuth2_0 = new ClientProtocol("OAuth2.0");
+    public static final ClientProtocol OpenID_Connect_1_0 = new ClientProtocol("OpenID Connect1.0");
+    public static final ClientProtocol SAML_2_0 = new ClientProtocol("SAML2.0");
     private final String name;
 
     /**

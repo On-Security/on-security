@@ -79,7 +79,7 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
         SecurityClient securityClient = registeredToSecurityClientConverter.convert(registeredClient);
         securityClient = SecurityClient.with(securityClient)
                 .regionId(DEFAULT_SECURITY_REGION_ID) // use default regionId
-                .protocol(ClientProtocol.OIDC)
+                .protocol(ClientProtocol.OpenID_Connect_1_0)
                 .build();
         TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(new DefaultTransactionDefinition());
         try {

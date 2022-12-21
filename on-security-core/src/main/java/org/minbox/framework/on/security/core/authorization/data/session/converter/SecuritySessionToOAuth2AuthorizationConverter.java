@@ -38,7 +38,7 @@ import java.util.Map;
  * @author 恒宇少年
  * @see SecuritySession
  * @see OAuth2Authorization
- * @since
+ * @since 0.0.1
  */
 public class SecuritySessionToOAuth2AuthorizationConverter implements Converter<SecuritySession, OAuth2Authorization> {
     private RegisteredClientRepository registeredClientRepository;

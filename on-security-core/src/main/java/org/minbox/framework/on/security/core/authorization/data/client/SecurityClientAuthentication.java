@@ -95,6 +95,12 @@ public class SecurityClientAuthentication implements Serializable {
         return authorizationCodeExpirationTime;
     }
 
+    /**
+     * 请求令牌格式
+     *
+     * @return {@link OAuth2TokenFormat}
+     * @since 0.0.2
+     */
     public OAuth2TokenFormat getAccessTokenFormat() {
         return accessTokenFormat;
     }

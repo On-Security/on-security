@@ -45,6 +45,11 @@
             </dependency>
             <dependency>
                 <groupId>org.minbox.framework</groupId>
+                <artifactId>on-security-identity-provider</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.minbox.framework</groupId>
                 <artifactId>on-security-core</artifactId>
                 <version>${revision}</version>
             </dependency>
