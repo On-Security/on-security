@@ -27,10 +27,12 @@
         <relativePath>../on-security-bom</relativePath>
     </parent>
 
-    <artifactId>on-security-authorization-server</artifactId>
+    <artifactId>on-security-identity-provider</artifactId>
+
     <description>
-        On-Security授权服务器.
+        On-Security身份提供商（Identity Provider），提供集成社会常见的IdP以及标准协议（OAuth2.0、OIDC、SAML2.0等）的IdP。
     </description>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -42,17 +44,14 @@
             <artifactId>on-security-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.minbox.framework</groupId>
-            <artifactId>on-security-identity-provider</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-authorization-server</artifactId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

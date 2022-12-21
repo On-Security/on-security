@@ -24,6 +24,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.minbox.framework.on.security.authorization.server.jose.Jwks;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.OnSecurityOAuth2AuthorizationServerConfigurer;
+import org.minbox.framework.on.security.identity.provider.configuration.OnSecurityIdentityProviderRegistrar;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -50,7 +51,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * @since 0.0.1
  */
 @Configuration
-@Import(OnSecurityAuthorizationServerRegistrar.class)
+@Import({OnSecurityAuthorizationServerRegistrar.class, OnSecurityIdentityProviderRegistrar.class})
 public class OnSecurityOAuth2AuthorizationServerConfiguration {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
