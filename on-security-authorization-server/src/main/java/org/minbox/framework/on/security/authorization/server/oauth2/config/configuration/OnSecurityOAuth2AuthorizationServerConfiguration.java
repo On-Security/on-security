@@ -24,7 +24,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.minbox.framework.on.security.authorization.server.jose.Jwks;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.OnSecurityOAuth2AuthorizationServerConfigurer;
-import org.minbox.framework.on.security.identity.provider.configuration.OnSecurityIdentityProviderRegistrar;
+import org.minbox.framework.on.security.identity.provider.config.configuration.OnSecurityIdentityProviderRegistrar;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -80,7 +80,9 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
                 .tokenRevocationEndpoint(config -> config.errorResponseHandler(onSecurityFailureHandler))
                 .clientAuthentication(config->config.errorResponseHandler(onSecurityFailureHandler))
                 // Enable OpenID Connect 1.0
-                .oidc(Customizer.withDefaults());
+                .oidc(Customizer.withDefaults())
+                // Enable Identity Provider
+                .identityProvider(Customizer.withDefaults());
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         http.requestMatcher(endpointsMatcher)
                 .authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())

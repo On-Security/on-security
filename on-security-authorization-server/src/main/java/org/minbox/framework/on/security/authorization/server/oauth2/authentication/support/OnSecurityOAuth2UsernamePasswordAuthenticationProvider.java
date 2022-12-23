@@ -19,11 +19,11 @@ package org.minbox.framework.on.security.authorization.server.oauth2.authenticat
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.AbstractOnSecurityAuthenticationProvider;
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityError;
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityErrorCodes;
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityOAuth2AuthenticationException;
-import org.minbox.framework.on.security.authorization.server.utils.OnSecurityThrowErrorUtils;
+import org.minbox.framework.on.security.core.authorization.AbstractOnSecurityAuthenticationProvider;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityError;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityOAuth2AuthenticationException;
+import org.minbox.framework.on.security.core.authorization.util.OnSecurityThrowErrorUtils;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionRepository;

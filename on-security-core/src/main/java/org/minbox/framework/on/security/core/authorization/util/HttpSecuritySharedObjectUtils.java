@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.authorization.server.utils;
+package org.minbox.framework.on.security.core.authorization.util;
 
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
@@ -46,6 +46,14 @@ public final class HttpSecuritySharedObjectUtils {
 
     public static AuthenticationManager getAuthenticationManager(HttpSecurity httpSecurity) {
         return httpSecurity.getSharedObject(AuthenticationManager.class);
+    }
+
+    public static ApplicationContext getApplicationContext(HttpSecurity httpSecurity) {
+        return httpSecurity.getSharedObject(ApplicationContext.class);
+    }
+
+    public static <T> T getBean(HttpSecurity httpSecurity, Class<T> type) {
+        return httpSecurity.getSharedObject(ApplicationContext.class).getBean(type);
     }
 
     public static <T> T getOptionalBean(HttpSecurity httpSecurity, Class<T> type) {

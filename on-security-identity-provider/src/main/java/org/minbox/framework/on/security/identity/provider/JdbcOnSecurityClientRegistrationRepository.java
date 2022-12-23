@@ -64,6 +64,9 @@ public final class JdbcOnSecurityClientRegistrationRepository implements ClientR
     @Override
     public ClientRegistration findByRegistrationId(String registrationId) {
         SecurityRegionIdentityProvider regionIdentityProvider = regionIdentityProviderRepository.findByRegistrationId(registrationId);
+        if (regionIdentityProvider == null) {
+            return null;
+        }
         SecurityIdentityProvider identityProvider = identityProviderRepository.findById(regionIdentityProvider.getIdpId());
         return converter.convert(new ClientRegistrationAdapter(regionIdentityProvider, identityProvider));
     }

@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.authorization.server.oauth2.authentication;
+package org.minbox.framework.on.security.core.authorization.exception;
 
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
 import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
