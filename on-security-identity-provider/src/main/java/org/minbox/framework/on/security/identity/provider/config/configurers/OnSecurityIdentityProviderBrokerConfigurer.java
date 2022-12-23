@@ -18,9 +18,11 @@
 package org.minbox.framework.on.security.identity.provider.config.configurers;
 
 import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
+import org.minbox.framework.on.security.identity.provider.authentication.OnSecurityIdentityProviderAuthenticationEntryPoint;
+import org.minbox.framework.on.security.identity.provider.authentication.OnSecurityIdentityProviderAuthenticationSuccessHandler;
 import org.minbox.framework.on.security.identity.provider.config.configurers.support.OnSecurityIdentityProviderBrokerEndpointConfigurer;
-import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
@@ -39,16 +41,17 @@ import java.util.Map;
  * @see OnSecurityIdentityProviderBrokerEndpointConfigurer
  * @since 0.0.3
  */
-public final class OnSecurityIdentityProviderBrokerConfigurer extends AbstractOnSecurityOAuth2Configurer {
+public final class OnSecurityIdentityProviderBrokerConfigurer extends AbstractHttpConfigurer<OnSecurityIdentityProviderBrokerConfigurer, HttpSecurity> {
+    /**
+     * IdP认证回调地址前缀
+     */
+    private static final String BROKER_CALLBACK_PREFIX = "/identity/broker/callback/**";
+    private static final String IDENTITY_PROVIDER_LOGIN_URL = "/login";
     private RequestMatcher idpBrokerRequestMatcher;
     private Map<Class<? extends AbstractOnSecurityOAuth2Configurer>, AbstractOnSecurityOAuth2Configurer> configurers = createConfigurers();
 
-    public OnSecurityIdentityProviderBrokerConfigurer(ObjectPostProcessor<Object> objectPostProcessor) {
-        super(objectPostProcessor);
-    }
-
     @Override
-    public void init(HttpSecurity httpSecurity) {
+    public void init(HttpSecurity httpSecurity) throws Exception {
         List<RequestMatcher> requestMatchers = new ArrayList<>();
         this.configurers.values().forEach(configurer -> {
             configurer.init(httpSecurity);
@@ -57,6 +60,16 @@ public final class OnSecurityIdentityProviderBrokerConfigurer extends AbstractOn
                 requestMatchers.add(requestMatcher);
             }
         });
+        OnSecurityIdentityProviderAuthenticationSuccessHandler identityProviderAuthenticationSuccessHandler =
+                new OnSecurityIdentityProviderAuthenticationSuccessHandler();
+        OnSecurityIdentityProviderAuthenticationEntryPoint identityProviderAuthenticationEntryPoint =
+                new OnSecurityIdentityProviderAuthenticationEntryPoint(IDENTITY_PROVIDER_LOGIN_URL);
+        httpSecurity
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(identityProviderAuthenticationEntryPoint))
+                .oauth2Login(oauth2Login ->
+                        oauth2Login.successHandler(identityProviderAuthenticationSuccessHandler)
+                                //.failureHandler()
+                                .loginProcessingUrl(BROKER_CALLBACK_PREFIX));
         this.idpBrokerRequestMatcher = new OrRequestMatcher(requestMatchers);
     }
 
@@ -65,9 +78,11 @@ public final class OnSecurityIdentityProviderBrokerConfigurer extends AbstractOn
         this.configurers.values().forEach(configurer -> configurer.configure(httpSecurity));
     }
 
-    @Override
+
     public RequestMatcher getRequestMatcher() {
-        return this.idpBrokerRequestMatcher;
+        // Return a deferred RequestMatcher
+        // since endpointsMatcher is constructed in init(HttpSecurity).
+        return (request) -> this.idpBrokerRequestMatcher.matches(request);
     }
 
     private Map<Class<? extends AbstractOnSecurityOAuth2Configurer>, AbstractOnSecurityOAuth2Configurer> createConfigurers() {

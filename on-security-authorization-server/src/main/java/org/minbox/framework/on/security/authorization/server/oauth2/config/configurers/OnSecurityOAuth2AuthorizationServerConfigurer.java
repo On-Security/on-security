@@ -20,8 +20,6 @@ package org.minbox.framework.on.security.authorization.server.oauth2.config.conf
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityOAuth2UsernamePasswordConfigurer;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityPreAuthorizationCodeAuthenticationConfigurer;
 import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
-import org.minbox.framework.on.security.identity.provider.config.configurers.OnSecurityIdentityProviderBrokerConfigurer;
-import org.minbox.framework.on.security.identity.provider.config.configurers.support.OnSecurityIdentityProviderBrokerEndpointConfigurer;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -210,31 +208,12 @@ public final class OnSecurityOAuth2AuthorizationServerConfigurer extends Abstrac
         return this;
     }
 
-    /**
-     * 配置支持启用身份供应商（Identity Provider）
-     *
-     * @param identityProviderCustomizer the {@link Customizer} providing access to the {@link OnSecurityIdentityProviderBrokerEndpointConfigurer}
-     * @return the {@link OnSecurityOAuth2AuthorizationServerConfigurer} for further configuration
-     */
-    public OnSecurityOAuth2AuthorizationServerConfigurer identityProvider(Customizer<OnSecurityIdentityProviderBrokerConfigurer> identityProviderCustomizer) {
-        // @formatter:off
-        OnSecurityIdentityProviderBrokerConfigurer identityProviderBrokerConfigurer =
-                getConfigurer(OnSecurityIdentityProviderBrokerConfigurer.class);
-        if (identityProviderBrokerConfigurer == null) {
-            addConfigurer(OnSecurityIdentityProviderBrokerConfigurer.class,
-                    new OnSecurityIdentityProviderBrokerConfigurer(this::postProcess));
-            identityProviderBrokerConfigurer = getConfigurer(OnSecurityIdentityProviderBrokerConfigurer.class);
-        }
-        // @formatter:on
-        identityProviderCustomizer.customize(identityProviderBrokerConfigurer);
-        return this;
-    }
-
     @Override
     public void init(HttpSecurity httpSecurity) throws Exception {
         // Apply OAuth2AuthorizationServerConfigurer
         httpSecurity.apply(this.authorizationServerConfigurer);
         List<RequestMatcher> requestMatchers = new ArrayList<>();
+
         requestMatchers.add(this.authorizationServerConfigurer.getEndpointsMatcher());
         this.configurers.values().forEach(configurer -> {
             configurer.init(httpSecurity);
