@@ -18,7 +18,7 @@
 package org.minbox.framework.on.security.authorization.server.oauth2.web.converter;
 
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityPreAuthorizationCodeAuthenticationToken;
-import org.minbox.framework.on.security.authorization.server.utils.RequestParameterUtils;
+import org.minbox.framework.on.security.core.authorization.util.RequestParameterUtils;
 import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

@@ -18,11 +18,11 @@
 package org.minbox.framework.on.security.authorization.server.oauth2.web;
 
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityErrorCodes;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityOAuth2UsernamePasswordAuthenticationToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.converter.OnSecurityOAuth2UsernamePasswordAuthenticationConverter;
-import org.minbox.framework.on.security.authorization.server.utils.OnSecurityThrowErrorUtils;
-import org.minbox.framework.on.security.authorization.server.utils.RequestParameterUtils;
+import org.minbox.framework.on.security.core.authorization.util.OnSecurityThrowErrorUtils;
+import org.minbox.framework.on.security.core.authorization.util.RequestParameterUtils;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.security.authentication.AuthenticationManager;

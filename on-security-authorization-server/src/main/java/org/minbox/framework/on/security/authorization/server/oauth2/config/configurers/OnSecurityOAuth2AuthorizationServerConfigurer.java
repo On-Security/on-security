@@ -19,6 +19,7 @@ package org.minbox.framework.on.security.authorization.server.oauth2.config.conf
 
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityOAuth2UsernamePasswordConfigurer;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityPreAuthorizationCodeAuthenticationConfigurer;
+import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,7 +35,10 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.Assert;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * On-Security授权服务器{@link AbstractHttpConfigurer}实现配置
@@ -47,6 +51,7 @@ import java.util.*;
  * @see AbstractOnSecurityOAuth2Configurer
  */
 public final class OnSecurityOAuth2AuthorizationServerConfigurer extends AbstractHttpConfigurer<OnSecurityOAuth2AuthorizationServerConfigurer, HttpSecurity> {
+
     private Map<Class<? extends AbstractOnSecurityOAuth2Configurer>, AbstractOnSecurityOAuth2Configurer> configurers = createConfigurers();
     private RequestMatcher endpointsMatcher;
     private OAuth2AuthorizationServerConfigurer authorizationServerConfigurer;
@@ -208,6 +213,7 @@ public final class OnSecurityOAuth2AuthorizationServerConfigurer extends Abstrac
         // Apply OAuth2AuthorizationServerConfigurer
         httpSecurity.apply(this.authorizationServerConfigurer);
         List<RequestMatcher> requestMatchers = new ArrayList<>();
+
         requestMatchers.add(this.authorizationServerConfigurer.getEndpointsMatcher());
         this.configurers.values().forEach(configurer -> {
             configurer.init(httpSecurity);
@@ -220,7 +226,7 @@ public final class OnSecurityOAuth2AuthorizationServerConfigurer extends Abstrac
     }
 
     @Override
-    public void configure(HttpSecurity httpSecurity) {
+    public void configure(HttpSecurity httpSecurity) throws Exception {
         this.configurers.values().forEach(configurer -> configurer.configure(httpSecurity));
     }
 

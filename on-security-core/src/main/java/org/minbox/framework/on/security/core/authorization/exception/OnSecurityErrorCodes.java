@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.authorization.server.oauth2.authentication;
+package org.minbox.framework.on.security.core.authorization.exception;
 
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 
@@ -54,6 +54,10 @@ public enum OnSecurityErrorCodes {
      * 未传递"password"参数时使用
      */
     INVALID_PASSWORD("invalid_password"),
+    /**
+     * 无效的身份供应商
+     */
+    INVALID_IDENTITY_PROVIDER("invalid_identity_provider"),
     /**
      * 身份验证失败
      * <p>

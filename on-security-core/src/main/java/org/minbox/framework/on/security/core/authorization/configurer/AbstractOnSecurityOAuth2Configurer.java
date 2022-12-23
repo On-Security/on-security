@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.authorization.server.oauth2.config.configurers;
+package org.minbox.framework.on.security.core.authorization.configurer;
 
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,9 +36,9 @@ public abstract class AbstractOnSecurityOAuth2Configurer {
         this.objectPostProcessor = objectPostProcessor;
     }
 
-    protected abstract void init(HttpSecurity httpSecurity);
+    public abstract void init(HttpSecurity httpSecurity);
 
-    protected abstract void configure(HttpSecurity httpSecurity);
+    public abstract void configure(HttpSecurity httpSecurity);
 
     public RequestMatcher getRequestMatcher() {
         return null;

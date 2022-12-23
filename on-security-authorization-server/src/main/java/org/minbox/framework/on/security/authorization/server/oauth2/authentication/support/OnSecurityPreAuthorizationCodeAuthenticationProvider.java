@@ -17,9 +17,9 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.authentication.support;
 
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.AbstractOnSecurityAuthenticationProvider;
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityErrorCodes;
-import org.minbox.framework.on.security.authorization.server.utils.OnSecurityThrowErrorUtils;
+import org.minbox.framework.on.security.core.authorization.AbstractOnSecurityAuthenticationProvider;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
+import org.minbox.framework.on.security.core.authorization.util.OnSecurityThrowErrorUtils;
 import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUserDetails;
 import org.minbox.framework.on.security.core.authorization.data.client.SecurityClient;
 import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientJdbcRepository;

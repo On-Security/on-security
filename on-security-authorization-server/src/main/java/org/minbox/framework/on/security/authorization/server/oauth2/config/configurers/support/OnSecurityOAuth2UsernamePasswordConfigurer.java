@@ -18,9 +18,9 @@
 package org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support;
 
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityOAuth2UsernamePasswordAuthenticationProvider;
-import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.AbstractOnSecurityOAuth2Configurer;
+import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.OnSecurityOAuth2UsernamePasswordAuthenticationFilter;
-import org.minbox.framework.on.security.authorization.server.utils.HttpSecuritySharedObjectUtils;
+import org.minbox.framework.on.security.core.authorization.util.HttpSecuritySharedObjectUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
@@ -45,7 +45,7 @@ public class OnSecurityOAuth2UsernamePasswordConfigurer extends AbstractOnSecuri
     }
 
     @Override
-    protected void init(HttpSecurity httpSecurity) {
+    public void init(HttpSecurity httpSecurity) {
         AuthorizationServerSettings authorizationServerSettings = HttpSecuritySharedObjectUtils.getAuthorizationServerSettings(httpSecurity);
         this.requestMatcher = new AntPathRequestMatcher(authorizationServerSettings.getTokenEndpoint(), HttpMethod.POST.name());
         OnSecurityOAuth2UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider =
@@ -58,7 +58,7 @@ public class OnSecurityOAuth2UsernamePasswordConfigurer extends AbstractOnSecuri
     }
 
     @Override
-    protected void configure(HttpSecurity httpSecurity) {
+    public void configure(HttpSecurity httpSecurity) {
         AuthenticationManager authenticationManager = HttpSecuritySharedObjectUtils.getAuthenticationManager(httpSecurity);
         OnSecurityOAuth2UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter =
                 new OnSecurityOAuth2UsernamePasswordAuthenticationFilter(this.requestMatcher, authenticationManager);

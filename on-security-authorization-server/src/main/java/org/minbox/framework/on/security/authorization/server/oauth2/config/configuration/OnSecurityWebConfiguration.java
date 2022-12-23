@@ -17,6 +17,7 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.config.configuration;
 
+import org.minbox.framework.on.security.identity.provider.config.configurers.OnSecurityIdentityProviderBrokerConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -42,6 +43,9 @@ public class OnSecurityWebConfiguration {
     @Bean
     public SecurityFilterChain onSecurityWebSecurityFilterChain(HttpSecurity http) throws Exception {
         this.defaultOnSecurityAuthorizationServer(http);
+        // Enable Identity Provider
+        OnSecurityIdentityProviderBrokerConfigurer identityProviderBrokerConfigurer = new OnSecurityIdentityProviderBrokerConfigurer();
+        http.apply(identityProviderBrokerConfigurer);
         return http.build();
     }
 

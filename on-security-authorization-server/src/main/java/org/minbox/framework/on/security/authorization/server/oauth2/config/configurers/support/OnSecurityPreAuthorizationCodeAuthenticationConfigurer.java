@@ -18,9 +18,9 @@
 package org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support;
 
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityPreAuthorizationCodeAuthenticationProvider;
-import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.AbstractOnSecurityOAuth2Configurer;
+import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.OnSecurityPreAuthorizationCodeAuthenticationFilter;
-import org.minbox.framework.on.security.authorization.server.utils.HttpSecuritySharedObjectUtils;
+import org.minbox.framework.on.security.core.authorization.util.HttpSecuritySharedObjectUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
@@ -48,7 +48,7 @@ public class OnSecurityPreAuthorizationCodeAuthenticationConfigurer extends Abst
     }
 
     @Override
-    protected void init(HttpSecurity httpSecurity) {
+    public void init(HttpSecurity httpSecurity) {
         AuthorizationServerSettings authorizationServerSettings = HttpSecuritySharedObjectUtils.getAuthorizationServerSettings(httpSecurity);
         this.initPreAuthenticationMatcher(authorizationServerSettings);
         OnSecurityPreAuthorizationCodeAuthenticationProvider preAuthenticationProvider =
@@ -57,7 +57,7 @@ public class OnSecurityPreAuthorizationCodeAuthenticationConfigurer extends Abst
     }
 
     @Override
-    protected void configure(HttpSecurity httpSecurity) {
+    public void configure(HttpSecurity httpSecurity) {
         AuthenticationManager authenticationManager = HttpSecuritySharedObjectUtils.getAuthenticationManager(httpSecurity);
         OnSecurityPreAuthorizationCodeAuthenticationFilter preAuthenticationFilter =
                 new OnSecurityPreAuthorizationCodeAuthenticationFilter(this.preAuthenticationRequestMatcher, authenticationManager);

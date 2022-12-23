@@ -23,8 +23,9 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.minbox.framework.on.security.authorization.server.jose.Jwks;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
+import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityIdentityProviderIdTokenCustomizer;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.OnSecurityOAuth2AuthorizationServerConfigurer;
-import org.minbox.framework.on.security.identity.provider.configuration.OnSecurityIdentityProviderRegistrar;
+import org.minbox.framework.on.security.identity.provider.config.configuration.OnSecurityIdentityProviderRegistrar;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -36,6 +37,8 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.ser
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
@@ -53,6 +56,8 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @Configuration
 @Import({OnSecurityAuthorizationServerRegistrar.class, OnSecurityIdentityProviderRegistrar.class})
 public class OnSecurityOAuth2AuthorizationServerConfiguration {
+    private static final String DEFAULT_LOGIN_URL = "/login";
+
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain onSecurityAuthorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -87,7 +92,7 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
                 .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
                 .apply(authorizationServerConfigurer)
                 .and()
-                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")))
+                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(DEFAULT_LOGIN_URL)))
                 // Enable resource server using jwt encryption
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         // @formatter:on
@@ -131,6 +136,11 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
         return this.defaultAuthorizationServerSettings();
+    }
+
+    @Bean
+    public OAuth2TokenCustomizer<JwtEncodingContext> identityProviderIdTokenCustomizer() {
+        return new OnSecurityIdentityProviderIdTokenCustomizer();
     }
 
     /**

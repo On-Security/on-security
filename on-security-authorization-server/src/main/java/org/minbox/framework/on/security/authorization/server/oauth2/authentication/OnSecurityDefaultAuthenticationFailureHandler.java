@@ -20,6 +20,10 @@ package org.minbox.framework.on.security.authorization.server.oauth2.authenticat
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityPreAuthorizationCodeAuthenticationConfigurer;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.OnSecurityPreAuthorizationCodeAuthenticationFilter;
+import org.minbox.framework.on.security.core.authorization.AuthenticationFailureResponse;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityError;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityOAuth2AuthenticationException;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -37,7 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static org.minbox.framework.on.security.authorization.server.utils.OnSecurityThrowErrorUtils.DEFAULT_HELP_URI;
+import static org.minbox.framework.on.security.core.authorization.util.OnSecurityThrowErrorUtils.DEFAULT_HELP_URI;
 
 /**
  * 定义默认的认证失败处理器
