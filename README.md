@@ -1,4 +1,5 @@
-![](https://apiboot.minbox.org/img/on-security.png)
+<img src="https://apiboot.minbox.org/img/on-security.png" style="width:260px"/>
+
 # On-Security：安全的构建应用服务
 
 [![Ci-Builder](https://github.com/On-Security/on-security/actions/workflows/release.yml/badge.svg)](https://github.com/On-Security/on-security/actions)
