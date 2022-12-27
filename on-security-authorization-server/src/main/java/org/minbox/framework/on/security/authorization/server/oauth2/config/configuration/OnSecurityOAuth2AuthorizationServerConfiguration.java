@@ -25,7 +25,6 @@ import org.minbox.framework.on.security.authorization.server.jose.Jwks;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityIdentityProviderIdTokenCustomizer;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.OnSecurityOAuth2AuthorizationServerConfigurer;
-import org.minbox.framework.on.security.identity.provider.config.configuration.OnSecurityIdentityProviderRegistrar;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -54,7 +53,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * @since 0.0.1
  */
 @Configuration
-@Import({OnSecurityAuthorizationServerRegistrar.class, OnSecurityIdentityProviderRegistrar.class})
+@Import(OnSecurityAuthorizationServerRegistrar.class)
 public class OnSecurityOAuth2AuthorizationServerConfiguration {
     private static final String DEFAULT_LOGIN_URL = "/login";
 
