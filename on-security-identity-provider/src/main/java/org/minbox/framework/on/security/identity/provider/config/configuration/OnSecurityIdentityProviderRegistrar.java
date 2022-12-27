@@ -24,22 +24,32 @@ import org.minbox.framework.util.BeanUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.util.ClassUtils;
 
 /**
  * OnSecurity身份提供商相关核心类注册器
  *
  * @author 恒宇少年
- * @since 0.0.2
  * @see JdbcOnSecurityClientRegistrationRepository
+ * @since 0.0.2
  */
 public class OnSecurityIdentityProviderRegistrar implements ImportBeanDefinitionRegistrar {
     protected final Log logger = LogFactory.getLog(this.getClass());
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        BeanUtils.registerInfrastructureBeanIfAbsent(registry,
-                JdbcOnSecurityClientRegistrationRepository.BEAN_NAME,
-                JdbcOnSecurityClientRegistrationRepository.class);
-        logger.info("The OnSecurity JDBC ClientRegistrationRepository registration success.");
+        // @formatter:off
+        boolean isImportClientClass = ClassUtils.isPresent(
+                "org.springframework.security.oauth2.client.registration.ClientRegistrationRepository",
+                OnSecurityIdentityProviderRegistrar.class.getClassLoader());
+        if (isImportClientClass) {
+            BeanUtils.registerInfrastructureBeanIfAbsent(registry,
+                    JdbcOnSecurityClientRegistrationRepository.BEAN_NAME,
+                    JdbcOnSecurityClientRegistrationRepository.class);
+            logger.info("The OnSecurity JDBC ClientRegistrationRepository registration success.");
+        } else {
+            logger.warn("The ClientRegistrationRepository is not found in the ClassLoader, identity provider cannot be enabled.");
+        }
+        // @formatter:on
     }
 }

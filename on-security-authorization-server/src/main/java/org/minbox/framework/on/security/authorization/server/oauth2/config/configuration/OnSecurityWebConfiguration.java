@@ -17,6 +17,7 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.config.configuration;
 
+import org.minbox.framework.on.security.identity.provider.config.configuration.OnSecurityIdentityProviderRegistrar;
 import org.minbox.framework.on.security.identity.provider.config.configurers.OnSecurityIdentityProviderBrokerConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +39,7 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 @EnableWebSecurity
 @Configuration
-@Import(OnSecurityWebRegistrar.class)
+@Import({OnSecurityWebRegistrar.class, OnSecurityIdentityProviderRegistrar.class})
 public class OnSecurityWebConfiguration {
     @Bean
     public SecurityFilterChain onSecurityWebSecurityFilterChain(HttpSecurity http) throws Exception {
