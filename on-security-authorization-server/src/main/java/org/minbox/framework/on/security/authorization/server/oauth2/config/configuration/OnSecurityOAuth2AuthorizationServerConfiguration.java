@@ -23,12 +23,16 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.minbox.framework.on.security.authorization.server.jose.Jwks;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityIdentityProviderIdTokenCustomizer;
+import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.OnSecurityDelegatingOAuth2TokenGenerator;
+import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.customizer.OnSecurityIdentityProviderIdTokenCustomizer;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.OnSecurityOAuth2AuthorizationServerConfigurer;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,12 +40,15 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.ser
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
-import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenClaimsContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import java.util.Arrays;
 
 /**
  * OnSecurity授权认证服务器默认配置类
@@ -97,6 +104,27 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
         // @formatter:on
     }
 
+    /**
+     * 配置OnSecurity代理的令牌生成器
+     *
+     * @param jwkSource {@link JWKSource}
+     * @return {@link OnSecurityDelegatingOAuth2TokenGenerator}
+     */
+    @Bean
+    public OAuth2TokenGenerator onSecurityTokenGenerator(JWKSource<SecurityContext> jwkSource, ApplicationContext context) {
+        OnSecurityDelegatingOAuth2TokenGenerator.Builder builder = OnSecurityDelegatingOAuth2TokenGenerator.withJWKSource(jwkSource);
+        OAuth2TokenCustomizer<OAuth2TokenClaimsContext> accessTokenCustomizer = this.getAccessTokenCustomizer(context);
+        if (accessTokenCustomizer != null) {
+            builder.setAccessTokenCustomizer(accessTokenCustomizer);
+        }
+        // @formatter:off
+        builder.setJwtCustomizers(Arrays.asList(
+                new OnSecurityIdentityProviderIdTokenCustomizer()
+        ));
+        // @formatter:on
+        return builder.build();
+    }
+
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
         return this.defaultJwkSource();
@@ -137,11 +165,6 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
         return this.defaultAuthorizationServerSettings();
     }
 
-    @Bean
-    public OAuth2TokenCustomizer<JwtEncodingContext> identityProviderIdTokenCustomizer() {
-        return new OnSecurityIdentityProviderIdTokenCustomizer();
-    }
-
     /**
      * 默认的授权服务器配置 {@link AuthorizationServerSettings}
      * <p>
@@ -151,6 +174,19 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
      */
     protected AuthorizationServerSettings defaultAuthorizationServerSettings() {
         return OnSecurityAuthorizationServerSettingsBuilder.build();
+    }
+
+    private OAuth2TokenCustomizer<OAuth2TokenClaimsContext> getAccessTokenCustomizer(ApplicationContext context) {
+        ResolvableType type = ResolvableType.forClassWithGenerics(OAuth2TokenCustomizer.class, OAuth2TokenClaimsContext.class);
+        return getOptionalBean(context, type);
+    }
+
+    private <T> T getOptionalBean(ApplicationContext context, ResolvableType type) {
+        String[] names = context.getBeanNamesForType(type);
+        if (names.length > 1) {
+            throw new NoUniqueBeanDefinitionException(type, names);
+        }
+        return names.length == 1 ? (T) context.getBean(names[0]) : null;
     }
 
     /**

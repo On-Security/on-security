@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package org.minbox.framework.on.security.authorization.server.oauth2.authentication;
+package org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.customizer;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
@@ -34,7 +34,7 @@ import java.util.*;
  * @author 恒宇少年
  * @since 0.0.3
  */
-public final class OnSecurityIdentityProviderIdTokenCustomizer implements OAuth2TokenCustomizer<JwtEncodingContext> {
+public final class OnSecurityIdentityProviderIdTokenCustomizer implements OnSecuritySortTokenCustomizer<JwtEncodingContext> {
 
     private static final Set<String> ID_TOKEN_CLAIMS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
             IdTokenClaimNames.ISS,
@@ -83,5 +83,4 @@ public final class OnSecurityIdentityProviderIdTokenCustomizer implements OAuth2
 
         return new HashMap<>(claims);
     }
-
 }
