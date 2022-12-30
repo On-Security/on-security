@@ -43,7 +43,7 @@
         基于Spring Security编写，支持OpenID Connect 1.0、OAuth 2.1协议规范的统一安全认证、SSO单点登录框架。
     </description>
     <properties>
-        <revision>0.0.4-SNAPSHOT</revision>
+        <revision>0.0.4</revision>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
