@@ -25,6 +25,7 @@ import org.minbox.framework.on.security.authorization.server.jose.Jwks;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.OnSecurityDelegatingOAuth2TokenGenerator;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.customizer.OnSecurityIdentityProviderIdTokenCustomizer;
+import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.customizer.OnSecurityUserAuthorizeAttributeJwtClaimsCustomizer;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.OnSecurityOAuth2AuthorizationServerConfigurer;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -34,6 +35,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.Order;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
@@ -118,8 +120,10 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
             builder.setAccessTokenCustomizer(accessTokenCustomizer);
         }
         // @formatter:off
+        JdbcOperations jdbcOperations = context.getBean(JdbcOperations.class);
         builder.setJwtCustomizers(Arrays.asList(
-                new OnSecurityIdentityProviderIdTokenCustomizer()
+                new OnSecurityIdentityProviderIdTokenCustomizer(),
+                new OnSecurityUserAuthorizeAttributeJwtClaimsCustomizer(jdbcOperations)
         ));
         // @formatter:on
         return builder.build();
