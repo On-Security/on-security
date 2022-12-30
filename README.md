@@ -5,6 +5,7 @@
 [![Ci-Builder](https://github.com/On-Security/on-security/actions/workflows/release.yml/badge.svg)](https://github.com/On-Security/on-security/actions)
 [![](https://img.shields.io/maven-central/v/org.minbox.framework/on-security.svg?label=Maven%20Central)](https://search.maven.org/search?q=a:on-security-bom)
 ![](https://img.shields.io/badge/JDK-17+-green.svg)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 `On-Security`是一款集身份认证（Identity Authentication）、访问管理（Access Management）和SSO单点登录（Single Sign On）的安全服务开源框架，支持基于角色（RBAC）、基于属性（ABAC）来灵活控制资源的访问权限，框架基于`Spring Security`进行编写，支持`OpenID Connect1.0`、`OAuth2.1`、`SAML2.0`等协议。
 
