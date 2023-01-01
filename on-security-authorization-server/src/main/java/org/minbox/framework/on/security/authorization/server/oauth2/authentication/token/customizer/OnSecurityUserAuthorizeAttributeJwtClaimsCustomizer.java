@@ -17,6 +17,7 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.customizer;
 
+import org.minbox.framework.on.security.core.authorization.OnSecurityJwtTokenClaims;
 import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUserDetails;
 import org.minbox.framework.on.security.core.authorization.data.attribute.SecurityAttribute;
 import org.minbox.framework.on.security.core.authorization.data.attribute.SecurityAttributeJdbcRepository;
@@ -36,6 +37,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -88,6 +90,12 @@ public class OnSecurityUserAuthorizeAttributeJwtClaimsCustomizer implements OnSe
             return;
         }
         JwtClaimsSet.Builder claimsBuilder = context.getClaims();
-        authorizeAttributeList.stream().forEach(attribute -> claimsBuilder.claim(attribute.getKey(), attribute.getValue()));
+        // @formatter:off
+        Map<String, String> attributeMap =
+                authorizeAttributeList.stream().collect(
+                        Collectors.toMap(SecurityAttribute::getKey, attribute -> attribute.getValue())
+                );
+        // @formatter:on
+        claimsBuilder.claim(OnSecurityJwtTokenClaims.AUTH_ATTR, attributeMap);
     }
 }
