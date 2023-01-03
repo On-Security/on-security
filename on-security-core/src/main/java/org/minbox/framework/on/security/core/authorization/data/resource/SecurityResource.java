@@ -36,7 +36,7 @@ public class SecurityResource implements Serializable {
 
     private String id;
     private String regionId;
-    private String clientId;
+    private String applicationId;
     private String name;
     private String code;
     private ResourceType type;
@@ -56,8 +56,8 @@ public class SecurityResource implements Serializable {
         return regionId;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public String getName() {
@@ -95,7 +95,7 @@ public class SecurityResource implements Serializable {
 
     public String toString() {
         // @formatter:off
-        return "SecurityResource(id=" + this.id + ", regionId=" + this.regionId + ", clientId=" + this.clientId +
+        return "SecurityResource(id=" + this.id + ", regionId=" + this.regionId + ", applicationId=" + this.applicationId +
                 ", name=" + this.name + ", code=" + this.code + ", type=" + this.type + ", describe=" + this.describe +
                 ", deleted=" + this.deleted + ", createTime=" + this.createTime + ", resourceUris=" + this.resourceUris + ")";
         // @formatter:on
@@ -108,7 +108,7 @@ public class SecurityResource implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String id;
         private String regionId;
-        private String clientId;
+        private String applicationId;
         private String name;
         private String code;
         private ResourceType type;
@@ -126,8 +126,8 @@ public class SecurityResource implements Serializable {
             return this;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -168,7 +168,7 @@ public class SecurityResource implements Serializable {
 
         public SecurityResource build() {
             Assert.hasText(this.regionId, "regionId cannot be empty");
-            Assert.hasText(this.clientId, "clientId cannot be empty");
+            Assert.hasText(this.applicationId, "applicationId cannot be empty");
             Assert.hasText(this.name, "name cannot be empty");
             Assert.hasText(this.code, "code cannot be empty");
             Assert.notNull(this.type, "type cannot be null");
@@ -180,7 +180,7 @@ public class SecurityResource implements Serializable {
             SecurityResource resource = new SecurityResource();
             resource.id = this.id;
             resource.regionId = this.regionId;
-            resource.clientId = this.clientId;
+            resource.applicationId = this.applicationId;
             resource.name = this.name;
             resource.code = this.code;
             resource.type = this.type;
@@ -193,8 +193,8 @@ public class SecurityResource implements Serializable {
 
         public String toString() {
             // @formatter:off
-            return "SecurityResource.Builder(id=" + this.id + ", regionId=" + this.regionId + ", clientId=" +
-                    this.clientId + ", name=" + this.name + ", code=" + this.code + ", type=" +
+            return "SecurityResource.Builder(id=" + this.id + ", regionId=" + this.regionId + ", applicationId=" +
+                    this.applicationId + ", name=" + this.name + ", code=" + this.code + ", type=" +
                     this.type + ", describe=" + this.describe + ", deleted=" + this.deleted + ", createTime=" +
                     this.createTime + ", resourceUris=" + this.resourceUris + ")";
             // @formatter:on

@@ -40,8 +40,8 @@ public final class ClientRegistrationConvert implements Converter<ClientRegistra
         // @formatter:off
         ClientRegistration.Builder builder = ClientRegistration
                 .withRegistrationId(regionIdentityProvider.getRegistrationId())
-                .clientId(regionIdentityProvider.getClientId())
-                .clientSecret(regionIdentityProvider.getClientSecret())
+                .clientId(regionIdentityProvider.getApplicationId())
+                .clientSecret(regionIdentityProvider.getApplicationSecret())
                 .clientName(regionIdentityProvider.getUniqueIdentifier())
                 .clientAuthenticationMethod(identityProvider.getClientAuthenticationMethod())
                 .authorizationGrantType(identityProvider.getAuthorizationGrantType())

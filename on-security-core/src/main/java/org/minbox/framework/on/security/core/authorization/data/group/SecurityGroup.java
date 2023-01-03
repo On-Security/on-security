@@ -39,7 +39,7 @@ public class SecurityGroup implements Serializable {
     private String describe;
     private LocalDateTime createTime;
 
-    private Set<SecurityGroupAuthorizeClient> authorizeClients;
+    private Set<SecurityGroupAuthorizeApplication> authorizeClients;
     private Set<SecurityGroupAuthorizeRole> authorizeRoles;
 
     protected SecurityGroup() {
@@ -65,7 +65,7 @@ public class SecurityGroup implements Serializable {
         return createTime;
     }
 
-    public Set<SecurityGroupAuthorizeClient> getAuthorizeClients() {
+    public Set<SecurityGroupAuthorizeApplication> getAuthorizeClients() {
         return authorizeClients;
     }
 
@@ -96,7 +96,7 @@ public class SecurityGroup implements Serializable {
         private String name;
         private String describe;
         private LocalDateTime createTime;
-        private Set<SecurityGroupAuthorizeClient> authorizeClients;
+        private Set<SecurityGroupAuthorizeApplication> authorizeClients;
         private Set<SecurityGroupAuthorizeRole> authorizeRoles;
 
         protected Builder(String id) {
@@ -123,7 +123,7 @@ public class SecurityGroup implements Serializable {
             return this;
         }
 
-        public Builder authorizeClients(Set<SecurityGroupAuthorizeClient> authorizeClients) {
+        public Builder authorizeClients(Set<SecurityGroupAuthorizeApplication> authorizeClients) {
             this.authorizeClients = authorizeClients;
             return this;
         }

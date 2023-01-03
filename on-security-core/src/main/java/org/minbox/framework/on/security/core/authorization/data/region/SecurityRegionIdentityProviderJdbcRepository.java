@@ -47,8 +47,8 @@ public class SecurityRegionIdentityProviderJdbcRepository implements SecurityReg
             + "idp_id, "
             + "unique_identifier, "
             + "registration_id, "
-            + "client_id, "
-            + "client_secret, "
+            + "application_id, "
+            + "application_secret, "
             + "callback_url, "
             + "authorization_scopes, "
             + "expand_metadata, "
@@ -97,8 +97,8 @@ public class SecurityRegionIdentityProviderJdbcRepository implements SecurityReg
                     .idpId(rs.getString("idp_id"))
                     .uniqueIdentifier(rs.getString("unique_identifier"))
                     .registrationId(rs.getString("registration_id"))
-                    .clientId(rs.getString("client_id"))
-                    .clientSecret(rs.getString("client_secret"))
+                    .applicationId(rs.getString("application_id"))
+                    .clientSecret(rs.getString("application_secret"))
                     .callbackUrl(rs.getString("callback_url"))
                     .describe(rs.getString("describe"))
                     .createTime(rs.getTimestamp("create_time").toLocalDateTime());

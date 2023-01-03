@@ -38,7 +38,7 @@ public class SecurityRegionIdentityProvider implements Serializable {
     private String idpId;
     private String uniqueIdentifier;
     private String registrationId;
-    private String clientId;
+    private String applicationId;
     private String clientSecret;
     private String callbackUrl;
     private Set<String> authorizationScopes;
@@ -69,11 +69,11 @@ public class SecurityRegionIdentityProvider implements Serializable {
         return registrationId;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
-    public String getClientSecret() {
+    public String getApplicationSecret() {
         return clientSecret;
     }
 
@@ -101,7 +101,7 @@ public class SecurityRegionIdentityProvider implements Serializable {
         // @formatter:off
         return "SecurityRegionIdentityProvider(id=" + this.id + ", regionId=" + this.regionId + ", idpId=" + this.idpId +
                 ", uniqueIdentifier=" + this.uniqueIdentifier + ", registrationId=" + this.registrationId +
-                ", clientId=" + this.clientId + ", clientSecret=" + this.clientSecret + ", callbackUrl=" + this.callbackUrl +
+                ", applicationId=" + this.applicationId + ", clientSecret=" + this.clientSecret + ", callbackUrl=" + this.callbackUrl +
                 ", authorizationScopes=" + this.authorizationScopes + ", describe=" + this.describe +
                 ", expandMetadata=" + this.expandMetadata + ", createTime=" + this.createTime + ")";
         // @formatter:on
@@ -123,7 +123,7 @@ public class SecurityRegionIdentityProvider implements Serializable {
         private String idpId;
         private String uniqueIdentifier;
         private String registrationId;
-        private String clientId;
+        private String applicationId;
         private String clientSecret;
         private String callbackUrl;
         private Set<String> authorizationScopes;
@@ -155,8 +155,8 @@ public class SecurityRegionIdentityProvider implements Serializable {
             return this;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -195,7 +195,7 @@ public class SecurityRegionIdentityProvider implements Serializable {
             Assert.hasText(idpId, "idpId cannot be empty");
             Assert.hasText(uniqueIdentifier, "uniqueIdentifier cannot be empty");
             Assert.hasText(registrationId, "registrationId cannot be empty");
-            Assert.hasText(clientId, "clientId cannot be empty");
+            Assert.hasText(applicationId, "applicationId cannot be empty");
             Assert.hasText(clientSecret, "clientSecret cannot be empty");
             Assert.hasText(callbackUrl, "callbackUrl cannot be empty");
             this.createTime = this.createTime == null ? LocalDateTime.now() : this.createTime;
@@ -209,7 +209,7 @@ public class SecurityRegionIdentityProvider implements Serializable {
             identityProviderConfig.idpId = this.idpId;
             identityProviderConfig.uniqueIdentifier = this.uniqueIdentifier;
             identityProviderConfig.registrationId = this.registrationId;
-            identityProviderConfig.clientId = this.clientId;
+            identityProviderConfig.applicationId = this.applicationId;
             identityProviderConfig.clientSecret = this.clientSecret;
             identityProviderConfig.callbackUrl = this.callbackUrl;
             identityProviderConfig.authorizationScopes = this.authorizationScopes;
@@ -223,7 +223,7 @@ public class SecurityRegionIdentityProvider implements Serializable {
             // @formatter:off
             return "SecurityRegionIdentityProvider.Builder(id=" + this.id + ", regionId=" + this.regionId + ", idpId=" + this.idpId +
                     ", uniqueIdentifier=" + this.uniqueIdentifier + ", registrationId=" + this.registrationId +
-                    ", clientId=" + this.clientId + ", clientSecret=" + this.clientSecret + ", callbackUrl=" + this.callbackUrl +
+                    ", applicationId=" + this.applicationId + ", clientSecret=" + this.clientSecret + ", callbackUrl=" + this.callbackUrl +
                     ", authorizationScopes=" + this.authorizationScopes + ", describe=" + this.describe +
                     ", expandMetadata=" + this.expandMetadata + ", createTime=" + this.createTime + ")";
             // @formatter:on

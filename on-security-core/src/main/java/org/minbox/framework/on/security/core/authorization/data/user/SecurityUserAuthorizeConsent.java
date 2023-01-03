@@ -34,7 +34,7 @@ public class SecurityUserAuthorizeConsent implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private String userId;
     private String username;
-    private String clientId;
+    private String applicationId;
     private Set<String> authorities;
     private LocalDateTime authorizeTime;
 
@@ -49,8 +49,8 @@ public class SecurityUserAuthorizeConsent implements Serializable {
         return username;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public Set<String> getAuthorities() {
@@ -68,7 +68,7 @@ public class SecurityUserAuthorizeConsent implements Serializable {
 
     public String toString() {
         // @formatter:off
-        return "SecurityUserAuthorizeConsent(userId=" + this.userId + ", clientId=" + this.clientId + ", authorities=" +
+        return "SecurityUserAuthorizeConsent(userId=" + this.userId + ", applicationId=" + this.applicationId + ", authorities=" +
                 this.authorities + ", authorizeTime=" + this.authorizeTime + ")";
         // @formatter:on
     }
@@ -80,7 +80,7 @@ public class SecurityUserAuthorizeConsent implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String userId;
         private String username;
-        private String clientId;
+        private String applicationId;
         private Set<String> authorities;
         private LocalDateTime authorizeTime;
 
@@ -88,8 +88,8 @@ public class SecurityUserAuthorizeConsent implements Serializable {
             this.userId = userId;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -110,7 +110,7 @@ public class SecurityUserAuthorizeConsent implements Serializable {
 
         public SecurityUserAuthorizeConsent build() {
             Assert.hasText(this.username, "username cannot be empty");
-            Assert.hasText(this.clientId, "clientId cannot be empty");
+            Assert.hasText(this.applicationId, "applicationId cannot be empty");
             Assert.notEmpty(this.authorities, "authorities cannot be empty");
             Assert.notNull(this.authorizeTime, "authorizeTime cannot be null");
             return this.create();
@@ -120,7 +120,7 @@ public class SecurityUserAuthorizeConsent implements Serializable {
             SecurityUserAuthorizeConsent userAuthorizeConsent = new SecurityUserAuthorizeConsent();
             userAuthorizeConsent.userId = this.userId;
             userAuthorizeConsent.username = this.username;
-            userAuthorizeConsent.clientId = this.clientId;
+            userAuthorizeConsent.applicationId = this.applicationId;
             userAuthorizeConsent.authorities = this.authorities;
             userAuthorizeConsent.authorizeTime = this.authorizeTime;
             return userAuthorizeConsent;
@@ -128,7 +128,7 @@ public class SecurityUserAuthorizeConsent implements Serializable {
 
         public String toString() {
             // @formatter:off
-            return "SecurityUserAuthorizeConsent.Builder(userId=" + this.userId + "username="+this.username+", clientId=" + this.clientId +
+            return "SecurityUserAuthorizeConsent.Builder(userId=" + this.userId + "username="+this.username+", applicationId=" + this.applicationId +
                     ", authorities=" + this.authorities + ", authorizeTime=" + this.authorizeTime + ")";
             // @formatter:on
         }

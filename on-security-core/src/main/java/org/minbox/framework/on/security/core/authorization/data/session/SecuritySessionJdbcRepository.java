@@ -51,7 +51,7 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
     // @formatter:off
     private static final String COLUMN_NAMES = "id, "
             + "region_id, "
-            + "client_id, "
+            + "application_id, "
             + "user_id, "
             + "username, "
             + "`state`, "
@@ -135,7 +135,7 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
         List<SqlParameterValue> parameters = new ArrayList<>(this.sessionParametersMapper.apply(session));
         SqlParameterValue id = parameters.remove(0); // remove id
         parameters.remove(0); // remove region_id
-        parameters.remove(0); // remove client_id
+        parameters.remove(0); // remove application_id
         parameters.remove(0); // remove user_id
         parameters.remove(0); // remove username
         parameters.remove(23);// remove create_time
@@ -201,7 +201,7 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
             SecuritySession.Builder builder = SecuritySession.withId(rs.getString("id"));
             // @formatter:off
             builder.regionId(rs.getString("region_id"))
-                    .clientId(rs.getString("client_id"))
+                    .applicationId(rs.getString("application_id"))
                     .userId(rs.getString("user_id"))
                     .username(rs.getString("username"))
                     .state(rs.getString("state"))
@@ -314,7 +314,7 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
             List<SqlParameterValue> parameters = new ArrayList<>();
             parameters.add(new SqlParameterValue(Types.VARCHAR, session.getId()));
             parameters.add(new SqlParameterValue(Types.VARCHAR, session.getRegionId()));
-            parameters.add(new SqlParameterValue(Types.VARCHAR, session.getClientId()));
+            parameters.add(new SqlParameterValue(Types.VARCHAR, session.getApplicationId()));
             parameters.add(new SqlParameterValue(Types.VARCHAR, session.getUserId()));
             parameters.add(new SqlParameterValue(Types.VARCHAR, session.getUsername()));
             parameters.add(new SqlParameterValue(Types.VARCHAR, session.getState()));

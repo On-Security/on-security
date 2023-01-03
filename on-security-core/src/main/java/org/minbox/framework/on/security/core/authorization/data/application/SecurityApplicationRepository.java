@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client;
+package org.minbox.framework.on.security.core.authorization.data.application;
 
 /**
  * 客户端数据存储库接口
@@ -23,29 +23,29 @@ package org.minbox.framework.on.security.core.authorization.data.client;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecurityClientRepository {
+public interface SecurityApplicationRepository {
     /**
      * 存储客户端
      * <p>
-     * 根据{@link SecurityClient#getId()}判定是新增还是更新数据，如果已经存在则执行更新，否则执行新增
+     * 根据{@link SecurityApplication#getId()}判定是新增还是更新数据，如果已经存在则执行更新，否则执行新增
      *
-     * @param client {@link SecurityClient} 客户端对象实例
+     * @param client {@link SecurityApplication} 客户端对象实例
      */
-    void save(SecurityClient client);
+    void save(SecurityApplication client);
 
     /**
-     * 根据{@link SecurityClient#getId()}查询客户端信息
+     * 根据{@link SecurityApplication#getId()}查询客户端信息
      *
-     * @param id {@link SecurityClient#getId()} 主键编号
-     * @return {@link SecurityClient}
+     * @param id {@link SecurityApplication#getId()} 主键编号
+     * @return {@link SecurityApplication}
      */
-    SecurityClient findById(String id);
+    SecurityApplication findById(String id);
 
     /**
-     * 根据{@link SecurityClient#getClientId()}查询客户端信息
+     * 根据{@link SecurityApplication#getApplicationId()}查询客户端信息
      *
-     * @param clientId {@link SecurityClient#getClientId()}
-     * @return {@link SecurityClient}
+     * @param applicationId {@link SecurityApplication#getApplicationId()}
+     * @return {@link SecurityApplication}
      */
-    SecurityClient findByClientId(String clientId);
+    SecurityApplication findByClientId(String applicationId);
 }

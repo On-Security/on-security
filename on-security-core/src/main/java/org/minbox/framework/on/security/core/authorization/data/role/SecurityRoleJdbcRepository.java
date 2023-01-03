@@ -35,7 +35,7 @@ public class SecurityRoleJdbcRepository implements SecurityRoleRepository {
     // @formatter:off
     private static final String COLUMN_NAMES = "id, "
             + "region_id, "
-            + "client_id, "
+            + "application_id, "
             + "name, "
             + "code, "
             + "`describe`, "
@@ -77,7 +77,7 @@ public class SecurityRoleJdbcRepository implements SecurityRoleRepository {
             SecurityRole.Builder builder = SecurityRole
                     .withId(rs.getString("id"))
                     .regionId(rs.getString("region_id"))
-                    .clientId(rs.getString("client_id"))
+                    .applicationId(rs.getString("application_id"))
                     .name(rs.getString("name"))
                     .code(rs.getString("code"))
                     .describe(rs.getString("describe"))

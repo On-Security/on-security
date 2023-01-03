@@ -19,8 +19,8 @@ package org.minbox.framework.on.security.core.authorization.data.session.convert
 
 import org.minbox.framework.on.security.core.authorization.AccessTokenType;
 import org.minbox.framework.on.security.core.authorization.SessionState;
-import org.minbox.framework.on.security.core.authorization.data.client.SecurityClient;
-import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientRepository;
+import org.minbox.framework.on.security.core.authorization.data.application.SecurityApplication;
+import org.minbox.framework.on.security.core.authorization.data.application.SecurityApplicationRepository;
 import org.minbox.framework.on.security.core.authorization.data.session.SecuritySession;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUser;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserRepository;
@@ -48,10 +48,10 @@ import java.time.ZoneId;
  * @since 0.0.1
  */
 public final class OAuth2AuthorizationToSecuritySessionConverter implements Converter<OAuth2Authorization, SecuritySession> {
-    private SecurityClientRepository clientRepository;
+    private SecurityApplicationRepository clientRepository;
     private SecurityUserRepository userRepository;
 
-    public OAuth2AuthorizationToSecuritySessionConverter(SecurityClientRepository clientRepository, SecurityUserRepository userRepository) {
+    public OAuth2AuthorizationToSecuritySessionConverter(SecurityApplicationRepository clientRepository, SecurityUserRepository userRepository) {
         this.clientRepository = clientRepository;
         this.userRepository = userRepository;
     }
@@ -59,8 +59,8 @@ public final class OAuth2AuthorizationToSecuritySessionConverter implements Conv
     @Override
     public SecuritySession convert(OAuth2Authorization authorization) {
         // Load security client
-        SecurityClient securityClient = clientRepository.findById(authorization.getRegisteredClientId());
-        Assert.notNull(securityClient, "Client ID: " + authorization.getRegisteredClientId() + ", no data retrieved");
+        SecurityApplication securityApplication = clientRepository.findById(authorization.getRegisteredClientId());
+        Assert.notNull(securityApplication, "Client ID: " + authorization.getRegisteredClientId() + ", no data retrieved");
 
         String authorizationId = authorization.getId();
         SecuritySession.Builder builder = SecuritySession.withId(authorizationId);
@@ -74,8 +74,8 @@ public final class OAuth2AuthorizationToSecuritySessionConverter implements Conv
 
         // @formatter:off
         builder
-                .regionId(securityClient.getRegionId())
-                .clientId(securityClient.getId())
+                .regionId(securityApplication.getRegionId())
+                .applicationId(securityApplication.getId())
                 .sessionState(SessionState.NORMAL)
                 .username(authorization.getPrincipalName())
                 .attributes(authorization.getAttributes())

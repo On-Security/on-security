@@ -49,7 +49,7 @@ public class AuthorizationConsentToUserAuthorizeConsentConverter implements Conv
         // @formatter:off
         SecurityUserAuthorizeConsent.Builder builder = SecurityUserAuthorizeConsent.withUserId(securityUser.getId())
                 .username(authorizationConsent.getPrincipalName())
-                .clientId(authorizationConsent.getRegisteredClientId())
+                .applicationId(authorizationConsent.getRegisteredClientId())
                 .authorizeTime(LocalDateTime.now());
         if (!ObjectUtils.isEmpty(authorizationConsent.getAuthorities())) {
             builder.authorities(authorizationConsent.getAuthorities().stream()

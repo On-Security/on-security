@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client;
+package org.minbox.framework.on.security.core.authorization.data.application;
 
 import java.util.List;
 
@@ -25,21 +25,21 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecurityClientSecretRepository {
+public interface SecurityApplicationSecretRepository {
     /**
      * 保存客户端秘钥
      * <p>
-     * 根据{@link SecurityClientSecret#getId()}判定，如果已经存在执行更新，否则执行新增
+     * 根据{@link SecurityApplicationSecret#getId()}判定，如果已经存在执行更新，否则执行新增
      *
-     * @param clientSecret {@link SecurityClientSecret} 对象实例
+     * @param clientSecret {@link SecurityApplicationSecret} 对象实例
      */
-    void save(SecurityClientSecret clientSecret);
+    void save(SecurityApplicationSecret clientSecret);
 
     /**
-     * 根据{@link SecurityClient#getId()}查询客户端秘钥列表
+     * 根据{@link SecurityApplication#getId()}查询客户端秘钥列表
      *
-     * @param clientId 客户端ID {@link SecurityClientSecret#getClientId()}
-     * @return 客户端秘钥对象列表 {@link SecurityClientSecret}
+     * @param applicationId 应用ID {@link SecurityApplicationSecret#getApplicationId()}
+     * @return 客户端秘钥对象列表 {@link SecurityApplicationSecret}
      */
-    List<SecurityClientSecret> findByClientId(String clientId);
+    List<SecurityApplicationSecret> findByClientId(String applicationId);
 }

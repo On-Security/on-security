@@ -15,11 +15,11 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client.converter;
+package org.minbox.framework.on.security.core.authorization.data.application.converter;
 
 import org.minbox.framework.on.security.core.authorization.ClientRedirectUriType;
 import org.minbox.framework.on.security.core.authorization.SignatureAlgorithm;
-import org.minbox.framework.on.security.core.authorization.data.client.*;
+import org.minbox.framework.on.security.core.authorization.data.application.*;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.util.ObjectUtils;
@@ -34,30 +34,30 @@ import java.util.stream.Collectors;
 /**
  * 客户端数据转换器
  * <p>
- * 提供{@link SecurityClient}与{@link RegisteredClient}客户端数据相互转换的方法
+ * 提供{@link SecurityApplication}与{@link RegisteredClient}客户端数据相互转换的方法
  *
  * @author 恒宇少年
  * @since 0.0.1
  */
-public final class RegisteredToSecurityClientConverter implements Converter<RegisteredClient, SecurityClient> {
+public final class RegisteredToSecurityApplicationConverter implements Converter<RegisteredClient, SecurityApplication> {
     /**
-     * 将{@link RegisteredClient}转换为{@link SecurityClient}
+     * 将{@link RegisteredClient}转换为{@link SecurityApplication}
      *
      * @param registeredClient SpringSecurity认证服务器提供的客户端实例
      * @return On-Security所维护管理的客户端实例
      */
     @Override
-    public SecurityClient convert(RegisteredClient registeredClient) {
+    public SecurityApplication convert(RegisteredClient registeredClient) {
         // @formatter:off
         String id = registeredClient.getId();
-        SecurityClient.Builder builder = SecurityClient.withId(id);
-        builder.clientId(registeredClient.getClientId())
+        SecurityApplication.Builder builder = SecurityApplication.withId(id);
+        builder.applicationId(registeredClient.getClientId())
                 .enabled(true)
                 .displayName(registeredClient.getClientName())
                 .createTime(LocalDateTime.ofInstant(registeredClient.getClientIdIssuedAt(), ZoneId.systemDefault()));
-        SecurityClientAuthentication.Builder authenticationBuilder = SecurityClientAuthentication.withId(UUID.randomUUID().toString());
+        SecurityApplicationAuthentication.Builder authenticationBuilder = SecurityApplicationAuthentication.withId(UUID.randomUUID().toString());
         authenticationBuilder
-                .clientId(id)
+                .applicationId(id)
                 .createTime(LocalDateTime.now())
                 .confidential(registeredClient.getClientSettings().isRequireProofKey())
                 .consentRequired(registeredClient.getClientSettings().isRequireAuthorizationConsent())
@@ -95,9 +95,9 @@ public final class RegisteredToSecurityClientConverter implements Converter<Regi
 
         // scopes
         if(!ObjectUtils.isEmpty(registeredClient.getScopes())) {
-            List<SecurityClientScope> clientScopeList = registeredClient.getScopes().stream().map(scope ->
-                            SecurityClientScope.withId(UUID.randomUUID().toString())
-                                    .clientId(id)
+            List<SecurityApplicationScope> clientScopeList = registeredClient.getScopes().stream().map(scope ->
+                            SecurityApplicationScope.withId(UUID.randomUUID().toString())
+                                    .applicationId(id)
                                     .scopeName(scope)
                                     .scopeCode(scope)
                                     .createTime(LocalDateTime.now())
@@ -108,9 +108,9 @@ public final class RegisteredToSecurityClientConverter implements Converter<Regi
 
         // redirectUris
         if(!ObjectUtils.isEmpty(registeredClient.getRedirectUris())) {
-            List<SecurityClientRedirectUri> redirectUriList = registeredClient.getRedirectUris().stream().map(uri ->
-                            SecurityClientRedirectUri.withId(UUID.randomUUID().toString())
-                                    .clientId(id)
+            List<SecurityApplicationRedirectUri> redirectUriList = registeredClient.getRedirectUris().stream().map(uri ->
+                            SecurityApplicationRedirectUri.withId(UUID.randomUUID().toString())
+                                    .applicationId(id)
                                     .redirectType(ClientRedirectUriType.LOGIN)
                                     .redirectUri(uri)
                                     .createTime(LocalDateTime.now())
@@ -121,8 +121,8 @@ public final class RegisteredToSecurityClientConverter implements Converter<Regi
 
         // secrets
         if(!ObjectUtils.isEmpty(registeredClient.getClientSecret())) {
-            SecurityClientSecret clientSecret = SecurityClientSecret.withId(UUID.randomUUID().toString())
-                    .clientId(id)
+            SecurityApplicationSecret clientSecret = SecurityApplicationSecret.withId(UUID.randomUUID().toString())
+                    .applicationId(id)
                     .clientSecret(registeredClient.getClientSecret())
                     .secretExpiresAt(LocalDateTime.ofInstant(registeredClient.getClientSecretExpiresAt(), ZoneId.systemDefault()))
                     .createTime(LocalDateTime.now())

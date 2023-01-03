@@ -31,7 +31,7 @@ public class UserAuthorizeConsentToAuthorizationConsentConverter implements Conv
 
     @Override
     public OAuth2AuthorizationConsent convert(SecurityUserAuthorizeConsent userAuthorizeConsent) {
-        return OAuth2AuthorizationConsent.withId(userAuthorizeConsent.getClientId(), userAuthorizeConsent.getUsername())
+        return OAuth2AuthorizationConsent.withId(userAuthorizeConsent.getApplicationId(), userAuthorizeConsent.getUsername())
                 .authorities(authorities -> {
                     for (String authority : userAuthorizeConsent.getAuthorities()) {
                         authorities.add(new SimpleGrantedAuthority(authority));

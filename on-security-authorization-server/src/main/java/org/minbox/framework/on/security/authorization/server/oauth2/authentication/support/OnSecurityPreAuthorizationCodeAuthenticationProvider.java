@@ -21,15 +21,15 @@ import org.minbox.framework.on.security.core.authorization.AbstractOnSecurityAut
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityThrowErrorUtils;
 import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUserDetails;
-import org.minbox.framework.on.security.core.authorization.data.client.SecurityClient;
-import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientJdbcRepository;
-import org.minbox.framework.on.security.core.authorization.data.client.SecurityClientRepository;
+import org.minbox.framework.on.security.core.authorization.data.application.SecurityApplication;
+import org.minbox.framework.on.security.core.authorization.data.application.SecurityApplicationJdbcRepository;
+import org.minbox.framework.on.security.core.authorization.data.application.SecurityApplicationRepository;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionRepository;
-import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeClient;
-import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeClientJdbcRepository;
-import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeClientRepository;
+import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeApplication;
+import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeApplicationJdbcRepository;
+import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeApplicationRepository;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.core.Authentication;
@@ -50,16 +50,16 @@ import java.util.stream.Collectors;
  * @since 0.0.1
  */
 public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends AbstractOnSecurityAuthenticationProvider {
-    private SecurityClientRepository securityClientRepository;
-    private SecurityUserAuthorizeClientRepository userAuthorizeClientRepository;
+    private SecurityApplicationRepository securityApplicationRepository;
+    private SecurityUserAuthorizeApplicationRepository userAuthorizeClientRepository;
     private SecurityRegionRepository regionRepository;
 
     public OnSecurityPreAuthorizationCodeAuthenticationProvider(Map<Class<?>, Object> sharedObjects) {
         super(sharedObjects);
         ApplicationContext applicationContext = (ApplicationContext) sharedObjects.get(ApplicationContext.class);
         JdbcOperations jdbcOperations = applicationContext.getBean(JdbcOperations.class);
-        this.securityClientRepository = new SecurityClientJdbcRepository(jdbcOperations);
-        this.userAuthorizeClientRepository = new SecurityUserAuthorizeClientJdbcRepository(jdbcOperations);
+        this.securityApplicationRepository = new SecurityApplicationJdbcRepository(jdbcOperations);
+        this.userAuthorizeClientRepository = new SecurityUserAuthorizeApplicationJdbcRepository(jdbcOperations);
         this.regionRepository = new SecurityRegionJdbcRepository(jdbcOperations);
     }
 
@@ -68,22 +68,22 @@ public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends Abstra
         OnSecurityPreAuthorizationCodeAuthenticationToken preAuthenticationToken = (OnSecurityPreAuthorizationCodeAuthenticationToken) authentication;
         OnSecurityUserDetails onSecurityUserDetails = preAuthenticationToken.getUserDetails();
         // Verification ClientId
-        SecurityClient securityClient = null;
-        if (!ObjectUtils.isEmpty(preAuthenticationToken.getClientId())) {
-            securityClient = securityClientRepository.findByClientId(preAuthenticationToken.getClientId());
-            if (securityClient == null || !securityClient.isEnabled() || securityClient.isDeleted()) {
+        SecurityApplication securityApplication = null;
+        if (!ObjectUtils.isEmpty(preAuthenticationToken.getApplicationId())) {
+            securityApplication = securityApplicationRepository.findByClientId(preAuthenticationToken.getApplicationId());
+            if (securityApplication == null || !securityApplication.isEnabled() || securityApplication.isDeleted()) {
                 //@formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_CLIENT,
                         OAuth2ParameterNames.CLIENT_ID,
-                        "Invalid Client：" + preAuthenticationToken.getClientId() + "，Please check data validity.");
+                        "Invalid Client：" + preAuthenticationToken.getApplicationId() + "，Please check data validity.");
                 // @formatter:on
             }
-            SecurityRegion securityRegion = regionRepository.findById(securityClient.getRegionId());
+            SecurityRegion securityRegion = regionRepository.findById(securityApplication.getRegionId());
             if (securityRegion == null || !securityRegion.isEnabled() || securityRegion.isDeleted()) {
                 //@formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_REGION,
                         null,
-                        "Invalid Region：" + (securityRegion == null ? securityClient.getRegionId() : securityRegion.getRegionId()) +
+                        "Invalid Region：" + (securityRegion == null ? securityApplication.getRegionId() : securityRegion.getRegionId()) +
                                 "，Please check data validity.");
                 // @formatter:on
             }
@@ -91,22 +91,22 @@ public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends Abstra
         // Verification UserDetails
         if (onSecurityUserDetails != null) {
             // @formatter:off
-            List<SecurityUserAuthorizeClient> userAuthorizeClientList =
+            List<SecurityUserAuthorizeApplication> userAuthorizeClientList =
                     userAuthorizeClientRepository.findByUserId(onSecurityUserDetails.getUserId());
             if(ObjectUtils.isEmpty(userAuthorizeClientList)) {
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
                         OAuth2ParameterNames.CLIENT_ID,
-                        "User: " + onSecurityUserDetails.getUsername() + ", not authorized to bind client: " + preAuthenticationToken.getClientId());
+                        "User: " + onSecurityUserDetails.getUsername() + ", not authorized to bind client: " + preAuthenticationToken.getApplicationId());
             }
             List<String> userAuthorizeClientIds = userAuthorizeClientList.stream()
-                    .map(SecurityUserAuthorizeClient::getClientId)
+                    .map(SecurityUserAuthorizeApplication::getApplicationId)
                     .collect(Collectors.toList());
             // @formatter:on
-            if (!userAuthorizeClientIds.contains(securityClient.getId())) {
+            if (!userAuthorizeClientIds.contains(securityApplication.getId())) {
                 // @formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
                         OAuth2ParameterNames.CLIENT_ID,
-                        "User: " + onSecurityUserDetails.getUsername() + ", not authorized to bind client: " + preAuthenticationToken.getClientId());
+                        "User: " + onSecurityUserDetails.getUsername() + ", not authorized to bind client: " + preAuthenticationToken.getApplicationId());
                 // @formatter:on
             }
         }

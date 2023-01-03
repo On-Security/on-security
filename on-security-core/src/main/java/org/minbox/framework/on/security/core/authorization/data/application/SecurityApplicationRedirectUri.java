@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client;
+package org.minbox.framework.on.security.core.authorization.data.application;
 
 import org.minbox.framework.on.security.core.authorization.ClientRedirectUriType;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
@@ -32,23 +32,23 @@ import java.time.LocalDateTime;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityClientRedirectUri implements Serializable {
+public class SecurityApplicationRedirectUri implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private String id;
-    private String clientId;
+    private String applicationId;
     private ClientRedirectUriType redirectType;
     private String redirectUri;
     private LocalDateTime createTime;
 
-    protected SecurityClientRedirectUri() {
+    protected SecurityApplicationRedirectUri() {
     }
 
     public String getId() {
         return id;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public ClientRedirectUriType getRedirectType() {
@@ -70,18 +70,18 @@ public class SecurityClientRedirectUri implements Serializable {
 
     public String toString() {
         // @formatter:off
-        return "SecurityClientRedirectUri(id=" + this.getId() + ", clientId=" + this.getClientId() + ", redirectType=" +
+        return "SecurityClientRedirectUri(id=" + this.getId() + ", applicationId=" + this.getApplicationId() + ", redirectType=" +
                 this.getRedirectType() + ", redirectUri=" + this.getRedirectUri() + ", createTime=" + this.getCreateTime() + ")";
         // @formatter:on
     }
 
     /**
-     * {@link SecurityClientRedirectUri} 对象构建者
+     * {@link SecurityApplicationRedirectUri} 对象构建者
      */
     public static class Builder implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String id;
-        private String clientId;
+        private String applicationId;
         private ClientRedirectUriType redirectType;
         private String redirectUri;
         private LocalDateTime createTime;
@@ -90,8 +90,8 @@ public class SecurityClientRedirectUri implements Serializable {
             this.id = id;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -110,17 +110,17 @@ public class SecurityClientRedirectUri implements Serializable {
             return this;
         }
 
-        public SecurityClientRedirectUri build() {
-            Assert.hasText(this.clientId, "clientId cannot be empty");
+        public SecurityApplicationRedirectUri build() {
+            Assert.hasText(this.applicationId, "applicationId cannot be empty");
             Assert.hasText(this.redirectUri, "redirectUri cannot be empty");
             Assert.notNull(this.redirectType, "redirectType cannot be null");
             return this.create();
         }
 
-        private SecurityClientRedirectUri create() {
-            SecurityClientRedirectUri clientRedirectUri = new SecurityClientRedirectUri();
+        private SecurityApplicationRedirectUri create() {
+            SecurityApplicationRedirectUri clientRedirectUri = new SecurityApplicationRedirectUri();
             clientRedirectUri.id = this.id;
-            clientRedirectUri.clientId = this.clientId;
+            clientRedirectUri.applicationId = this.applicationId;
             clientRedirectUri.redirectType = this.redirectType;
             clientRedirectUri.redirectUri = this.redirectUri;
             clientRedirectUri.createTime = this.createTime;
@@ -129,7 +129,7 @@ public class SecurityClientRedirectUri implements Serializable {
 
         public String toString() {
             // @formatter:off
-            return "SecurityClientRedirectUri.Builder(id=" + this.id + ", clientId=" + this.clientId +
+            return "SecurityClientRedirectUri.Builder(id=" + this.id + ", applicationId=" + this.applicationId +
                     ", redirectType=" + this.redirectType + ", redirectUri=" + this.redirectUri + ", createTime=" + this.createTime + ")";
             // @formatter:on
         }

@@ -15,31 +15,31 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client;
+package org.minbox.framework.on.security.core.authorization.data.application;
 
 import java.util.List;
 
 /**
- * 客户端范围数据存储库接口
+ * 客户端跳转地址数据存储库接口
  *
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecurityClientScopeRepository {
+public interface SecurityApplicationRedirectUriRepository {
     /**
-     * 保存客户端范围基本信息
+     * 存储客户端跳转地址
      * <p>
-     * 新增或更新客户端范围基本信息，根据{@link SecurityClientScope#getId()}查询如果已经存在则执行更新否则执行新增
+     * 根据{@link SecurityApplicationRedirectUri#getId()}判断如果已经存在执行更新，否则执行新增
      *
-     * @param clientScope {@link SecurityClientScope} 客户端范围实例
+     * @param clientRedirectUri {@link SecurityApplicationRedirectUri} 客户端跳转地址对象实例
      */
-    void save(SecurityClientScope clientScope);
+    void save(SecurityApplicationRedirectUri clientRedirectUri);
 
     /**
-     * 根据{@link SecurityClient#getId()}查询客户端范围列表
+     * 根据{@link SecurityApplication#getId()}查询客户端跳转地址列表
      *
-     * @param clientId 客户端ID {@link SecurityClientScope#getClientId()}
-     * @return 客户端绑定的范围列表 {@link SecurityClientScope}
+     * @param applicationId 应用ID {@link SecurityApplicationRedirectUri#getApplicationId()}
+     * @return 客户端跳转地址对象列表 {@link SecurityApplicationRedirectUri}
      */
-    List<SecurityClientScope> findByClientId(String clientId);
+    List<SecurityApplicationRedirectUri> findByClientId(String applicationId);
 }

@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client;
+package org.minbox.framework.on.security.core.authorization.data.application;
 
 import org.minbox.framework.on.security.core.authorization.SignatureAlgorithm;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
@@ -34,10 +34,10 @@ import java.util.Set;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityClientAuthentication implements Serializable {
+public class SecurityApplicationAuthentication implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private String id;
-    private String clientId;
+    private String applicationId;
     private boolean confidential;
     private String jwksUrl;
     private boolean consentRequired;
@@ -52,15 +52,15 @@ public class SecurityClientAuthentication implements Serializable {
     private boolean reuseRefreshToken;
     private LocalDateTime createTime;
 
-    protected SecurityClientAuthentication() {
+    protected SecurityApplicationAuthentication() {
     }
 
     public String getId() {
         return id;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public boolean isConfidential() {
@@ -128,7 +128,7 @@ public class SecurityClientAuthentication implements Serializable {
 
     public String toString() {
         // @formatter:off
-        return "SecurityClientAuthentication(id=" + this.getId() + ", clientId=" + this.getClientId() + ", confidential=" +
+        return "SecurityClientAuthentication(id=" + this.getId() + ", applicationId=" + this.getApplicationId() + ", confidential=" +
                 this.isConfidential() + ", jwksUrl=" + this.getJwksUrl() + ", consentRequired=" + this.isConsentRequired() +
                 ", signatureAlgorithm=" + this.getSignatureAlgorithm() + ", authorizationMethods=" + this.getAuthorizationMethods() +
                 ", grantTypes=" + this.getGrantTypes() + ", idTokenSignatureAlgorithm=" + this.getIdTokenSignatureAlgorithm() +
@@ -140,12 +140,12 @@ public class SecurityClientAuthentication implements Serializable {
     }
 
     /**
-     * {@link SecurityClientAuthentication} 对象构建者
+     * {@link SecurityApplicationAuthentication} 对象构建者
      */
     public static class Builder implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String id;
-        private String clientId;
+        private String applicationId;
         private boolean confidential;
         private String jwksUrl;
         private boolean consentRequired;
@@ -164,8 +164,8 @@ public class SecurityClientAuthentication implements Serializable {
             this.id = id;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -234,8 +234,8 @@ public class SecurityClientAuthentication implements Serializable {
             return this;
         }
 
-        public SecurityClientAuthentication build() {
-            Assert.hasText(this.clientId, "clientId cannot be empty.");
+        public SecurityApplicationAuthentication build() {
+            Assert.hasText(this.applicationId, "applicationId cannot be empty.");
             Assert.notEmpty(this.authorizationMethods, "authorizationMethods cannot be empty.");
             Assert.notEmpty(this.grantTypes, "grantTypes cannot be empty.");
             Assert.isTrue(this.authorizationCodeExpirationTime > 0, "authorizationCodeExpirationTime must be greater than 0");
@@ -245,10 +245,10 @@ public class SecurityClientAuthentication implements Serializable {
             return this.create();
         }
 
-        private SecurityClientAuthentication create() {
-            SecurityClientAuthentication clientAuthentication = new SecurityClientAuthentication();
+        private SecurityApplicationAuthentication create() {
+            SecurityApplicationAuthentication clientAuthentication = new SecurityApplicationAuthentication();
             clientAuthentication.id = this.id;
-            clientAuthentication.clientId = this.clientId;
+            clientAuthentication.applicationId = this.applicationId;
             clientAuthentication.confidential = this.confidential;
             clientAuthentication.jwksUrl = this.jwksUrl;
             clientAuthentication.authorizationMethods = this.authorizationMethods;
@@ -267,7 +267,7 @@ public class SecurityClientAuthentication implements Serializable {
 
         public String toString() {
             // @formatter:off
-            return "SecurityClientAuthentication.Builder(id=" + this.id + ", clientId=" + this.clientId + ", confidential=" +
+            return "SecurityClientAuthentication.Builder(id=" + this.id + ", applicationId=" + this.applicationId + ", confidential=" +
                     this.confidential + ", jwksUrl=" + this.jwksUrl + ", consentRequired=" + this.consentRequired + ", signatureAlgorithm=" +
                     this.signatureAlgorithm + ", authorizationMethods=" + this.authorizationMethods + ", grantTypes=" + this.grantTypes +
                     ", idTokenSignatureAlgorithm=" + this.idTokenSignatureAlgorithm + ", authorizationCodeExpirationTime=" +

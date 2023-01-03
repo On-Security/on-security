@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client;
+package org.minbox.framework.on.security.core.authorization.data.application;
 
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
 import org.springframework.util.Assert;
@@ -29,28 +29,28 @@ import java.time.LocalDateTime;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityClientSecret implements Serializable {
+public class SecurityApplicationSecret implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private String id;
-    private String clientId;
+    private String applicationId;
     private String clientSecret;
     private LocalDateTime secretExpiresAt;
     private LocalDateTime createTime;
     private boolean deleted;
     private LocalDateTime deleteTime;
 
-    protected SecurityClientSecret() {
+    protected SecurityApplicationSecret() {
     }
 
     public String getId() {
         return id;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
-    public String getClientSecret() {
+    public String getApplicationSecret() {
         return clientSecret;
     }
 
@@ -77,19 +77,19 @@ public class SecurityClientSecret implements Serializable {
 
     public String toString() {
         // @formatter:off
-        return "SecurityClientSecret(id=" + this.getId() + ", clientId=" + this.getClientId() + ", clientSecret=" +
-                this.getClientSecret() + ", secretExpiresAt=" + this.getSecretExpiresAt() + ", createTime=" + this.getCreateTime() +
+        return "SecurityApplicationSecret(id=" + this.getId() + ", applicationId=" + this.getApplicationId() + ", clientSecret=" +
+                this.getApplicationSecret() + ", secretExpiresAt=" + this.getSecretExpiresAt() + ", createTime=" + this.getCreateTime() +
                 ", deleted=" + this.isDeleted() + ", deleteTime=" + this.getDeleteTime() + ")";
         // @formatter:on
     }
 
     /**
-     * {@link SecurityClientSecret} 对象构建者
+     * {@link SecurityApplicationSecret} 对象构建者
      */
     public static class Builder implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String id;
-        private String clientId;
+        private String applicationId;
         private String clientSecret;
         private LocalDateTime secretExpiresAt;
         private LocalDateTime createTime;
@@ -100,8 +100,8 @@ public class SecurityClientSecret implements Serializable {
             this.id = id;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -130,29 +130,29 @@ public class SecurityClientSecret implements Serializable {
             return this;
         }
 
-        public SecurityClientSecret build() {
-            Assert.hasText(this.clientId, "clientId cannot be empty");
+        public SecurityApplicationSecret build() {
+            Assert.hasText(this.applicationId, "applicationId cannot be empty");
             Assert.hasText(this.clientSecret, "clientSecret cannot be empty");
             Assert.notNull(this.secretExpiresAt, "secretExpiresAt cannot be null");
             return this.create();
         }
 
-        private SecurityClientSecret create() {
-            SecurityClientSecret securityClientSecret = new SecurityClientSecret();
-            securityClientSecret.id = this.id;
-            securityClientSecret.clientId = this.clientId;
-            securityClientSecret.clientSecret = this.clientSecret;
-            securityClientSecret.secretExpiresAt = this.secretExpiresAt;
-            securityClientSecret.createTime = this.createTime;
-            securityClientSecret.deleted = this.deleted;
-            securityClientSecret.deleteTime = this.deleteTime;
-            return securityClientSecret;
+        private SecurityApplicationSecret create() {
+            SecurityApplicationSecret securityApplicationSecret = new SecurityApplicationSecret();
+            securityApplicationSecret.id = this.id;
+            securityApplicationSecret.applicationId = this.applicationId;
+            securityApplicationSecret.clientSecret = this.clientSecret;
+            securityApplicationSecret.secretExpiresAt = this.secretExpiresAt;
+            securityApplicationSecret.createTime = this.createTime;
+            securityApplicationSecret.deleted = this.deleted;
+            securityApplicationSecret.deleteTime = this.deleteTime;
+            return securityApplicationSecret;
         }
 
         public String toString() {
             //@formatter:off
-            return "SecurityClientSecret.SecurityClientSecretBuilder(id=" + this.id + ", clientId=" +
-                    this.clientId + ", clientSecret=" + this.clientSecret + ", secretExpiresAt=" + this.secretExpiresAt
+            return "SecurityApplicationSecret.SecurityApplicationSecretBuilder(id=" + this.id + ", applicationId=" +
+                    this.applicationId + ", clientSecret=" + this.clientSecret + ", secretExpiresAt=" + this.secretExpiresAt
                     + ", createTime=" + this.createTime + ", deleted=" + this.deleted + ", deleteTime=" + this.deleteTime + ")";
             //@formatter:on
         }

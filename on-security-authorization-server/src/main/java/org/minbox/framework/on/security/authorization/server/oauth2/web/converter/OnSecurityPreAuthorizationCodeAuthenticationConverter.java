@@ -41,7 +41,7 @@ public class OnSecurityPreAuthorizationCodeAuthenticationConverter implements Au
     @Override
     public Authentication convert(HttpServletRequest request) {
         MultiValueMap<String, String> parameters = RequestParameterUtils.getParameters(request);
-        String clientId = parameters.getFirst(OAuth2ParameterNames.CLIENT_ID);
+        String applicationId = parameters.getFirst(OAuth2ParameterNames.CLIENT_ID);
         String grantType = parameters.getFirst(OAuth2ParameterNames.GRANT_TYPE);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         OnSecurityUserDetails onSecurityUserDetails = null;
@@ -49,7 +49,7 @@ public class OnSecurityPreAuthorizationCodeAuthenticationConverter implements Au
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) authentication;
             onSecurityUserDetails = (OnSecurityUserDetails) usernamePasswordAuthenticationToken.getPrincipal();
         }
-        return new OnSecurityPreAuthorizationCodeAuthenticationToken(clientId, grantType, onSecurityUserDetails);
+        return new OnSecurityPreAuthorizationCodeAuthenticationToken(applicationId, grantType, onSecurityUserDetails);
     }
 
 

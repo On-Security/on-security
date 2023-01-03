@@ -40,12 +40,12 @@ public class SecurityUserAuthorizeConsentJdbcRepository implements SecurityUserA
     // @formatter:off
     private static final String COLUMN_NAMES = "user_id, "
             + "username, "
-            + "client_id, "
+            + "application_id, "
             + "authorities, "
             + "authorize_time";
     // @formatter:on
     private static final String TABLE_NAME = "security_user_authorize_consents";
-    private static final String USER_ID_AND_CLIENT_ID_FILTER = "user_id = ? and client_id = ?";
+    private static final String USER_ID_AND_CLIENT_ID_FILTER = "user_id = ? and application_id = ?";
     private static final String SELECT_USER_AUTHORIZE_CONSENT_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
     // @formatter:off
     private static final String INSERT_USER_AUTHORIZE_CONSENT_SQL = "INSERT INTO " + TABLE_NAME
@@ -71,7 +71,7 @@ public class SecurityUserAuthorizeConsentJdbcRepository implements SecurityUserA
     public void save(SecurityUserAuthorizeConsent userAuthorizeConsent) {
         Assert.notNull(userAuthorizeConsent, "userAuthorizeConsent cannot be null");
         SecurityUserAuthorizeConsent storedUserAuthorizeConsent =
-                this.findBy(USER_ID_AND_CLIENT_ID_FILTER, userAuthorizeConsent.getUserId(), userAuthorizeConsent.getClientId());
+                this.findBy(USER_ID_AND_CLIENT_ID_FILTER, userAuthorizeConsent.getUserId(), userAuthorizeConsent.getApplicationId());
         if (storedUserAuthorizeConsent != null) {
             this.updateUserAuthorizeConsent(userAuthorizeConsent);
         } else {
@@ -82,10 +82,10 @@ public class SecurityUserAuthorizeConsentJdbcRepository implements SecurityUserA
     private void updateUserAuthorizeConsent(SecurityUserAuthorizeConsent userAuthorizeConsent) {
         List<SqlParameterValue> parameters = new ArrayList<>(this.userAuthorizeConsentParametersMapper.apply(userAuthorizeConsent));
         SqlParameterValue userId = parameters.remove(0); // remove user_id
-        SqlParameterValue clientId = parameters.remove(1); // remove client_id
+        SqlParameterValue applicationId = parameters.remove(1); // remove application_id
         parameters.remove(2); // remove authorize_time
         parameters.add(userId); // add where user_id
-        parameters.add(clientId); // add where client_id
+        parameters.add(applicationId); // add where application_id
         PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
         this.jdbcOperations.update(UPDATE_USER_AUTHORIZE_CONSENT_SQL, pss);
     }
@@ -126,7 +126,7 @@ public class SecurityUserAuthorizeConsentJdbcRepository implements SecurityUserA
         public SecurityUserAuthorizeConsent mapRow(ResultSet rs, int rowNum) throws SQLException {
             SecurityUserAuthorizeConsent.Builder builder = SecurityUserAuthorizeConsent.withUserId(rs.getString("user_id"));
             // @formatter:off
-            builder.clientId(rs.getString("client_id"))
+            builder.applicationId(rs.getString("application_id"))
                     .username(rs.getString("username"))
                     .authorizeTime(rs.getTimestamp("authorize_time").toLocalDateTime());
             // @formatter:on
@@ -144,7 +144,7 @@ public class SecurityUserAuthorizeConsentJdbcRepository implements SecurityUserA
             return Arrays.asList(
                     new SqlParameterValue(Types.VARCHAR, userAuthorizeConsent.getUserId()),
                     new SqlParameterValue(Types.VARCHAR, userAuthorizeConsent.getUsername()),
-                    new SqlParameterValue(Types.VARCHAR, userAuthorizeConsent.getClientId()),
+                    new SqlParameterValue(Types.VARCHAR, userAuthorizeConsent.getApplicationId()),
                     new SqlParameterValue(Types.VARCHAR, StringUtils.collectionToDelimitedString(userAuthorizeConsent.getAuthorities(), ",")),
                     new SqlParameterValue(Types.TIMESTAMP, Timestamp.valueOf(userAuthorizeConsent.getAuthorizeTime()))
 

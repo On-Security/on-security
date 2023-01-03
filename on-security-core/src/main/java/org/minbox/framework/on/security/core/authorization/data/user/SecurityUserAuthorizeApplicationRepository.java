@@ -17,7 +17,7 @@
 
 package org.minbox.framework.on.security.core.authorization.data.user;
 
-import org.minbox.framework.on.security.core.authorization.data.client.SecurityClient;
+import org.minbox.framework.on.security.core.authorization.data.application.SecurityApplication;
 
 import java.util.List;
 
@@ -27,19 +27,19 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecurityUserAuthorizeClientRepository {
+public interface SecurityUserAuthorizeApplicationRepository {
     /**
      * 新增用户授权客户端
      *
-     * @param userAuthorizeClient {@link SecurityUserAuthorizeClient}
+     * @param userAuthorizeClient {@link SecurityUserAuthorizeApplication}
      */
-    void insert(SecurityUserAuthorizeClient userAuthorizeClient);
+    void insert(SecurityUserAuthorizeApplication userAuthorizeClient);
 
     /**
      * 删除用户授权的客户端
      *
      * @param securityUserId   用户ID {@link SecurityUser#getId()}
-     * @param securityClientId 客户端ID {@link SecurityClient#getId()}
+     * @param securityClientId 应用ID {@link SecurityApplication#getId()}
      */
     void remove(String securityUserId, String securityClientId);
 
@@ -47,7 +47,7 @@ public interface SecurityUserAuthorizeClientRepository {
      * 查询用户授权的客户端列表
      *
      * @param userId {@link SecurityUser#getId()} 用户ID
-     * @return 用户授权的客户端列表 {@link SecurityUserAuthorizeClient}
+     * @return 用户授权的客户端列表 {@link SecurityUserAuthorizeApplication}
      */
-    List<SecurityUserAuthorizeClient> findByUserId(String userId);
+    List<SecurityUserAuthorizeApplication> findByUserId(String userId);
 }
