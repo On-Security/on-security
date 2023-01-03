@@ -17,7 +17,7 @@
 
 package org.minbox.framework.on.security.authorization.server;
 
-import org.minbox.framework.on.security.core.authorization.data.client.*;
+import org.minbox.framework.on.security.core.authorization.data.application.*;
 import org.minbox.framework.on.security.core.authorization.data.session.SecuritySession;
 import org.minbox.framework.on.security.core.authorization.data.session.SecuritySessionJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.session.SecuritySessionRepository;
@@ -52,14 +52,14 @@ public class JdbcOnSecurityOAuth2AuthorizationService implements OAuth2Authoriza
     private Converter<OAuth2Authorization, SecuritySession> oAuth2AuthorizationToSecuritySessionConverter;
     private Converter<SecuritySession, OAuth2Authorization> securitySessionToOAuth2AuthorizationConverter;
     private SecuritySessionRepository sessionRepository;
-    private SecurityClientRepository clientRepository;
-    private SecurityClientAuthenticationRepository clientAuthenticationRepository;
+    private SecurityApplicationRepository clientRepository;
+    private SecurityApplicationAuthenticationRepository clientAuthenticationRepository;
     private SecurityUserRepository userRepository;
 
     public JdbcOnSecurityOAuth2AuthorizationService(JdbcOperations jdbcOperations, RegisteredClientRepository registeredClientRepository) {
         this.sessionRepository = new SecuritySessionJdbcRepository(jdbcOperations);
-        this.clientRepository = new SecurityClientJdbcRepository(jdbcOperations);
-        this.clientAuthenticationRepository = new SecurityClientAuthenticationJdbcRepository(jdbcOperations);
+        this.clientRepository = new SecurityApplicationJdbcRepository(jdbcOperations);
+        this.clientAuthenticationRepository = new SecurityApplicationAuthenticationJdbcRepository(jdbcOperations);
         this.userRepository = new SecurityUserJdbcRepository(jdbcOperations);
         this.securitySessionToOAuth2AuthorizationConverter =
                 new SecuritySessionToOAuth2AuthorizationConverter(registeredClientRepository);
@@ -71,7 +71,7 @@ public class JdbcOnSecurityOAuth2AuthorizationService implements OAuth2Authoriza
     public void save(OAuth2Authorization authorization) {
         SecuritySession securitySession = oAuth2AuthorizationToSecuritySessionConverter.convert(authorization);
         SecuritySession.Builder builder = SecuritySession.with(securitySession);
-        SecurityClientAuthentication clientAuthentication = clientAuthenticationRepository.findByClientId(securitySession.getClientId());
+        SecurityApplicationAuthentication clientAuthentication = clientAuthenticationRepository.findByClientId(securitySession.getApplicationId());
         LocalDateTime issuedAt = LocalDateTime.now();
         // set access token expire time
         // authorization_code || password || client_credentials

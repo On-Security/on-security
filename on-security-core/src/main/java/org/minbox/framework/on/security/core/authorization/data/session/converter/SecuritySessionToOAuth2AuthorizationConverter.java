@@ -49,7 +49,7 @@ public class SecuritySessionToOAuth2AuthorizationConverter implements Converter<
 
     @Override
     public OAuth2Authorization convert(SecuritySession session) {
-        RegisteredClient registeredClient = registeredClientRepository.findById(session.getClientId());
+        RegisteredClient registeredClient = registeredClientRepository.findById(session.getApplicationId());
         // @formatter:off
         OAuth2Authorization.Builder builder = OAuth2Authorization
                 .withRegisteredClient(registeredClient)

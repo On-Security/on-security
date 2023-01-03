@@ -34,13 +34,13 @@ import java.util.function.Function;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityUserAuthorizeClientJdbcRepository implements SecurityUserAuthorizeClientRepository {
+public class SecurityUserAuthorizeApplicationJdbcRepository implements SecurityUserAuthorizeApplicationRepository {
     // @formatter:off
     private static final String COLUMN_NAMES = "user_id, "
-            + "client_id, "
+            + "application_id, "
             + "authorize_time";
     // @formatter:on
-    private static final String TABLE_NAME = "security_user_authorize_clients";
+    private static final String TABLE_NAME = "security_user_authorize_applications";
     private static final String USER_ID_FILTER = "user_id = ?";
     private static final String SELECT_USER_AUTHORIZE_CLIENT_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
     // @formatter:off
@@ -50,32 +50,32 @@ public class SecurityUserAuthorizeClientJdbcRepository implements SecurityUserAu
     private static final String REMOVE_USER_AUTHORIZE_CLIENT_SQL = "DELETE FROM " + TABLE_NAME + " WHERE " + USER_ID_FILTER;
 
     private JdbcOperations jdbcOperations;
-    private RowMapper<SecurityUserAuthorizeClient> userAuthorizeClientRowMapper;
-    private Function<SecurityUserAuthorizeClient, List<SqlParameterValue>> userAuthorizeClientParametersMapper;
+    private RowMapper<SecurityUserAuthorizeApplication> userAuthorizeClientRowMapper;
+    private Function<SecurityUserAuthorizeApplication, List<SqlParameterValue>> userAuthorizeClientParametersMapper;
 
-    public SecurityUserAuthorizeClientJdbcRepository(JdbcOperations jdbcOperations) {
+    public SecurityUserAuthorizeApplicationJdbcRepository(JdbcOperations jdbcOperations) {
         Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
         this.jdbcOperations = jdbcOperations;
-        this.userAuthorizeClientRowMapper = new SecurityUserAuthorizeClientJdbcRepository.SecurityUserAuthorizeClientRowMapper();
-        this.userAuthorizeClientParametersMapper = new SecurityUserAuthorizeClientJdbcRepository.SecurityUserAuthorizeClientParametersMapper();
+        this.userAuthorizeClientRowMapper = new SecurityUserAuthorizeApplicationJdbcRepository.SecurityUserAuthorizeClientRowMapper();
+        this.userAuthorizeClientParametersMapper = new SecurityUserAuthorizeApplicationJdbcRepository.SecurityUserAuthorizeClientParametersMapper();
     }
 
     @Override
-    public void insert(SecurityUserAuthorizeClient userAuthorizeClient) {
+    public void insert(SecurityUserAuthorizeApplication userAuthorizeClient) {
         Assert.notNull(userAuthorizeClient, "userAuthorizeClient cannot be null");
         List<SqlParameterValue> parameters = this.userAuthorizeClientParametersMapper.apply(userAuthorizeClient);
         PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
         this.jdbcOperations.update(INSERT_USER_AUTHORIZE_CLIENT_SQL, pss);
     }
 
-    private SecurityUserAuthorizeClient findBy(String filter, Object... args) {
-        List<SecurityUserAuthorizeClient> result = this.jdbcOperations.query(
+    private SecurityUserAuthorizeApplication findBy(String filter, Object... args) {
+        List<SecurityUserAuthorizeApplication> result = this.jdbcOperations.query(
                 SELECT_USER_AUTHORIZE_CLIENT_SQL + filter, this.userAuthorizeClientRowMapper, args);
         return !result.isEmpty() ? result.get(0) : null;
     }
 
-    private List<SecurityUserAuthorizeClient> findListBy(String filter, Object... args) {
-        List<SecurityUserAuthorizeClient> result = this.jdbcOperations.query(
+    private List<SecurityUserAuthorizeApplication> findListBy(String filter, Object... args) {
+        List<SecurityUserAuthorizeApplication> result = this.jdbcOperations.query(
                 SELECT_USER_AUTHORIZE_CLIENT_SQL + filter, this.userAuthorizeClientRowMapper, args);
         return result;
     }
@@ -92,28 +92,28 @@ public class SecurityUserAuthorizeClientJdbcRepository implements SecurityUserAu
     }
 
     @Override
-    public List<SecurityUserAuthorizeClient> findByUserId(String userId) {
+    public List<SecurityUserAuthorizeApplication> findByUserId(String userId) {
         return this.findListBy(USER_ID_FILTER, userId);
     }
 
-    public static class SecurityUserAuthorizeClientRowMapper implements RowMapper<SecurityUserAuthorizeClient> {
+    public static class SecurityUserAuthorizeClientRowMapper implements RowMapper<SecurityUserAuthorizeApplication> {
         @Override
-        public SecurityUserAuthorizeClient mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public SecurityUserAuthorizeApplication mapRow(ResultSet rs, int rowNum) throws SQLException {
             // @formatter:off
-            return SecurityUserAuthorizeClient.withUserId(rs.getString("user_id"))
-                    .clientId(rs.getString("client_id"))
+            return SecurityUserAuthorizeApplication.withUserId(rs.getString("user_id"))
+                    .applicationId(rs.getString("application_id"))
                     .authorizeTime(rs.getTimestamp("authorize_time").toLocalDateTime())
                     .build();
             // @formatter:on
         }
     }
 
-    public static class SecurityUserAuthorizeClientParametersMapper implements Function<SecurityUserAuthorizeClient, List<SqlParameterValue>> {
+    public static class SecurityUserAuthorizeClientParametersMapper implements Function<SecurityUserAuthorizeApplication, List<SqlParameterValue>> {
         @Override
-        public List<SqlParameterValue> apply(SecurityUserAuthorizeClient userAuthorizeClient) {
+        public List<SqlParameterValue> apply(SecurityUserAuthorizeApplication userAuthorizeClient) {
             return Arrays.asList(
                     new SqlParameterValue(Types.VARCHAR, userAuthorizeClient.getUserId()),
-                    new SqlParameterValue(Types.VARCHAR, userAuthorizeClient.getClientId()),
+                    new SqlParameterValue(Types.VARCHAR, userAuthorizeClient.getApplicationId()),
                     new SqlParameterValue(Types.TIMESTAMP, Timestamp.valueOf(userAuthorizeClient.getAuthorizeTime()))
 
             );

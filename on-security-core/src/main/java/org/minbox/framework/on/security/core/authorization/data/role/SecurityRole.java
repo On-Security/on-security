@@ -34,7 +34,7 @@ public class SecurityRole implements Serializable {
 
     private String id;
     private String regionId;
-    private String clientId;
+    private String applicationId;
     private String name;
     private String code;
     private String describe;
@@ -52,8 +52,8 @@ public class SecurityRole implements Serializable {
         return regionId;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public String getName() {
@@ -83,7 +83,7 @@ public class SecurityRole implements Serializable {
 
     public String toString() {
         // @formatter:off
-        return "SecurityRole(id=" + this.id + ", regionId=" + this.regionId + ", clientId=" + this.clientId + ", name=" +
+        return "SecurityRole(id=" + this.id + ", regionId=" + this.regionId + ", applicationId=" + this.applicationId + ", name=" +
                 this.name + ", code=" + this.code + ", describe=" + this.describe + ", deleted=" + this.deleted +
                 ", createTime=" + this.createTime + ")";
         // @formatter:on
@@ -96,7 +96,7 @@ public class SecurityRole implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String id;
         private String regionId;
-        private String clientId;
+        private String applicationId;
         private String name;
         private String code;
         private String describe;
@@ -112,8 +112,8 @@ public class SecurityRole implements Serializable {
             return this;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -144,7 +144,7 @@ public class SecurityRole implements Serializable {
 
         public SecurityRole build() {
             Assert.hasText(this.regionId, "regionId cannot be empty");
-            Assert.hasText(this.clientId, "clientId cannot be empty");
+            Assert.hasText(this.applicationId, "applicationId cannot be empty");
             Assert.hasText(this.name, "name cannot be empty");
             Assert.hasText(this.code, "code cannot be empty");
             Assert.notNull(this.createTime, "createTime cannot be null");
@@ -155,7 +155,7 @@ public class SecurityRole implements Serializable {
             SecurityRole securityRole = new SecurityRole();
             securityRole.id = this.id;
             securityRole.regionId = this.regionId;
-            securityRole.clientId = this.clientId;
+            securityRole.applicationId = this.applicationId;
             securityRole.name = this.name;
             securityRole.code = this.code;
             securityRole.describe = this.describe;
@@ -166,7 +166,7 @@ public class SecurityRole implements Serializable {
 
         public String toString() {
             // @formatter:off
-            return "SecurityRole.Builder(id=" + this.id + ", regionId=" + this.regionId + ", clientId=" + this.clientId +
+            return "SecurityRole.Builder(id=" + this.id + ", regionId=" + this.regionId + ", applicationId=" + this.applicationId +
                     ", name=" + this.name + ", code=" + this.code + ", describe=" + this.describe + ", deleted=" +
                     this.deleted + ", createTime=" + this.createTime + ")";
             // @formatter:on

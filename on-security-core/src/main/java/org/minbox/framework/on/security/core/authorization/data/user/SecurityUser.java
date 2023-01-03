@@ -51,7 +51,7 @@ public class SecurityUser implements Serializable {
     private boolean deleted;
     private String describe;
     private LocalDateTime createTime;
-    private Set<SecurityUserAuthorizeClient> authorizeClients;
+    private Set<SecurityUserAuthorizeApplication> authorizeClients;
     private Set<SecurityUserAuthorizeConsent> authorizeConsents;
     private Set<SecurityUserAuthorizeRole> authorizeRoles;
     private Set<SecurityUserGroup> groups;
@@ -123,7 +123,7 @@ public class SecurityUser implements Serializable {
         return createTime;
     }
 
-    public Set<SecurityUserAuthorizeClient> getAuthorizeClients() {
+    public Set<SecurityUserAuthorizeApplication> getAuthorizeClients() {
         return authorizeClients;
     }
 
@@ -177,7 +177,7 @@ public class SecurityUser implements Serializable {
         private boolean deleted;
         private String describe;
         private LocalDateTime createTime;
-        private Set<SecurityUserAuthorizeClient> authorizeClients;
+        private Set<SecurityUserAuthorizeApplication> authorizeClients;
         private Set<SecurityUserAuthorizeConsent> authorizeConsents;
         private Set<SecurityUserAuthorizeRole> authorizeRoles;
         private Set<SecurityUserGroup> groups;
@@ -261,7 +261,7 @@ public class SecurityUser implements Serializable {
             return this;
         }
 
-        public Builder authorizeClients(Set<SecurityUserAuthorizeClient> authorizeClients) {
+        public Builder authorizeClients(Set<SecurityUserAuthorizeApplication> authorizeClients) {
             this.authorizeClients = authorizeClients;
             return this;
         }

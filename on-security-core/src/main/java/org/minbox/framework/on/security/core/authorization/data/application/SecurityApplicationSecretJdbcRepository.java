@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client;
+package org.minbox.framework.on.security.core.authorization.data.application;
 
 import org.springframework.jdbc.core.*;
 import org.springframework.util.Assert;
@@ -36,18 +36,18 @@ import java.util.function.Function;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityClientSecretJdbcRepository implements SecurityClientSecretRepository {
+public class SecurityApplicationSecretJdbcRepository implements SecurityApplicationSecretRepository {
     private static final String COLUMN_NAMES = "id, "
-            + "client_id, "
-            + "client_secret, "
+            + "application_id, "
+            + "application_secret, "
             + "secret_expires_at, "
             + "deleted, "
             + "create_time, "
             + "delete_time";
     // @formatter:on
-    private static final String TABLE_NAME = "security_client_secret";
+    private static final String TABLE_NAME = "security_application_secret";
     private static final String ID_FILTER = "id = ?";
-    private static final String CLIENT_ID_FILTER = "client_id = ?";
+    private static final String CLIENT_ID_FILTER = "application_id = ?";
     private static final String SELECT_CLIENT_SECRET_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
     // @formatter:off
     private static final String INSERT_CLIENT_SECRET_SQL = "INSERT INTO " + TABLE_NAME
@@ -57,71 +57,71 @@ public class SecurityClientSecretJdbcRepository implements SecurityClientSecretR
             + " WHERE " + ID_FILTER;
     // @formatter:on
     private JdbcOperations jdbcOperations;
-    private RowMapper<SecurityClientSecret> clientSecretRowMapper;
-    private Function<SecurityClientSecret, List<SqlParameterValue>> clientSecretParametersMapper;
+    private RowMapper<SecurityApplicationSecret> clientSecretRowMapper;
+    private Function<SecurityApplicationSecret, List<SqlParameterValue>> clientSecretParametersMapper;
 
-    public SecurityClientSecretJdbcRepository(JdbcOperations jdbcOperations) {
+    public SecurityApplicationSecretJdbcRepository(JdbcOperations jdbcOperations) {
         Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
         this.jdbcOperations = jdbcOperations;
-        this.clientSecretRowMapper = new SecurityClientSecretRowMapper();
-        this.clientSecretParametersMapper = new SecurityClientSecretParametersMapper();
+        this.clientSecretRowMapper = new SecurityApplicationSecretRowMapper();
+        this.clientSecretParametersMapper = new SecurityApplicationSecretParametersMapper();
     }
 
     @Override
-    public void save(SecurityClientSecret clientSecret) {
+    public void save(SecurityApplicationSecret clientSecret) {
         Assert.notNull(clientSecret, "clientSecret cannot be null");
-        SecurityClientSecret storedClientSecret = this.findBy(ID_FILTER, clientSecret.getId());
-        if (storedClientSecret != null) {
-            this.updateClientSecret(clientSecret);
+        SecurityApplicationSecret storedApplicationSecret = this.findBy(ID_FILTER, clientSecret.getId());
+        if (storedApplicationSecret != null) {
+            this.updateApplicationSecret(clientSecret);
         } else {
-            this.insertClientSecret(clientSecret);
+            this.insertApplicationSecret(clientSecret);
         }
     }
 
     @Override
-    public List<SecurityClientSecret> findByClientId(String clientId) {
-        Assert.hasText(clientId, "clientId cannot be empty");
-        return this.findListBy(CLIENT_ID_FILTER, clientId);
+    public List<SecurityApplicationSecret> findByClientId(String applicationId) {
+        Assert.hasText(applicationId, "applicationId cannot be empty");
+        return this.findListBy(CLIENT_ID_FILTER, applicationId);
     }
 
-    private void updateClientSecret(SecurityClientSecret clientSecret) {
+    private void updateApplicationSecret(SecurityApplicationSecret clientSecret) {
         List<SqlParameterValue> parameters = new ArrayList<>(this.clientSecretParametersMapper.apply(clientSecret));
         SqlParameterValue id = parameters.remove(0); // remove id
-        parameters.remove(0); // remove client_id
+        parameters.remove(0); // remove application_id
         parameters.remove(3); // remove create_time
         parameters.add(id); // add where id
         PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
         this.jdbcOperations.update(UPDATE_CLIENT_SECRET_SQL, pss);
     }
 
-    private void insertClientSecret(SecurityClientSecret clientSecret) {
+    private void insertApplicationSecret(SecurityApplicationSecret clientSecret) {
         List<SqlParameterValue> parameters = this.clientSecretParametersMapper.apply(clientSecret);
         PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
         this.jdbcOperations.update(INSERT_CLIENT_SECRET_SQL, pss);
     }
 
-    private SecurityClientSecret findBy(String filter, Object... args) {
-        List<SecurityClientSecret> result = this.jdbcOperations.query(
+    private SecurityApplicationSecret findBy(String filter, Object... args) {
+        List<SecurityApplicationSecret> result = this.jdbcOperations.query(
                 SELECT_CLIENT_SECRET_SQL + filter, this.clientSecretRowMapper, args);
         return !result.isEmpty() ? result.get(0) : null;
     }
 
-    private List<SecurityClientSecret> findListBy(String filter, Object... args) {
-        List<SecurityClientSecret> result = this.jdbcOperations.query(
+    private List<SecurityApplicationSecret> findListBy(String filter, Object... args) {
+        List<SecurityApplicationSecret> result = this.jdbcOperations.query(
                 SELECT_CLIENT_SECRET_SQL + filter, this.clientSecretRowMapper, args);
         return result;
     }
 
 
-    public static class SecurityClientSecretRowMapper implements RowMapper<SecurityClientSecret> {
+    public static class SecurityApplicationSecretRowMapper implements RowMapper<SecurityApplicationSecret> {
         @Override
-        public SecurityClientSecret mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public SecurityApplicationSecret mapRow(ResultSet rs, int rowNum) throws SQLException {
             Timestamp deleteTime = rs.getTimestamp("delete_time");
             Timestamp secretExpiresAt = rs.getTimestamp("secret_expires_at");
             // @formatter:off
-            SecurityClientSecret clientSecret = SecurityClientSecret.withId(rs.getString("id"))
-                    .clientId(rs.getString("client_id"))
-                    .clientSecret(rs.getString("client_secret"))
+            SecurityApplicationSecret clientSecret = SecurityApplicationSecret.withId(rs.getString("id"))
+                    .applicationId(rs.getString("application_id"))
+                    .clientSecret(rs.getString("application_secret"))
                     .secretExpiresAt(secretExpiresAt != null ? secretExpiresAt.toLocalDateTime() : null)
                     .createTime(rs.getTimestamp("create_time").toLocalDateTime())
                     .deleted(rs.getBoolean("deleted"))
@@ -132,14 +132,14 @@ public class SecurityClientSecretJdbcRepository implements SecurityClientSecretR
         }
     }
 
-    public static class SecurityClientSecretParametersMapper implements Function<SecurityClientSecret, List<SqlParameterValue>> {
+    public static class SecurityApplicationSecretParametersMapper implements Function<SecurityApplicationSecret, List<SqlParameterValue>> {
         @Override
-        public List<SqlParameterValue> apply(SecurityClientSecret clientSecret) {
+        public List<SqlParameterValue> apply(SecurityApplicationSecret clientSecret) {
             // @formatter:off
             return Arrays.asList(
                     new SqlParameterValue(Types.VARCHAR, clientSecret.getId()),
-                    new SqlParameterValue(Types.VARCHAR, clientSecret.getClientId()),
-                    new SqlParameterValue(Types.VARCHAR, clientSecret.getClientSecret()),
+                    new SqlParameterValue(Types.VARCHAR, clientSecret.getApplicationId()),
+                    new SqlParameterValue(Types.VARCHAR, clientSecret.getApplicationSecret()),
                     new SqlParameterValue(Types.TIMESTAMP, Timestamp.valueOf(clientSecret.getSecretExpiresAt())),
                     new SqlParameterValue(Types.BOOLEAN, clientSecret.isDeleted()),
                     new SqlParameterValue(Types.TIMESTAMP, Timestamp.valueOf(clientSecret.getCreateTime())),

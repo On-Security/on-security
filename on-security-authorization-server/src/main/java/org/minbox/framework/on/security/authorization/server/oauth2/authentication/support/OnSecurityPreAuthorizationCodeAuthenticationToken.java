@@ -30,19 +30,19 @@ import java.util.Collections;
  * @since 0.0.1
  */
 public class OnSecurityPreAuthorizationCodeAuthenticationToken extends AbstractAuthenticationToken {
-    private String clientId;
+    private String applicationId;
     private String grantType;
     private OnSecurityUserDetails userDetails;
 
     /**
      * 实例化OnSecurityPreAuthenticationToken构造函数
      *
-     * @param clientId    客户端ID {@link RegisteredClient#getId()}
+     * @param applicationId    应用ID {@link RegisteredClient#getId()}
      * @param userDetails 资源所有者，用户对象实例 {@link OnSecurityUserDetails}
      */
-    public OnSecurityPreAuthorizationCodeAuthenticationToken(String clientId, String grantType, OnSecurityUserDetails userDetails) {
+    public OnSecurityPreAuthorizationCodeAuthenticationToken(String applicationId, String grantType, OnSecurityUserDetails userDetails) {
         super(Collections.emptyList());
-        this.clientId = clientId;
+        this.applicationId = applicationId;
         this.grantType = grantType;
         this.userDetails = userDetails;
     }
@@ -57,8 +57,8 @@ public class OnSecurityPreAuthorizationCodeAuthenticationToken extends AbstractA
         return this.userDetails;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public OnSecurityUserDetails getUserDetails() {

@@ -29,22 +29,22 @@ import java.time.LocalDateTime;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityGroupAuthorizeClient implements Serializable {
+public class SecurityGroupAuthorizeApplication implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
 
     private String groupId;
-    private String clientId;
+    private String applicationId;
     private LocalDateTime authorizeTime;
 
-    protected SecurityGroupAuthorizeClient() {
+    protected SecurityGroupAuthorizeApplication() {
     }
 
     public String getGroupId() {
         return groupId;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public LocalDateTime getAuthorizeTime() {
@@ -57,24 +57,24 @@ public class SecurityGroupAuthorizeClient implements Serializable {
     }
 
     public String toString() {
-        return "SecurityGroupAuthorizeClient(groupId=" + this.groupId + ", clientId=" + this.clientId + ", authorizeTime=" + this.authorizeTime + ")";
+        return "SecurityGroupAuthorizeClient(groupId=" + this.groupId + ", applicationId=" + this.applicationId + ", authorizeTime=" + this.authorizeTime + ")";
     }
 
     /**
-     * {@link SecurityGroupAuthorizeClient} 对象创建者
+     * {@link SecurityGroupAuthorizeApplication} 对象创建者
      */
     public static class Builder implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String groupId;
-        private String clientId;
+        private String applicationId;
         private LocalDateTime authorizeTime;
 
         protected Builder(String groupId) {
             this.groupId = groupId;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -83,22 +83,22 @@ public class SecurityGroupAuthorizeClient implements Serializable {
             return this;
         }
 
-        public SecurityGroupAuthorizeClient build() {
-            Assert.hasText(clientId, "clientId cannot be empty.");
+        public SecurityGroupAuthorizeApplication build() {
+            Assert.hasText(applicationId, "applicationId cannot be empty.");
             Assert.notNull(authorizeTime, "authorizeTime cannot be null");
             return this.create();
         }
 
-        private SecurityGroupAuthorizeClient create() {
-            SecurityGroupAuthorizeClient groupAuthorizeClient = new SecurityGroupAuthorizeClient();
+        private SecurityGroupAuthorizeApplication create() {
+            SecurityGroupAuthorizeApplication groupAuthorizeClient = new SecurityGroupAuthorizeApplication();
             groupAuthorizeClient.groupId = this.groupId;
-            groupAuthorizeClient.clientId = this.clientId;
+            groupAuthorizeClient.applicationId = this.applicationId;
             groupAuthorizeClient.authorizeTime = this.authorizeTime;
             return groupAuthorizeClient;
         }
 
         public String toString() {
-            return "SecurityGroupAuthorizeClient.Builder(groupId=" + this.groupId + ", clientId=" + this.clientId + ", authorizeTime=" + this.authorizeTime + ")";
+            return "SecurityGroupAuthorizeClient.Builder(groupId=" + this.groupId + ", applicationId=" + this.applicationId + ", authorizeTime=" + this.authorizeTime + ")";
         }
     }
 }

@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client;
+package org.minbox.framework.on.security.core.authorization.data.application;
 
 import org.minbox.framework.on.security.core.authorization.ClientScopeType;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
@@ -33,24 +33,24 @@ import java.time.LocalDateTime;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityClientScope implements Serializable {
+public class SecurityApplicationScope implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private String id;
-    private String clientId;
+    private String applicationId;
     private String scopeName;
     private String scopeCode;
     private ClientScopeType type;
     private LocalDateTime createTime;
 
-    protected SecurityClientScope() {
+    protected SecurityApplicationScope() {
     }
 
     public String getId() {
         return id;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public String getScopeName() {
@@ -76,18 +76,18 @@ public class SecurityClientScope implements Serializable {
 
     public String toString() {
         // @formatter:off
-        return "SecurityClientScope(id=" + this.getId() + ", clientId=" + this.getClientId() + ", scopeName=" +
+        return "SecurityClientScope(id=" + this.getId() + ", applicationId=" + this.getApplicationId() + ", scopeName=" +
                 this.getScopeName() + ", scopeCode=" + this.getScopeCode() + ", type=" + this.getType() + ", createTime=" + this.getCreateTime() + ")";
         // @formatter:on
     }
 
     /**
-     * {@link SecurityClientScope} 对象构建者
+     * {@link SecurityApplicationScope} 对象构建者
      */
-    public static class Builder extends SecurityClientScope implements Serializable {
+    public static class Builder extends SecurityApplicationScope implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String id;
-        private String clientId;
+        private String applicationId;
         private String scopeName;
         private String scopeCode;
         private ClientScopeType type;
@@ -97,8 +97,8 @@ public class SecurityClientScope implements Serializable {
             this.id = id;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -122,8 +122,8 @@ public class SecurityClientScope implements Serializable {
             return this;
         }
 
-        public SecurityClientScope build() {
-            Assert.hasText(this.clientId, "clientId cannot be empty");
+        public SecurityApplicationScope build() {
+            Assert.hasText(this.applicationId, "applicationId cannot be empty");
             Assert.hasText(this.scopeName, "scopeName cannot be empty");
             Assert.hasText(this.scopeCode, "scopeCode cannot be empty");
             Assert.notNull(this.createTime, "createTime cannot be null");
@@ -131,10 +131,10 @@ public class SecurityClientScope implements Serializable {
             return this.create();
         }
 
-        private SecurityClientScope create() {
-            SecurityClientScope clientScope = new SecurityClientScope();
+        private SecurityApplicationScope create() {
+            SecurityApplicationScope clientScope = new SecurityApplicationScope();
             clientScope.id = this.id;
-            clientScope.clientId = this.clientId;
+            clientScope.applicationId = this.applicationId;
             clientScope.scopeName = this.scopeName;
             clientScope.scopeCode = this.scopeCode;
             clientScope.type = this.type;

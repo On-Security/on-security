@@ -26,10 +26,10 @@ import org.springframework.util.Assert;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityGroupAuthorizeClientJdbcRepository implements SecurityGroupAuthorizeClientRepository {
+public class SecurityGroupAuthorizeApplicationJdbcRepository implements SecurityGroupAuthorizeApplicationRepository {
     private JdbcOperations jdbcOperations;
 
-    public SecurityGroupAuthorizeClientJdbcRepository(JdbcOperations jdbcOperations) {
+    public SecurityGroupAuthorizeApplicationJdbcRepository(JdbcOperations jdbcOperations) {
         Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
         this.jdbcOperations = jdbcOperations;
     }

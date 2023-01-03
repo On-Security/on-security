@@ -35,7 +35,7 @@ public class SecurityUserLoginLog implements Serializable {
 
     private String id;
     private String regionId;
-    private String clientId;
+    private String applicationId;
     private String userId;
     private String userGroupId;
     private LocalDateTime loginTime;
@@ -58,8 +58,8 @@ public class SecurityUserLoginLog implements Serializable {
         return regionId;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public String getUserId() {
@@ -109,7 +109,7 @@ public class SecurityUserLoginLog implements Serializable {
 
     public String toString() {
         // @formatter:off
-        return "SecurityUserLoginLog(id=" + this.id + ", regionId=" + this.regionId + ", clientId=" + this.clientId +
+        return "SecurityUserLoginLog(id=" + this.id + ", regionId=" + this.regionId + ", applicationId=" + this.applicationId +
                 ", userId=" + this.userId + ", userGroupId=" + this.userGroupId + ", loginTime=" + this.loginTime +
                 ", ipAddress=" + this.ipAddress + ", deviceSystem=" + this.deviceSystem + ", browser=" + this.browser +
                 ", country=" + this.country + ", province=" + this.province + ", city=" + this.city + ", session=" + this.session + ")";
@@ -123,7 +123,7 @@ public class SecurityUserLoginLog implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String id;
         private String regionId;
-        private String clientId;
+        private String applicationId;
         private String userId;
         private String userGroupId;
         private LocalDateTime loginTime;
@@ -144,8 +144,8 @@ public class SecurityUserLoginLog implements Serializable {
             return this;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -201,7 +201,7 @@ public class SecurityUserLoginLog implements Serializable {
 
         public SecurityUserLoginLog build() {
             Assert.hasText(this.regionId, "regionId cannot be empty");
-            Assert.hasText(this.clientId, "clientId cannot be empty");
+            Assert.hasText(this.applicationId, "applicationId cannot be empty");
             Assert.hasText(this.userId, "userId cannot be empty");
             Assert.hasText(this.userGroupId, "userGroupId cannot be empty");
             Assert.notNull(this.loginTime, "loginTime cannot be null");
@@ -219,7 +219,7 @@ public class SecurityUserLoginLog implements Serializable {
             SecurityUserLoginLog userLoginLog = new SecurityUserLoginLog();
             userLoginLog.id = this.id;
             userLoginLog.regionId = this.regionId;
-            userLoginLog.clientId = this.clientId;
+            userLoginLog.applicationId = this.applicationId;
             userLoginLog.userId = this.userId;
             userLoginLog.userGroupId = this.userGroupId;
             userLoginLog.loginTime = this.loginTime;
@@ -235,8 +235,8 @@ public class SecurityUserLoginLog implements Serializable {
 
         public String toString() {
             // @formatter:off
-            return "SecurityUserLoginLog.Builder(id=" + this.id + ", regionId=" + this.regionId + ", clientId=" +
-                    this.clientId + ", userId=" + this.userId + ", userGroupId=" + this.userGroupId + ", loginTime=" +
+            return "SecurityUserLoginLog.Builder(id=" + this.id + ", regionId=" + this.regionId + ", applicationId=" +
+                    this.applicationId + ", userId=" + this.userId + ", userGroupId=" + this.userGroupId + ", loginTime=" +
                     this.loginTime + ", ipAddress=" + this.ipAddress + ", deviceSystem=" + this.deviceSystem + ", browser=" +
                     this.browser + ", country=" + this.country + ", province=" + this.province + ", city=" + this.city +
                     ", session=" + this.session + ")";

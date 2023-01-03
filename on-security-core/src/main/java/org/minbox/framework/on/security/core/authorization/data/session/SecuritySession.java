@@ -41,7 +41,7 @@ public class SecuritySession implements Serializable {
 
     private String id;
     private String regionId;
-    private String clientId;
+    private String applicationId;
     private String userId;
     private String username;
     private String state;
@@ -80,8 +80,8 @@ public class SecuritySession implements Serializable {
         return regionId;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public String getUserId() {
@@ -200,7 +200,7 @@ public class SecuritySession implements Serializable {
 
     public String toString() {
         // @formatter:off
-        return "SecuritySession(id=" + this.id + ", regionId=" + this.regionId + ", clientId=" + this.clientId +
+        return "SecuritySession(id=" + this.id + ", regionId=" + this.regionId + ", applicationId=" + this.applicationId +
                 ", userId=" + this.userId + ", username=" + this.username + ", state=" + this.state + ", attributes=" + this.attributes +
                 ", grantTypes=" + this.authorizationGrantType + ", authorizationScopes=" + this.authorizationScopes +
                 ", authorizationCodeValue=" + this.authorizationCodeValue + ", authorizationCodeIssuedAt=" +
@@ -223,7 +223,7 @@ public class SecuritySession implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String id;
         private String regionId;
-        private String clientId;
+        private String applicationId;
         private String userId;
         private String username;
         private SessionState sessionState;
@@ -258,7 +258,7 @@ public class SecuritySession implements Serializable {
         protected Builder(SecuritySession session) {
             this.id = session.id;
             this.regionId = session.regionId;
-            this.clientId = session.clientId;
+            this.applicationId = session.applicationId;
             this.userId = session.userId;
             this.username = session.username;
             this.sessionState = session.sessionState;
@@ -297,8 +297,8 @@ public class SecuritySession implements Serializable {
             return this;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -435,7 +435,7 @@ public class SecuritySession implements Serializable {
         public SecuritySession build() {
             Assert.hasText(this.id, "id cannot be empty");
             Assert.hasText(this.regionId, "regionId cannot be empty");
-            Assert.hasText(this.clientId, "clientId cannot be empty");
+            Assert.hasText(this.applicationId, "applicationId cannot be empty");
             Assert.hasText(this.username, "username cannot be empty");
             Assert.notNull(this.sessionState, "sessionState cannot be null");
             Assert.notNull(this.authorizationGrantType, "authorizationGrantType cannot be empty");
@@ -449,7 +449,7 @@ public class SecuritySession implements Serializable {
             SecuritySession session = new SecuritySession();
             session.id = this.id;
             session.regionId = this.regionId;
-            session.clientId = this.clientId;
+            session.applicationId = this.applicationId;
             session.userId = this.userId;
             session.username = this.username;
             session.state = this.state;
@@ -481,7 +481,7 @@ public class SecuritySession implements Serializable {
 
         public String toString() {
             // @formatter:off
-            return "SecuritySession.Builder(id=" + this.id + ", regionId=" + this.regionId + ", clientId=" + this.clientId +
+            return "SecuritySession.Builder(id=" + this.id + ", regionId=" + this.regionId + ", applicationId=" + this.applicationId +
                     ", userId=" + this.userId + ", username=" + this.username + ", state=" + this.state + ", attributes=" + this.attributes + ", grantTypes=" +
                     this.authorizationGrantType + ", authorizationScopes=" + this.authorizationScopes + ", authorizationCodeValue=" +
                     this.authorizationCodeValue + ", authorizationCodeIssuedAt=" + this.authorizationCodeIssuedAt +

@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client;
+package org.minbox.framework.on.security.core.authorization.data.application;
 
 import org.minbox.framework.on.security.core.authorization.ClientRedirectUriType;
 import org.springframework.jdbc.core.*;
@@ -36,16 +36,16 @@ import java.util.function.Function;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityClientRedirectUriJdbcRepository implements SecurityClientRedirectUriRepository {
+public class SecurityApplicationRedirectUriJdbcRepository implements SecurityApplicationRedirectUriRepository {
     private static final String COLUMN_NAMES = "id, "
-            + "client_id, "
+            + "application_id, "
             + "redirect_type, "
             + "redirect_uri, "
             + "create_time";
     // @formatter:on
-    private static final String TABLE_NAME = "security_client_redirect_uris";
+    private static final String TABLE_NAME = "security_application_redirect_uris";
     private static final String ID_FILTER = "id = ?";
-    private static final String CLIENT_ID_FILTER = "client_id = ?";
+    private static final String CLIENT_ID_FILTER = "application_id = ?";
     private static final String SELECT_CLIENT_REDIRECT_URI_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
     // @formatter:off
     private static final String INSERT_CLIENT_REDIRECT_URI_SQL = "INSERT INTO " + TABLE_NAME
@@ -55,20 +55,20 @@ public class SecurityClientRedirectUriJdbcRepository implements SecurityClientRe
             + " WHERE " + ID_FILTER;
     // @formatter:on
     private JdbcOperations jdbcOperations;
-    private RowMapper<SecurityClientRedirectUri> clientRedirectUriRowMapper;
-    private Function<SecurityClientRedirectUri, List<SqlParameterValue>> clientRedirectUriParametersMapper;
+    private RowMapper<SecurityApplicationRedirectUri> clientRedirectUriRowMapper;
+    private Function<SecurityApplicationRedirectUri, List<SqlParameterValue>> clientRedirectUriParametersMapper;
 
-    public SecurityClientRedirectUriJdbcRepository(JdbcOperations jdbcOperations) {
+    public SecurityApplicationRedirectUriJdbcRepository(JdbcOperations jdbcOperations) {
         Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
         this.jdbcOperations = jdbcOperations;
-        this.clientRedirectUriRowMapper = new SecurityClientRedirectUriJdbcRepository.SecurityClientRedirectUriRowMapper();
-        this.clientRedirectUriParametersMapper = new SecurityClientRedirectUriJdbcRepository.SecurityClientRedirectUriParametersMapper();
+        this.clientRedirectUriRowMapper = new SecurityApplicationRedirectUriJdbcRepository.SecurityClientRedirectUriRowMapper();
+        this.clientRedirectUriParametersMapper = new SecurityApplicationRedirectUriJdbcRepository.SecurityClientRedirectUriParametersMapper();
     }
 
     @Override
-    public void save(SecurityClientRedirectUri clientRedirectUri) {
+    public void save(SecurityApplicationRedirectUri clientRedirectUri) {
         Assert.notNull(clientRedirectUri, "clientRedirectUri cannot be null");
-        SecurityClientRedirectUri storedClientRedirectUri = this.findBy(ID_FILTER, clientRedirectUri.getId());
+        SecurityApplicationRedirectUri storedClientRedirectUri = this.findBy(ID_FILTER, clientRedirectUri.getId());
         if (storedClientRedirectUri != null) {
             this.updateClientRedirectUri(clientRedirectUri);
         } else {
@@ -77,46 +77,46 @@ public class SecurityClientRedirectUriJdbcRepository implements SecurityClientRe
     }
 
     @Override
-    public List<SecurityClientRedirectUri> findByClientId(String clientId) {
-        Assert.hasText(clientId, "clientId cannot be empty");
-        return this.findListBy(CLIENT_ID_FILTER, clientId);
+    public List<SecurityApplicationRedirectUri> findByClientId(String applicationId) {
+        Assert.hasText(applicationId, "applicationId cannot be empty");
+        return this.findListBy(CLIENT_ID_FILTER, applicationId);
     }
 
-    private void updateClientRedirectUri(SecurityClientRedirectUri clientRedirectUri) {
+    private void updateClientRedirectUri(SecurityApplicationRedirectUri clientRedirectUri) {
         List<SqlParameterValue> parameters = new ArrayList<>(this.clientRedirectUriParametersMapper.apply(clientRedirectUri));
         SqlParameterValue id = parameters.remove(0); // remove id
-        parameters.remove(0); // remove client_id
+        parameters.remove(0); // remove application_id
         parameters.remove(2); // remove create_time
         parameters.add(id); // add where id
         PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
         this.jdbcOperations.update(UPDATE_CLIENT_REDIRECT_URI_SQL, pss);
     }
 
-    private void insertClientRedirectUri(SecurityClientRedirectUri clientRedirectUri) {
+    private void insertClientRedirectUri(SecurityApplicationRedirectUri clientRedirectUri) {
         List<SqlParameterValue> parameters = this.clientRedirectUriParametersMapper.apply(clientRedirectUri);
         PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
         this.jdbcOperations.update(INSERT_CLIENT_REDIRECT_URI_SQL, pss);
     }
 
-    private SecurityClientRedirectUri findBy(String filter, Object... args) {
-        List<SecurityClientRedirectUri> result = this.jdbcOperations.query(
+    private SecurityApplicationRedirectUri findBy(String filter, Object... args) {
+        List<SecurityApplicationRedirectUri> result = this.jdbcOperations.query(
                 SELECT_CLIENT_REDIRECT_URI_SQL + filter, this.clientRedirectUriRowMapper, args);
         return !result.isEmpty() ? result.get(0) : null;
     }
 
-    private List<SecurityClientRedirectUri> findListBy(String filter, Object... args) {
-        List<SecurityClientRedirectUri> result = this.jdbcOperations.query(
+    private List<SecurityApplicationRedirectUri> findListBy(String filter, Object... args) {
+        List<SecurityApplicationRedirectUri> result = this.jdbcOperations.query(
                 SELECT_CLIENT_REDIRECT_URI_SQL + filter, this.clientRedirectUriRowMapper, args);
         return result;
     }
 
 
-    public static class SecurityClientRedirectUriRowMapper implements RowMapper<SecurityClientRedirectUri> {
+    public static class SecurityClientRedirectUriRowMapper implements RowMapper<SecurityApplicationRedirectUri> {
         @Override
-        public SecurityClientRedirectUri mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public SecurityApplicationRedirectUri mapRow(ResultSet rs, int rowNum) throws SQLException {
             // @formatter:off
-            SecurityClientRedirectUri clientRedirectUri = SecurityClientRedirectUri.withId(rs.getString("id"))
-                    .clientId(rs.getString("client_id"))
+            SecurityApplicationRedirectUri clientRedirectUri = SecurityApplicationRedirectUri.withId(rs.getString("id"))
+                    .applicationId(rs.getString("application_id"))
                     .redirectType(new ClientRedirectUriType(rs.getString("redirect_type")))
                     .redirectUri(rs.getString("redirect_uri"))
                     .createTime(rs.getTimestamp("create_time").toLocalDateTime())
@@ -126,13 +126,13 @@ public class SecurityClientRedirectUriJdbcRepository implements SecurityClientRe
         }
     }
 
-    public static class SecurityClientRedirectUriParametersMapper implements Function<SecurityClientRedirectUri, List<SqlParameterValue>> {
+    public static class SecurityClientRedirectUriParametersMapper implements Function<SecurityApplicationRedirectUri, List<SqlParameterValue>> {
         @Override
-        public List<SqlParameterValue> apply(SecurityClientRedirectUri clientRedirectUri) {
+        public List<SqlParameterValue> apply(SecurityApplicationRedirectUri clientRedirectUri) {
             // @formatter:off
             return Arrays.asList(
                     new SqlParameterValue(Types.VARCHAR, clientRedirectUri.getId()),
-                    new SqlParameterValue(Types.VARCHAR, clientRedirectUri.getClientId()),
+                    new SqlParameterValue(Types.VARCHAR, clientRedirectUri.getApplicationId()),
                     new SqlParameterValue(Types.VARCHAR, clientRedirectUri.getRedirectType().getValue()),
                     new SqlParameterValue(Types.VARCHAR, clientRedirectUri.getRedirectUri()),
                     new SqlParameterValue(Types.TIMESTAMP, Timestamp.valueOf(clientRedirectUri.getCreateTime()))

@@ -18,9 +18,9 @@
 package org.minbox.framework.on.security.authorization.server;
 
 import org.minbox.framework.on.security.core.authorization.ClientProtocol;
-import org.minbox.framework.on.security.core.authorization.data.client.*;
-import org.minbox.framework.on.security.core.authorization.data.client.converter.RegisteredToSecurityClientConverter;
-import org.minbox.framework.on.security.core.authorization.data.client.converter.SecurityToRegisteredClientConverter;
+import org.minbox.framework.on.security.core.authorization.data.application.*;
+import org.minbox.framework.on.security.core.authorization.data.application.converter.RegisteredToSecurityApplicationConverter;
+import org.minbox.framework.on.security.core.authorization.data.application.converter.SecurityApplicationToRegisteredClientConverter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -37,12 +37,12 @@ import java.util.List;
  * On-Security提供的{@link RegisteredClientRepository}JDBC数据存储方式实现类
  * <p>
  * 根据SpringSecurity授权服务器所维护的{@link RegisteredClient}客户端信息转换并
- * 维护On-Security授权服务器所维护的{@link SecurityClient}客户端数据
+ * 维护On-Security授权服务器所维护的{@link SecurityApplication}客户端数据
  *
  * @author 恒宇少年
  * @see RegisteredClientRepository
  * @see RegisteredClient
- * @see SecurityClient
+ * @see SecurityApplication
  * @see JdbcOperations
  * @since 0.0.1
  */
@@ -53,55 +53,55 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
     public static final String BEAN_NAME = "jdbcOnSecurityRegisteredClientRepository";
     private static final String DEFAULT_SECURITY_REGION_ID = "default";
     private DataSourceTransactionManager dataSourceTransactionManager;
-    private Converter<RegisteredClient, SecurityClient> registeredToSecurityClientConverter;
-    private Converter<SecurityClient, RegisteredClient> securityToRegisteredClientConverter;
-    private SecurityClientRepository clientRepository;
-    private SecurityClientScopeRepository clientScopeRepository;
-    private SecurityClientSecretRepository clientSecretRepository;
-    private SecurityClientRedirectUriRepository clientRedirectUriRepository;
-    private SecurityClientAuthenticationRepository clientAuthenticationRepository;
+    private Converter<RegisteredClient, SecurityApplication> registeredToSecurityClientConverter;
+    private Converter<SecurityApplication, RegisteredClient> securityToRegisteredClientConverter;
+    private SecurityApplicationRepository clientRepository;
+    private SecurityApplicationScopeRepository clientScopeRepository;
+    private SecurityApplicationSecretRepository clientSecretRepository;
+    private SecurityApplicationRedirectUriRepository clientRedirectUriRepository;
+    private SecurityApplicationAuthenticationRepository clientAuthenticationRepository;
 
     public JdbcOnSecurityRegisteredClientRepository(JdbcOperations jdbcOperations, DataSourceTransactionManager dataSourceTransactionManager) {
         Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
         Assert.notNull(dataSourceTransactionManager, "dataSourceTransactionManager cannot be null");
         this.dataSourceTransactionManager = dataSourceTransactionManager;
-        this.registeredToSecurityClientConverter = new RegisteredToSecurityClientConverter();
-        this.securityToRegisteredClientConverter = new SecurityToRegisteredClientConverter();
-        this.clientRepository = new SecurityClientJdbcRepository(jdbcOperations);
-        this.clientScopeRepository = new SecurityClientScopeJdbcRepository(jdbcOperations);
-        this.clientSecretRepository = new SecurityClientSecretJdbcRepository(jdbcOperations);
-        this.clientRedirectUriRepository = new SecurityClientRedirectUriJdbcRepository(jdbcOperations);
-        this.clientAuthenticationRepository = new SecurityClientAuthenticationJdbcRepository(jdbcOperations);
+        this.registeredToSecurityClientConverter = new RegisteredToSecurityApplicationConverter();
+        this.securityToRegisteredClientConverter = new SecurityApplicationToRegisteredClientConverter();
+        this.clientRepository = new SecurityApplicationJdbcRepository(jdbcOperations);
+        this.clientScopeRepository = new SecurityApplicationScopeJdbcRepository(jdbcOperations);
+        this.clientSecretRepository = new SecurityApplicationSecretJdbcRepository(jdbcOperations);
+        this.clientRedirectUriRepository = new SecurityApplicationRedirectUriJdbcRepository(jdbcOperations);
+        this.clientAuthenticationRepository = new SecurityApplicationAuthenticationJdbcRepository(jdbcOperations);
     }
 
     @Override
     public void save(RegisteredClient registeredClient) {
-        SecurityClient securityClient = registeredToSecurityClientConverter.convert(registeredClient);
-        securityClient = SecurityClient.with(securityClient)
+        SecurityApplication securityApplication = registeredToSecurityClientConverter.convert(registeredClient);
+        securityApplication = SecurityApplication.with(securityApplication)
                 .regionId(DEFAULT_SECURITY_REGION_ID) // use default regionId
                 .protocol(ClientProtocol.OpenID_Connect_1_0)
                 .build();
         TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
             // Save client
-            clientRepository.save(securityClient);
+            clientRepository.save(securityApplication);
 
             // Save client authentication
-            clientAuthenticationRepository.save(securityClient.getAuthentication());
+            clientAuthenticationRepository.save(securityApplication.getAuthentication());
 
             // Save client scopes
-            if (!ObjectUtils.isEmpty(securityClient.getScopes())) {
-                for (SecurityClientScope scope : securityClient.getScopes()) {
+            if (!ObjectUtils.isEmpty(securityApplication.getScopes())) {
+                for (SecurityApplicationScope scope : securityApplication.getScopes()) {
                     clientScopeRepository.save(scope);
                 }
             }
             // Save client secret
-            if (!ObjectUtils.isEmpty(securityClient.getSecrets())) {
-                clientSecretRepository.save(securityClient.getSecrets().get(0));
+            if (!ObjectUtils.isEmpty(securityApplication.getSecrets())) {
+                clientSecretRepository.save(securityApplication.getSecrets().get(0));
             }
             // Save redirect uris
-            if (!ObjectUtils.isEmpty(securityClient.getRedirectUris())) {
-                for (SecurityClientRedirectUri redirectUri : securityClient.getRedirectUris()) {
+            if (!ObjectUtils.isEmpty(securityApplication.getRedirectUris())) {
+                for (SecurityApplicationRedirectUri redirectUri : securityApplication.getRedirectUris()) {
                     clientRedirectUriRepository.save(redirectUri);
                 }
             }
@@ -116,55 +116,55 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
     public RegisteredClient findById(String id) {
         Assert.hasText(id, "id cannot be empty");
         // Load client
-        SecurityClient securityClient = clientRepository.findById(id);
-        if (securityClient == null) {
+        SecurityApplication securityApplication = clientRepository.findById(id);
+        if (securityApplication == null) {
             return null;
         }
         // Build client
-        securityClient = this.buildSecurityClient(securityClient);
-        return securityToRegisteredClientConverter.convert(securityClient);
+        securityApplication = this.buildSecurityClient(securityApplication);
+        return securityToRegisteredClientConverter.convert(securityApplication);
     }
 
     @Override
-    public RegisteredClient findByClientId(String clientId) {
-        Assert.hasText(clientId, "clientId cannot be empty");
+    public RegisteredClient findByClientId(String applicationId) {
+        Assert.hasText(applicationId, "applicationId cannot be empty");
         // Load client
-        SecurityClient securityClient = clientRepository.findByClientId(clientId);
-        if (securityClient == null) {
+        SecurityApplication securityApplication = clientRepository.findByClientId(applicationId);
+        if (securityApplication == null) {
             return null;
         }
         // Build client
-        securityClient = this.buildSecurityClient(securityClient);
-        return securityToRegisteredClientConverter.convert(securityClient);
+        securityApplication = this.buildSecurityClient(securityApplication);
+        return securityToRegisteredClientConverter.convert(securityApplication);
     }
 
     /**
      * 根据客户端基本信息构建相关数据
      *
-     * @param securityClient {@link SecurityClient}
-     * @return 构建填充数据后的客户端对象实例 {@link SecurityClient}
+     * @param securityApplication {@link SecurityApplication}
+     * @return 构建填充数据后的客户端对象实例 {@link SecurityApplication}
      */
-    private SecurityClient buildSecurityClient(SecurityClient securityClient) {
+    private SecurityApplication buildSecurityClient(SecurityApplication securityApplication) {
         // Load client authentication
-        SecurityClient.Builder builder = SecurityClient.with(securityClient);
-        SecurityClientAuthentication clientAuthentication = clientAuthenticationRepository.findByClientId(securityClient.getId());
-        Assert.notNull(clientAuthentication, "No client authentication information was retrieved based on client ID: " + securityClient.getId());
+        SecurityApplication.Builder builder = SecurityApplication.with(securityApplication);
+        SecurityApplicationAuthentication clientAuthentication = clientAuthenticationRepository.findByClientId(securityApplication.getId());
+        Assert.notNull(clientAuthentication, "No client authentication information was retrieved based on client ID: " + securityApplication.getId());
         builder.authentication(clientAuthentication);
 
         // Load client scopes
-        List<SecurityClientScope> clientScopeList = clientScopeRepository.findByClientId(securityClient.getId());
+        List<SecurityApplicationScope> clientScopeList = clientScopeRepository.findByClientId(securityApplication.getId());
         if (!ObjectUtils.isEmpty(clientScopeList)) {
             builder.scopes(clientScopeList);
         }
 
         // Load client redirect uris
-        List<SecurityClientRedirectUri> redirectUris = clientRedirectUriRepository.findByClientId(securityClient.getId());
+        List<SecurityApplicationRedirectUri> redirectUris = clientRedirectUriRepository.findByClientId(securityApplication.getId());
         if (!ObjectUtils.isEmpty(redirectUris)) {
             builder.redirectUris(redirectUris);
         }
 
         // Load client secrets
-        List<SecurityClientSecret> secrets = clientSecretRepository.findByClientId(securityClient.getId());
+        List<SecurityApplicationSecret> secrets = clientSecretRepository.findByClientId(securityApplication.getId());
         if (!ObjectUtils.isEmpty(secrets)) {
             builder.secrets(secrets);
         }

@@ -23,5 +23,5 @@ package org.minbox.framework.on.security.core.authorization.data.group;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecurityGroupAuthorizeClientRepository {
+public interface SecurityGroupAuthorizeApplicationRepository {
 }

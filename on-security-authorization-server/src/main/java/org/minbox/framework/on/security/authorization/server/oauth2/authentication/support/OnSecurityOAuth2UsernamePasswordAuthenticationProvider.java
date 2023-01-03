@@ -76,7 +76,7 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
     private final Log logger = LogFactory.getLog(getClass());
     private static final OAuth2TokenType ID_TOKEN_TOKEN_TYPE = new OAuth2TokenType(OidcParameterNames.ID_TOKEN);
     private SecurityUserRepository userRepository;
-    private SecurityUserAuthorizeClientRepository userAuthorizeClientRepository;
+    private SecurityUserAuthorizeApplicationRepository userAuthorizeClientRepository;
     private SecurityRegionRepository regionRepository;
     private PasswordEncoder passwordEncoder;
     private OAuth2AuthorizationService authorizationService;
@@ -89,7 +89,7 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
         this.authorizationService = applicationContext.getBean(OAuth2AuthorizationService.class);
         this.userDetailsService = applicationContext.getBean(UserDetailsService.class);
         this.userRepository = new SecurityUserJdbcRepository(jdbcOperations);
-        this.userAuthorizeClientRepository = new SecurityUserAuthorizeClientJdbcRepository(jdbcOperations);
+        this.userAuthorizeClientRepository = new SecurityUserAuthorizeApplicationJdbcRepository(jdbcOperations);
         this.regionRepository = new SecurityRegionJdbcRepository(jdbcOperations);
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
@@ -100,7 +100,7 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
         OnSecurityOAuth2UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 (OnSecurityOAuth2UsernamePasswordAuthenticationToken) authentication;
         RegisteredClient registeredClient = usernamePasswordAuthenticationToken.getRegisteredClient();
-        String clientId = registeredClient.getId();
+        String applicationId = registeredClient.getId();
         try {
             if (ObjectUtils.isEmpty(registeredClient.getAuthorizationGrantTypes()) ||
                     !registeredClient.getAuthorizationGrantTypes().contains(AuthorizationGrantType.PASSWORD)) {
@@ -118,22 +118,22 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
                         "Username: " + usernamePasswordAuthenticationToken.getUsername() + ", no valid user found.");
                 // @formatter:on
             }
-            List<SecurityUserAuthorizeClient> userAuthorizeClientList = userAuthorizeClientRepository.findByUserId(securityUser.getId());
+            List<SecurityUserAuthorizeApplication> userAuthorizeClientList = userAuthorizeClientRepository.findByUserId(securityUser.getId());
             if (ObjectUtils.isEmpty(userAuthorizeClientList)) {
                 // @formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
                         OAuth2ParameterNames.CLIENT_ID,
                         "Username: " + usernamePasswordAuthenticationToken.getUsername() +
-                                ", did not authorize client: " + clientId + ".");
+                                ", did not authorize client: " + applicationId + ".");
                 // @formatter:on
             }
-            Set<String> userAuthorizeClientIdSet = userAuthorizeClientList.stream().map(SecurityUserAuthorizeClient::getClientId).collect(Collectors.toSet());
-            if (!userAuthorizeClientIdSet.contains(clientId)) {
+            Set<String> userAuthorizeClientIdSet = userAuthorizeClientList.stream().map(SecurityUserAuthorizeApplication::getApplicationId).collect(Collectors.toSet());
+            if (!userAuthorizeClientIdSet.contains(applicationId)) {
                 // @formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
                         OAuth2ParameterNames.CLIENT_ID,
                         "Username: " + usernamePasswordAuthenticationToken.getUsername() +
-                                ", did not authorize client: " + clientId + ".");
+                                ", did not authorize client: " + applicationId + ".");
                 // @formatter:on
             }
             SecurityRegion securityRegion = regionRepository.findById(securityUser.getRegionId());
@@ -301,7 +301,7 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
 
     /**
      * Sets the {@link PasswordEncoder} used to validate
-     * the {@link RegisteredClient#getClientSecret() client secret}.
+     * the {@link RegisteredClient#getClientSecret()}.
      * If not set, the client secret will be compared using
      * {@link PasswordEncoderFactories#createDelegatingPasswordEncoder()}.
      *

@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client;
+package org.minbox.framework.on.security.core.authorization.data.application;
 
 import org.minbox.framework.on.security.core.authorization.ClientProtocol;
 import org.minbox.framework.on.security.core.authorization.ClientRedirectUriType;
@@ -35,10 +35,10 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityClient implements Serializable {
+public class SecurityApplication implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private String id;
-    private String clientId;
+    private String applicationId;
     private String regionId;
     private ClientProtocol protocol;
     private String displayName;
@@ -47,20 +47,20 @@ public class SecurityClient implements Serializable {
     private boolean deleted;
     private LocalDateTime createTime;
 
-    private SecurityClientAuthentication authentication;
-    private List<SecurityClientScope> scopes;
-    private List<SecurityClientRedirectUri> redirectUris;
-    private List<SecurityClientSecret> secrets;
+    private SecurityApplicationAuthentication authentication;
+    private List<SecurityApplicationScope> scopes;
+    private List<SecurityApplicationRedirectUri> redirectUris;
+    private List<SecurityApplicationSecret> secrets;
 
-    protected SecurityClient() {
+    protected SecurityApplication() {
     }
 
     public String getId() {
         return id;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public String getRegionId() {
@@ -91,19 +91,19 @@ public class SecurityClient implements Serializable {
         return createTime;
     }
 
-    public SecurityClientAuthentication getAuthentication() {
+    public SecurityApplicationAuthentication getAuthentication() {
         return authentication;
     }
 
-    public List<SecurityClientScope> getScopes() {
+    public List<SecurityApplicationScope> getScopes() {
         return scopes;
     }
 
-    public List<SecurityClientRedirectUri> getRedirectUris() {
+    public List<SecurityApplicationRedirectUri> getRedirectUris() {
         return redirectUris;
     }
 
-    public List<SecurityClientSecret> getSecrets() {
+    public List<SecurityApplicationSecret> getSecrets() {
         return secrets;
     }
 
@@ -112,14 +112,14 @@ public class SecurityClient implements Serializable {
         return new Builder(id);
     }
 
-    public static Builder with(SecurityClient client) {
+    public static Builder with(SecurityApplication client) {
         Assert.notNull(client, "client cannot be empty");
         return new Builder(client);
     }
 
     public String toString() {
         // @formatter:off
-        return "SecurityClient(id=" + this.getId() + ", clientId=" + this.getClientId() + ", regionId=" + this.getRegionId() +
+        return "SecurityClient(id=" + this.getId() + ", applicationId=" + this.getApplicationId() + ", regionId=" + this.getRegionId() +
                 ", protocol=" + this.getProtocol() + ", displayName=" + this.getDisplayName() + ", describe=" + this.getDescribe() +
                 ", enabled=" + this.isEnabled() + ", deleted=" + this.isDeleted() + ", createTime=" + this.getCreateTime() +
                 ", authentication=" + this.getAuthentication() + ", scopes=" + this.getScopes() + ", redirectUris=" +
@@ -128,12 +128,12 @@ public class SecurityClient implements Serializable {
     }
 
     /**
-     * {@link SecurityClient} 对象构建者
+     * {@link SecurityApplication} 对象构建者
      */
     public static class Builder implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
         private String id;
-        private String clientId;
+        private String applicationId;
         private String regionId;
         private ClientProtocol protocol;
         private String displayName;
@@ -141,18 +141,18 @@ public class SecurityClient implements Serializable {
         private boolean enabled;
         private boolean deleted;
         private LocalDateTime createTime;
-        private SecurityClientAuthentication authentication;
-        private List<SecurityClientScope> scopes;
-        private List<SecurityClientRedirectUri> redirectUris;
-        private List<SecurityClientSecret> secrets;
+        private SecurityApplicationAuthentication authentication;
+        private List<SecurityApplicationScope> scopes;
+        private List<SecurityApplicationRedirectUri> redirectUris;
+        private List<SecurityApplicationSecret> secrets;
 
         protected Builder(String id) {
             this.id = id;
         }
 
-        protected Builder(SecurityClient client) {
+        protected Builder(SecurityApplication client) {
             this.id = client.id;
-            this.clientId = client.clientId;
+            this.applicationId = client.applicationId;
             this.regionId = client.regionId;
             this.protocol = client.protocol;
             this.displayName = client.displayName;
@@ -166,8 +166,8 @@ public class SecurityClient implements Serializable {
             this.secrets = client.secrets;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
+        public Builder applicationId(String applicationId) {
+            this.applicationId = applicationId;
             return this;
         }
 
@@ -206,28 +206,28 @@ public class SecurityClient implements Serializable {
             return this;
         }
 
-        public Builder authentication(SecurityClientAuthentication authentication) {
+        public Builder authentication(SecurityApplicationAuthentication authentication) {
             this.authentication = authentication;
             return this;
         }
 
-        public Builder scopes(List<SecurityClientScope> scopes) {
+        public Builder scopes(List<SecurityApplicationScope> scopes) {
             this.scopes = scopes;
             return this;
         }
 
-        public Builder redirectUris(List<SecurityClientRedirectUri> redirectUris) {
+        public Builder redirectUris(List<SecurityApplicationRedirectUri> redirectUris) {
             this.redirectUris = redirectUris;
             return this;
         }
 
-        public Builder secrets(List<SecurityClientSecret> secrets) {
+        public Builder secrets(List<SecurityApplicationSecret> secrets) {
             this.secrets = secrets;
             return this;
         }
 
-        public SecurityClient build() {
-            Assert.hasText(this.clientId, "clientId cannot be empty.");
+        public SecurityApplication build() {
+            Assert.hasText(this.applicationId, "applicationId cannot be empty.");
             if (this.authentication != null) {
                 if (authentication.isConfidential()) {
                     Assert.notEmpty(this.secrets, "confidential client must configure secret.");
@@ -244,10 +244,10 @@ public class SecurityClient implements Serializable {
             return this.create();
         }
 
-        private SecurityClient create() {
-            SecurityClient client = new SecurityClient();
+        private SecurityApplication create() {
+            SecurityApplication client = new SecurityApplication();
             client.id = this.id;
-            client.clientId = this.clientId;
+            client.applicationId = this.applicationId;
             client.regionId = this.regionId;
             client.protocol = this.protocol;
             client.displayName = this.displayName;
@@ -264,7 +264,7 @@ public class SecurityClient implements Serializable {
 
         public String toString() {
             // @formatter:off
-            return "SecurityClient.Builder(id=" + this.id + ", clientId=" + this.clientId + ", regionId=" +
+            return "SecurityClient.Builder(id=" + this.id + ", applicationId=" + this.applicationId + ", regionId=" +
                     this.regionId + ", protocol=" + this.protocol + ", displayName=" + this.displayName + ", describe=" +
                     this.describe + ", enabled=" + this.enabled + ", deleted=" + this.deleted + ", createTime=" +
                     this.createTime + ", authentication=" + this.authentication + ", scopes=" + this.scopes + ", redirectUris=" +

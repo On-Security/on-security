@@ -15,9 +15,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.client.converter;
+package org.minbox.framework.on.security.core.authorization.data.application.converter;
 
-import org.minbox.framework.on.security.core.authorization.data.client.*;
+import org.minbox.framework.on.security.core.authorization.data.application.*;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -36,56 +36,56 @@ import java.util.stream.Collectors;
 /**
  * 客户端数据转换器
  * <p>
- * 提供{@link RegisteredClient}与{@link SecurityClient}客户端数据相互转换的方法
+ * 提供{@link RegisteredClient}与{@link SecurityApplication}客户端数据相互转换的方法
  *
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityToRegisteredClientConverter implements Converter<SecurityClient, RegisteredClient> {
+public class SecurityApplicationToRegisteredClientConverter implements Converter<SecurityApplication, RegisteredClient> {
     @Override
-    public RegisteredClient convert(SecurityClient securityClient) {
-        RegisteredClient.Builder builder = RegisteredClient.withId(securityClient.getId());
+    public RegisteredClient convert(SecurityApplication securityApplication) {
+        RegisteredClient.Builder builder = RegisteredClient.withId(securityApplication.getId());
         // @formatter:off
-        builder.clientId(securityClient.getClientId())
-                .clientIdIssuedAt(securityClient.getCreateTime().atZone(ZoneId.systemDefault()).toInstant())
-                .clientName(securityClient.getDisplayName());
+        builder.clientId(securityApplication.getApplicationId())
+                .clientIdIssuedAt(securityApplication.getCreateTime().atZone(ZoneId.systemDefault()).toInstant())
+                .clientName(securityApplication.getDisplayName());
         // @formatter:on
         // secret
-        if (!ObjectUtils.isEmpty(securityClient.getSecrets())) {
-            Optional<SecurityClientSecret> securityClientSecretOptional =
-                    securityClient.getSecrets().stream().filter(s -> !s.isDeleted()).findFirst();
-            if (securityClientSecretOptional.isPresent()) {
-                SecurityClientSecret clientSecret = securityClientSecretOptional.get();
+        if (!ObjectUtils.isEmpty(securityApplication.getSecrets())) {
+            Optional<SecurityApplicationSecret> securityApplicationSecretOptional =
+                    securityApplication.getSecrets().stream().filter(s -> !s.isDeleted()).findFirst();
+            if (securityApplicationSecretOptional.isPresent()) {
+                SecurityApplicationSecret clientSecret = securityApplicationSecretOptional.get();
                 // @formatter:off
-                builder.clientSecret(clientSecret.getClientSecret())
+                builder.clientSecret(clientSecret.getApplicationSecret())
                         .clientSecretExpiresAt(clientSecret.getSecretExpiresAt().atZone(ZoneId.systemDefault()).toInstant());
                 // @formatter:on
             }
         }
 
         // scopes
-        if (!ObjectUtils.isEmpty(securityClient.getScopes())) {
+        if (!ObjectUtils.isEmpty(securityApplication.getScopes())) {
             // @formatter:off
-            Set<String> scopeSet = securityClient.getScopes().stream()
-                    .map(SecurityClientScope::getScopeCode)
+            Set<String> scopeSet = securityApplication.getScopes().stream()
+                    .map(SecurityApplicationScope::getScopeCode)
                     .collect(Collectors.toSet());
             builder.scopes((scopes) -> scopes.addAll(scopeSet));
             // @formatter:on
         }
 
         // redirect uris
-        if (!ObjectUtils.isEmpty(securityClient.getRedirectUris())) {
+        if (!ObjectUtils.isEmpty(securityApplication.getRedirectUris())) {
             // @formatter:off
-            Set<String> redirectUriSet = securityClient.getRedirectUris().stream()
-                    .map(SecurityClientRedirectUri::getRedirectUri)
+            Set<String> redirectUriSet = securityApplication.getRedirectUris().stream()
+                    .map(SecurityApplicationRedirectUri::getRedirectUri)
                     .collect(Collectors.toSet());
             builder.redirectUris((redirectUris) -> redirectUris.addAll(redirectUriSet));
             // @formatter:on
         }
 
         // authentication
-        if (!ObjectUtils.isEmpty(securityClient.getAuthentication())) {
-            SecurityClientAuthentication clientAuthentication = securityClient.getAuthentication();
+        if (!ObjectUtils.isEmpty(securityApplication.getAuthentication())) {
+            SecurityApplicationAuthentication clientAuthentication = securityApplication.getAuthentication();
             // authentication methods
             if (!ObjectUtils.isEmpty(clientAuthentication.getAuthorizationMethods())) {
                 // @formatter:off

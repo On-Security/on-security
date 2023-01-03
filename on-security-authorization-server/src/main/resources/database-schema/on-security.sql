@@ -127,14 +127,14 @@ CREATE TABLE `security_attribute` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `security_client`
+-- Table structure for table `security_application`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `security_client` (
+CREATE TABLE `security_application` (
                                    `id` varchar(36) NOT NULL COMMENT 'ID',
-                                   `client_id` varchar(20) NOT NULL COMMENT '客户端ID',
+                                   `application_id` varchar(20) NOT NULL COMMENT '应用ID',
                                    `region_id` varchar(36) NOT NULL COMMENT '所属安全域',
                                    `protocol_id` varchar(36) NOT NULL COMMENT '协议编号',
                                    `display_name` varchar(50) DEFAULT NULL COMMENT '显示名称',
@@ -143,27 +143,27 @@ CREATE TABLE `security_client` (
                                    `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
                                    `create_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
                                    PRIMARY KEY (`id`),
-                                   UNIQUE KEY `secuirty_client_client_id_uindex` (`client_id`)
+                                   UNIQUE KEY `secuirty_client_application_id_uindex` (`application_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='客户端基本信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `security_client`
+-- Dumping data for table `security_application`
 --
 
-/*!40000 ALTER TABLE `security_client` DISABLE KEYS */;
-INSERT INTO `security_client` VALUES ('a53055a0-72ba-11ed-aacb-0242ac110002','common','7f776d47-6b03-11ed-b779-0242ac110003','OpenID Connect','公共客户端',NULL,_binary '',_binary '\0','2022-12-03 11:29:07');
-/*!40000 ALTER TABLE `security_client` ENABLE KEYS */;
+/*!40000 ALTER TABLE `security_application` DISABLE KEYS */;
+INSERT INTO `security_application` VALUES ('a53055a0-72ba-11ed-aacb-0242ac110002','common','7f776d47-6b03-11ed-b779-0242ac110003','OpenID Connect','公共客户端',NULL,_binary '',_binary '\0','2022-12-03 11:29:07');
+/*!40000 ALTER TABLE `security_application` ENABLE KEYS */;
 
 --
--- Table structure for table `security_client_authentication`
+-- Table structure for table `security_application_authentication`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `security_client_authentication` (
+CREATE TABLE `security_application_authentication` (
                                                   `id` varchar(36) NOT NULL COMMENT 'ID',
-                                                  `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
+                                                  `application_id` varchar(36) NOT NULL COMMENT '应用ID',
                                                   `confidential` bit(1) NOT NULL DEFAULT b'0' COMMENT '客户端类型，是否为机密客户端',
                                                   `jwks_url` varchar(100) DEFAULT NULL COMMENT 'JWKS地址',
                                                   `authentication_methods` varchar(100) DEFAULT NULL COMMENT '客户端认证方式，数据取值参考：global_data_authentication_method#code',
@@ -178,95 +178,95 @@ CREATE TABLE `security_client_authentication` (
                                                   `reuse_refresh_token` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否重用刷新令牌',
                                                   `create_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
                                                   PRIMARY KEY (`id`),
-                                                  UNIQUE KEY `security_client_authentication_client_id_uindex` (`client_id`)
+                                                  UNIQUE KEY `security_application_authentication_application_id_uindex` (`application_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='客户端认证配置';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `security_client_authentication`
+-- Dumping data for table `security_application_authentication`
 --
 
-/*!40000 ALTER TABLE `security_client_authentication` DISABLE KEYS */;
-INSERT INTO `security_client_authentication` VALUES ('5571e280-a89a-4759-be5f-7a435176d6dd','a53055a0-72ba-11ed-aacb-0242ac110002',_binary '\0',NULL,'client_secret_basic',NULL,'authorization_code,refresh_token,client_credentials,password',_binary '','RS256',300,'self-contained',3600,7200,_binary '\0','2022-12-01 17:55:25');
-/*!40000 ALTER TABLE `security_client_authentication` ENABLE KEYS */;
+/*!40000 ALTER TABLE `security_application_authentication` DISABLE KEYS */;
+INSERT INTO `security_application_authentication` VALUES ('5571e280-a89a-4759-be5f-7a435176d6dd','a53055a0-72ba-11ed-aacb-0242ac110002',_binary '\0',NULL,'client_secret_basic',NULL,'authorization_code,refresh_token,client_credentials,password',_binary '','RS256',300,'self-contained',3600,7200,_binary '\0','2022-12-01 17:55:25');
+/*!40000 ALTER TABLE `security_application_authentication` ENABLE KEYS */;
 
 --
--- Table structure for table `security_client_redirect_uris`
+-- Table structure for table `security_application_redirect_uris`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `security_client_redirect_uris` (
+CREATE TABLE `security_application_redirect_uris` (
                                                  `id` varchar(36) NOT NULL COMMENT 'ID',
-                                                 `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
+                                                 `application_id` varchar(36) NOT NULL COMMENT '应用ID',
                                                  `redirect_type` varchar(10) NOT NULL COMMENT '跳转类型，home：主页跳转地址，login：登录回调跳转地址，logout：登出回调跳转地址',
                                                  `redirect_uri` varchar(200) NOT NULL COMMENT '跳转地址',
                                                  `create_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
                                                  PRIMARY KEY (`id`),
-                                                 KEY `security_client_redirect_uris_client_id_index` (`client_id`)
+                                                 KEY `security_application_redirect_uris_application_id_index` (`application_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='客户端跳转地址列表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `security_client_redirect_uris`
+-- Dumping data for table `security_application_redirect_uris`
 --
 
-/*!40000 ALTER TABLE `security_client_redirect_uris` DISABLE KEYS */;
-INSERT INTO `security_client_redirect_uris` VALUES ('6b561af1-75f5-11ed-a42c-0242ac110002','a53055a0-72ba-11ed-aacb-0242ac110002','login','http://127.0.0.1:8080/authorized','2022-12-07 14:07:26'),('c770bc3b-72ba-11ed-aacb-0242ac110002','a53055a0-72ba-11ed-aacb-0242ac110002','login','http://127.0.0.1:8080/login/oauth2/code/client-oidc','2022-12-03 11:30:05');
-/*!40000 ALTER TABLE `security_client_redirect_uris` ENABLE KEYS */;
+/*!40000 ALTER TABLE `security_application_redirect_uris` DISABLE KEYS */;
+INSERT INTO `security_application_redirect_uris` VALUES ('6b561af1-75f5-11ed-a42c-0242ac110002','a53055a0-72ba-11ed-aacb-0242ac110002','login','http://127.0.0.1:8080/authorized','2022-12-07 14:07:26'),('c770bc3b-72ba-11ed-aacb-0242ac110002','a53055a0-72ba-11ed-aacb-0242ac110002','login','http://127.0.0.1:8080/login/oauth2/code/client-oidc','2022-12-03 11:30:05');
+/*!40000 ALTER TABLE `security_application_redirect_uris` ENABLE KEYS */;
 
 --
--- Table structure for table `security_client_scope`
+-- Table structure for table `security_application_scope`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `security_client_scope` (
+CREATE TABLE `security_application_scope` (
                                          `id` varchar(36) NOT NULL COMMENT 'ID',
-                                         `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
+                                         `application_id` varchar(36) NOT NULL COMMENT '应用ID',
                                          `scope_name` varchar(20) DEFAULT NULL COMMENT '范围名称',
                                          `scope_code` varchar(20) DEFAULT NULL COMMENT '范围Code',
                                          `type` varchar(10) DEFAULT NULL COMMENT '范围类型，default：默认，optional：可选',
                                          `create_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
                                          PRIMARY KEY (`id`),
-                                         KEY `security_client_scope_client_id_index` (`client_id`)
+                                         KEY `security_application_scope_application_id_index` (`application_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='客户端范围';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `security_client_scope`
+-- Dumping data for table `security_application_scope`
 --
 
-/*!40000 ALTER TABLE `security_client_scope` DISABLE KEYS */;
-INSERT INTO `security_client_scope` VALUES ('4c68d0f7-75f5-11ed-a42c-0242ac110002','a53055a0-72ba-11ed-aacb-0242ac110002','openid','openid','default','2022-12-07 14:06:34'),('5174cf8b-75f5-11ed-a42c-0242ac110002','a53055a0-72ba-11ed-aacb-0242ac110002','profile','profile','default','2022-12-07 14:06:43'),('d43771ed-f553-401f-85fa-2df192ed91bd','a53055a0-72ba-11ed-aacb-0242ac110002','read','read','default','2022-12-01 17:55:25'),('d950dd4e-7e91-4e3b-bcb6-dd94e8e24641','a53055a0-72ba-11ed-aacb-0242ac110002','write','write','default','2022-12-01 17:55:25');
-/*!40000 ALTER TABLE `security_client_scope` ENABLE KEYS */;
+/*!40000 ALTER TABLE `security_application_scope` DISABLE KEYS */;
+INSERT INTO `security_application_scope` VALUES ('4c68d0f7-75f5-11ed-a42c-0242ac110002','a53055a0-72ba-11ed-aacb-0242ac110002','openid','openid','default','2022-12-07 14:06:34'),('5174cf8b-75f5-11ed-a42c-0242ac110002','a53055a0-72ba-11ed-aacb-0242ac110002','profile','profile','default','2022-12-07 14:06:43'),('d43771ed-f553-401f-85fa-2df192ed91bd','a53055a0-72ba-11ed-aacb-0242ac110002','read','read','default','2022-12-01 17:55:25'),('d950dd4e-7e91-4e3b-bcb6-dd94e8e24641','a53055a0-72ba-11ed-aacb-0242ac110002','write','write','default','2022-12-01 17:55:25');
+/*!40000 ALTER TABLE `security_application_scope` ENABLE KEYS */;
 
 --
--- Table structure for table `security_client_secret`
+-- Table structure for table `security_application_secret`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `security_client_secret` (
+CREATE TABLE `security_application_secret` (
                                           `id` varchar(36) NOT NULL COMMENT 'ID',
-                                          `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
+                                          `application_id` varchar(36) NOT NULL COMMENT '应用ID',
                                           `client_secret` varchar(100) NOT NULL COMMENT '客户端密钥',
                                           `secret_expires_at` datetime NOT NULL COMMENT '密钥过期时间',
                                           `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
                                           `create_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
                                           `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
                                           PRIMARY KEY (`id`),
-                                          KEY `security_client_secret_client_id_index` (`client_id`)
+                                          KEY `security_application_secret_application_id_index` (`application_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='客户端密钥';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `security_client_secret`
+-- Dumping data for table `security_application_secret`
 --
 
-/*!40000 ALTER TABLE `security_client_secret` DISABLE KEYS */;
-INSERT INTO `security_client_secret` VALUES ('87db669e-efd3-43da-b1f8-110b1704dfd3','a53055a0-72ba-11ed-aacb-0242ac110002','$2a$10$VtL5YbCcoZxIw4fCxAwm2.gfwNklqb/ltxSpqm7ox1yR78c5jCjr6','2022-12-30 17:55:25',_binary '\0','2022-12-01 17:55:25',NULL);
-/*!40000 ALTER TABLE `security_client_secret` ENABLE KEYS */;
+/*!40000 ALTER TABLE `security_application_secret` DISABLE KEYS */;
+INSERT INTO `security_application_secret` VALUES ('87db669e-efd3-43da-b1f8-110b1704dfd3','a53055a0-72ba-11ed-aacb-0242ac110002','$2a$10$VtL5YbCcoZxIw4fCxAwm2.gfwNklqb/ltxSpqm7ox1yR78c5jCjr6','2022-12-30 17:55:25',_binary '\0','2022-12-01 17:55:25',NULL);
+/*!40000 ALTER TABLE `security_application_secret` ENABLE KEYS */;
 
 --
 -- Table structure for table `security_group`
@@ -294,25 +294,25 @@ INSERT INTO `security_group` VALUES ('65ba5590-6ca2-11ed-8a6a-0242ac110002','7f7
 /*!40000 ALTER TABLE `security_group` ENABLE KEYS */;
 
 --
--- Table structure for table `security_group_authorize_clients`
+-- Table structure for table `security_group_authorize_applications`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `security_group_authorize_clients` (
+CREATE TABLE `security_group_authorize_applications` (
                                                     `group_id` varchar(36) NOT NULL COMMENT '安全组ID',
-                                                    `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
+                                                    `application_id` varchar(36) NOT NULL COMMENT '应用ID',
                                                     `authorize_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '授权时间',
-                                                    PRIMARY KEY (`group_id`,`client_id`)
+                                                    PRIMARY KEY (`group_id`,`application_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='安全组授权客户端列表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `security_group_authorize_clients`
+-- Dumping data for table `security_group_authorize_applications`
 --
 
-/*!40000 ALTER TABLE `security_group_authorize_clients` DISABLE KEYS */;
-/*!40000 ALTER TABLE `security_group_authorize_clients` ENABLE KEYS */;
+/*!40000 ALTER TABLE `security_group_authorize_applications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `security_group_authorize_applications` ENABLE KEYS */;
 
 --
 -- Table structure for table `security_group_authorize_roles`
@@ -437,7 +437,7 @@ CREATE TABLE `security_region_identity_provider` (
                                                      `idp_id` varchar(36) NOT NULL COMMENT '身份提供商ID，关联security_identity_provider#id',
                                                      `unique_identifier` varchar(30) DEFAULT NULL COMMENT '唯一识别码',
                                                      `registration_id` varchar(24) NOT NULL COMMENT '唯一注册ID，用于参与构建IdP访问路径',
-                                                     `client_id` varchar(200) NOT NULL COMMENT '客户端ID',
+                                                     `application_id` varchar(200) NOT NULL COMMENT '应用ID',
                                                      `client_secret` varchar(255) NOT NULL COMMENT '客户端密钥',
                                                      `callback_url` varchar(255) NOT NULL COMMENT '认证回调地址',
                                                      `authorization_scopes` text DEFAULT NULL COMMENT '授权的scope列表，值参考security_identity_provider_scopes#alias',
@@ -459,7 +459,7 @@ CREATE TABLE `security_region_identity_provider` (
 CREATE TABLE `security_resource` (
                                      `id` varchar(36) NOT NULL COMMENT 'ID',
                                      `region_id` varchar(36) NOT NULL COMMENT '安全域ID',
-                                     `client_id` varchar(36) DEFAULT NULL COMMENT '客户端ID，为空时资源属于全域',
+                                     `application_id` varchar(36) DEFAULT NULL COMMENT '应用ID，为空时资源属于全域',
                                      `name` varchar(20) NOT NULL COMMENT '资源名称',
                                      `code` varchar(20) NOT NULL COMMENT '资源码',
                                      `type` varchar(5) NOT NULL DEFAULT 'api' COMMENT '资源类型，api：Api接口资源',
@@ -538,7 +538,7 @@ INSERT INTO `security_resource_uris` VALUES ('d9298d44-6ca1-11ed-8a6a-0242ac1100
 CREATE TABLE `security_role` (
                                  `id` varchar(36) NOT NULL COMMENT 'ID',
                                  `region_id` varchar(36) NOT NULL COMMENT '安全域ID',
-                                 `client_id` varchar(36) DEFAULT NULL COMMENT '客户端ID',
+                                 `application_id` varchar(36) DEFAULT NULL COMMENT '应用ID',
                                  `name` varchar(20) NOT NULL COMMENT '角色名称',
                                  `code` varchar(20) NOT NULL COMMENT '角色码',
                                  `describe` varchar(50) DEFAULT NULL COMMENT '描述',
@@ -592,7 +592,7 @@ INSERT INTO `security_role_authorize_resources` VALUES ('23502652-8803-11ed-98df
 CREATE TABLE `security_session` (
                                     `id` varchar(36) NOT NULL COMMENT 'ID',
                                     `region_id` varchar(36) NOT NULL COMMENT '安全域ID',
-                                    `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
+                                    `application_id` varchar(36) NOT NULL COMMENT '应用ID',
                                     `user_id` varchar(36) DEFAULT NULL COMMENT '用户ID',
                                     `username` varchar(30) NOT NULL COMMENT '用户名',
                                     `state` varchar(100) DEFAULT NULL,
@@ -620,7 +620,7 @@ CREATE TABLE `security_session` (
                                     `refresh_token_metadata` text DEFAULT NULL COMMENT '刷新令牌元数据',
                                     `create_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
                                     PRIMARY KEY (`id`),
-                                    KEY `security_session_client_id_index` (`client_id`),
+                                    KEY `security_session_application_id_index` (`application_id`),
                                     KEY `security_session_region_id_index` (`region_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='会话信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -691,26 +691,26 @@ INSERT INTO `security_user_authorize_attributes` VALUES ('9010b4d0-6bcb-11ed-b5c
 /*!40000 ALTER TABLE `security_user_authorize_attributes` ENABLE KEYS */;
 
 --
--- Table structure for table `security_user_authorize_clients`
+-- Table structure for table `security_user_authorize_applications`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `security_user_authorize_clients` (
+CREATE TABLE `security_user_authorize_applications` (
                                                    `user_id` varchar(36) NOT NULL COMMENT '用户ID',
-                                                   `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
+                                                   `application_id` varchar(36) NOT NULL COMMENT '应用ID',
                                                    `authorize_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '授权时间',
-                                                   PRIMARY KEY (`user_id`,`client_id`)
+                                                   PRIMARY KEY (`user_id`,`application_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户授权客户端关系';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `security_user_authorize_clients`
+-- Dumping data for table `security_user_authorize_applications`
 --
 
-/*!40000 ALTER TABLE `security_user_authorize_clients` DISABLE KEYS */;
-INSERT INTO `security_user_authorize_clients` VALUES ('9010b4d0-6bcb-11ed-b5c2-0242ac110002','a53055a0-72ba-11ed-aacb-0242ac110002','2022-11-25 09:19:14');
-/*!40000 ALTER TABLE `security_user_authorize_clients` ENABLE KEYS */;
+/*!40000 ALTER TABLE `security_user_authorize_applications` DISABLE KEYS */;
+INSERT INTO `security_user_authorize_applications` VALUES ('9010b4d0-6bcb-11ed-b5c2-0242ac110002','a53055a0-72ba-11ed-aacb-0242ac110002','2022-11-25 09:19:14');
+/*!40000 ALTER TABLE `security_user_authorize_applications` ENABLE KEYS */;
 
 --
 -- Table structure for table `security_user_authorize_consents`
@@ -721,10 +721,10 @@ INSERT INTO `security_user_authorize_clients` VALUES ('9010b4d0-6bcb-11ed-b5c2-0
 CREATE TABLE `security_user_authorize_consents` (
                                                     `user_id` varchar(36) NOT NULL COMMENT '用户ID',
                                                     `username` varchar(30) NOT NULL COMMENT '用户名',
-                                                    `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
+                                                    `application_id` varchar(36) NOT NULL COMMENT '应用ID',
                                                     `authorities` varchar(100) NOT NULL COMMENT '同意授权列表',
                                                     `authorize_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '授权时间',
-                                                    PRIMARY KEY (`user_id`,`client_id`),
+                                                    PRIMARY KEY (`user_id`,`application_id`),
                                                     KEY `security_user_authorize_consents_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户授权同意信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -790,7 +790,7 @@ INSERT INTO `security_user_groups` VALUES ('9010b4d0-6bcb-11ed-b5c2-0242ac110002
 CREATE TABLE `security_user_login_log` (
                                            `id` varchar(36) NOT NULL COMMENT 'ID',
                                            `region_id` varchar(36) NOT NULL COMMENT '安全域ID',
-                                           `client_id` varchar(36) NOT NULL COMMENT '客户端ID',
+                                           `application_id` varchar(36) NOT NULL COMMENT '应用ID',
                                            `user_id` varchar(36) NOT NULL COMMENT '用户ID',
                                            `user_group_id` varchar(36) DEFAULT NULL COMMENT '用户组ID',
                                            `session_id` varchar(36) NOT NULL COMMENT '会话ID',
@@ -802,7 +802,7 @@ CREATE TABLE `security_user_login_log` (
                                            `province` varchar(10) DEFAULT NULL COMMENT '省份',
                                            `city` varchar(10) DEFAULT NULL COMMENT '城市',
                                            PRIMARY KEY (`id`),
-                                           KEY `security_user_login_log_client_id_index` (`client_id`),
+                                           KEY `security_user_login_log_application_id_index` (`application_id`),
                                            KEY `security_user_login_log_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户登录日志';
 /*!40101 SET character_set_client = @saved_cs_client */;
