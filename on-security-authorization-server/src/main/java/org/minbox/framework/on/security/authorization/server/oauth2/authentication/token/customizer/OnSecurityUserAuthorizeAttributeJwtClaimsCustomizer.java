@@ -27,6 +27,7 @@ import org.minbox.framework.on.security.core.authorization.data.user.SecurityUse
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUserAuthorizeAttributeRepository;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
@@ -71,6 +72,10 @@ public class OnSecurityUserAuthorizeAttributeJwtClaimsCustomizer implements OnSe
         // 令牌为ACCESS_TOKEN时，并且令牌格式化方式不为SELF_CONTAINED时，跳过
         OAuth2TokenFormat tokenFormat = context.getRegisteredClient().getTokenSettings().getAccessTokenFormat();
         if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType()) && !OAuth2TokenFormat.SELF_CONTAINED.equals(tokenFormat)) {
+            return;
+        }
+        // 授权类型为client_credentials时，跳过
+        if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
             return;
         }
         UsernamePasswordAuthenticationToken authenticationToken = context.getPrincipal();
