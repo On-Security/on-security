@@ -26,6 +26,7 @@ import org.minbox.framework.on.security.authorization.server.oauth2.authenticati
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.OnSecurityDelegatingOAuth2TokenGenerator;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.customizer.OnSecurityIdentityProviderIdTokenCustomizer;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.customizer.OnSecurityUserAuthorizeAttributeJwtClaimsCustomizer;
+import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.customizer.OnSecurityUserBindGroupJwtClaimsCustomizer;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.OnSecurityOAuth2AuthorizationServerConfigurer;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -123,7 +124,8 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
         JdbcOperations jdbcOperations = context.getBean(JdbcOperations.class);
         builder.setJwtCustomizers(Arrays.asList(
                 new OnSecurityIdentityProviderIdTokenCustomizer(),
-                new OnSecurityUserAuthorizeAttributeJwtClaimsCustomizer(jdbcOperations)
+                new OnSecurityUserAuthorizeAttributeJwtClaimsCustomizer(jdbcOperations),
+                new OnSecurityUserBindGroupJwtClaimsCustomizer(jdbcOperations)
         ));
         // @formatter:on
         return builder.build();

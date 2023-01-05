@@ -17,11 +17,20 @@
 
 package org.minbox.framework.on.security.core.authorization.data.user;
 
+import java.util.List;
+
 /**
  * 用户绑定租户关系数据存储库
  *
  * @author 恒宇少年
- * @since 0.0.1
+ * @since 0.0.5
  */
 public interface SecurityUserGroupRepository {
+    /**
+     * 查询用户绑定的分组列表
+     *
+     * @param userId 用户ID {@link SecurityUserGroup#getUserId()}
+     * @return {@link SecurityUserGroup}
+     */
+    List<SecurityUserGroup> findByUserId(String userId);
 }
