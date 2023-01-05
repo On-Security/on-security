@@ -17,11 +17,20 @@
 
 package org.minbox.framework.on.security.core.authorization.data.group;
 
+import java.util.List;
+
 /**
  * 安全组授权角色数据存储库
  *
  * @author 恒宇少年
- * @since 0.0.1
+ * @since 0.0.5
  */
 public interface SecurityGroupAuthorizeRoleRepository {
+    /**
+     * 查询分组授权的角色列表
+     *
+     * @param groupId {@link SecurityGroupAuthorizeRole#getGroupId()}
+     * @return {@link SecurityGroupAuthorizeRole}
+     */
+    List<SecurityGroupAuthorizeRole> findByGroupId(String groupId);
 }

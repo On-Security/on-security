@@ -19,6 +19,8 @@ package org.minbox.framework.on.security.core.authorization.data.role;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.util.Assert;
 
 import java.sql.ResultSet;
@@ -44,6 +46,7 @@ public class SecurityRoleJdbcRepository implements SecurityRoleRepository {
     // @formatter:on
     private static final String TABLE_NAME = "security_role";
     private static final String ID_FILTER = "id = ?";
+    private static final String ID_IN_FILTER = "id in (:ids) and application_id = :applicationId and deleted = false";
     private static final String SELECT_ROLE_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
 
     private JdbcOperations jdbcOperations;
@@ -59,6 +62,17 @@ public class SecurityRoleJdbcRepository implements SecurityRoleRepository {
     public SecurityRole findById(String id) {
         Assert.hasText(id, "id cannot be empty");
         return this.findBy(ID_FILTER, id);
+    }
+
+    @Override
+    public List<SecurityRole> findByIds(String applicationId, List<String> roleIds) {
+        Assert.hasText(applicationId, "applicationId cannot be empty");
+        Assert.notEmpty(roleIds, "role ids cannot be empty");
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(this.jdbcOperations);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("ids", roleIds);
+        parameterSource.addValue("applicationId", applicationId);
+        return namedParameterJdbcTemplate.query(SELECT_ROLE_SQL + ID_IN_FILTER, parameterSource, this.securityRoleRowMapper);
     }
 
     private SecurityRole findBy(String filter, Object... args) {

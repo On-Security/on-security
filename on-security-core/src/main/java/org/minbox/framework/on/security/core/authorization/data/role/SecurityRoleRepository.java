@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.role;
 
+import java.util.List;
+
 /**
  * 角色数据存储库
  *
@@ -31,4 +33,12 @@ public interface SecurityRoleRepository {
      * @return {@link SecurityRole} 角色基本信息对象实例
      */
     SecurityRole findById(String id);
+
+    /**
+     * 根据角色编号集合查询多个角色
+     *
+     * @param roleIds 角色编号集合 {@link SecurityRole#getId()}
+     * @return {@link SecurityRole}
+     */
+    List<SecurityRole> findByIds(String applicationId, List<String> roleIds);
 }
