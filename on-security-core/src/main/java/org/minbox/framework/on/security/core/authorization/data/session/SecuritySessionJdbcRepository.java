@@ -248,7 +248,7 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
             }
             String accessTokenScopesString = rs.getString("access_token_scopes");
             Set<String> accessTokenScopes = Collections.emptySet();
-            if (!ObjectUtils.isEmpty(accessTokenScopes)) {
+            if (!ObjectUtils.isEmpty(accessTokenScopesString)) {
                 accessTokenScopes = StringUtils.commaDelimitedListToSet(accessTokenScopesString);
             }
             builder.accessTokenScopes(accessTokenScopes);
