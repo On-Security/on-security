@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.authorization.server.oauth2.web.resolver;
+package org.minbox.framework.on.security.core.authorization.endpoint.resolver;
 
 import javax.servlet.http.HttpServletRequest;
 
