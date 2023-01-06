@@ -17,11 +17,20 @@
 
 package org.minbox.framework.on.security.core.authorization.data.resource;
 
+import java.util.List;
+
 /**
  * 资源路径数据存储库
  *
  * @author 恒宇少年
- * @since 0.0.1
+ * @since 0.0.5
  */
 public interface SecurityResourceUriRepository {
+    /**
+     * 根据资源ID查询资源绑定的路径列表
+     *
+     * @param resourceId 资源ID {@link SecurityResourceUri#getResourceId()}
+     * @return 资源路径 {@link SecurityResourceUri}
+     */
+    List<SecurityResourceUri> findByResourceId(String resourceId);
 }

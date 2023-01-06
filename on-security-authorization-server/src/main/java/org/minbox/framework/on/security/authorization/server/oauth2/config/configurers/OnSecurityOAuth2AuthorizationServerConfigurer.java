@@ -17,6 +17,7 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.config.configurers;
 
+import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityAccessAuthorizationConfigurer;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityOAuth2UsernamePasswordConfigurer;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityPreAuthorizationCodeAuthenticationConfigurer;
 import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
@@ -239,6 +240,9 @@ public final class OnSecurityOAuth2AuthorizationServerConfigurer extends Abstrac
         // Put OnSecurityOAuth2UsernamePasswordConfigurer
         configurers.put(OnSecurityOAuth2UsernamePasswordConfigurer.class,
                 postProcess(new OnSecurityOAuth2UsernamePasswordConfigurer(this::postProcess)));
+        // Put OnSecurityAccessAuthorizationConfigurer
+        configurers.put(OnSecurityAccessAuthorizationConfigurer.class,
+                postProcess(new OnSecurityAccessAuthorizationConfigurer(this::postProcess)));
         // @formatter:on
         return configurers;
     }

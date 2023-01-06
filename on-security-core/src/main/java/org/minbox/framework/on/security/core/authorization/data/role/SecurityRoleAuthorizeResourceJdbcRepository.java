@@ -19,6 +19,8 @@ package org.minbox.framework.on.security.core.authorization.data.role;
 
 import org.minbox.framework.on.security.core.authorization.AuthorizeMatchMethod;
 import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.util.Assert;
 
 import java.sql.ResultSet;
@@ -47,6 +49,7 @@ public class SecurityRoleAuthorizeResourceJdbcRepository implements SecurityRole
     private static final String TABLE_NAME = "security_role_authorize_resources";
     private static final String ID_FILTER = "id = ?";
     private static final String ROLE_ID_FILTER = "role_id = ?";
+    private static final String ROLE_ID_IN_FILTER = "role_id in (:roleIds)";
     private static final String SELECT_ALL_COLUMNS_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
     // @formatter:off
     private static final String INSERT_SQL = "INSERT INTO " + TABLE_NAME
@@ -75,6 +78,15 @@ public class SecurityRoleAuthorizeResourceJdbcRepository implements SecurityRole
     public List<SecurityRoleAuthorizeResource> findByRoleId(String roleId) {
         Assert.hasText(roleId, "roleId cannot be empty");
         return this.findListBy(ROLE_ID_FILTER, roleId);
+    }
+
+    @Override
+    public List<SecurityRoleAuthorizeResource> findByRoleIds(List<String> roleIds) {
+        Assert.notEmpty(roleIds, "role ids cannot be empty");
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(this.jdbcOperations);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("roleIds", roleIds);
+        return namedParameterJdbcTemplate.query(SELECT_ALL_COLUMNS_SQL + ROLE_ID_IN_FILTER, parameterSource, this.roleAuthorizeResourceRowMapper);
     }
 
     @Override
