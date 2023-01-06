@@ -18,8 +18,8 @@
 package org.minbox.framework.on.security.authorization.server.oauth2.web.converter;
 
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityAccessAuthorizationRequestToken;
-import org.minbox.framework.on.security.authorization.server.oauth2.web.resolver.BearerTokenResolver;
-import org.minbox.framework.on.security.authorization.server.oauth2.web.resolver.DefaultBearerTokenResolver;
+import org.minbox.framework.on.security.core.authorization.endpoint.resolver.BearerTokenResolver;
+import org.minbox.framework.on.security.core.authorization.endpoint.resolver.DefaultBearerTokenResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 
