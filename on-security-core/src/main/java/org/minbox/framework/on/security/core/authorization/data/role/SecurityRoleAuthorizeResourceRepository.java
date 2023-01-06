@@ -42,6 +42,14 @@ public interface SecurityRoleAuthorizeResourceRepository {
     List<SecurityRoleAuthorizeResource> findByRoleId(String roleId);
 
     /**
+     * 查询多个角色授权的全部资源关系列表
+     *
+     * @param roleIds 角色ID集合 {@link SecurityRole#getId()}
+     * @return {@link SecurityRoleAuthorizeResource}
+     */
+    List<SecurityRoleAuthorizeResource> findByRoleIds(List<String> roleIds);
+
+    /**
      * 根据ID删除角色资源的授权关系
      *
      * @param id {@link SecurityRoleAuthorizeResource#getId()}

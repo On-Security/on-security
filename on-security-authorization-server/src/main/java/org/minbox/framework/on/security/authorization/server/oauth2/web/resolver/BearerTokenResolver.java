@@ -15,20 +15,23 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.data.resource;
+package org.minbox.framework.on.security.authorization.server.oauth2.web.resolver;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * 资源数据存储库
+ * "Bearer Token"令牌解析器接口定义
  *
  * @author 恒宇少年
  * @since 0.0.5
  */
-public interface SecurityResourceRepository {
+@FunctionalInterface
+public interface BearerTokenResolver {
     /**
-     * 根据资源ID查询资源信息
+     * 从{@link HttpServletRequest}请求中解析"Bearer Token"
      *
-     * @param resourceId 资源ID {@link SecurityResource#getId()}
-     * @return 资源信息 {@link SecurityResource}
+     * @param request {@link HttpServletRequest}
+     * @return Bearer Token
      */
-    SecurityResource findById(String resourceId);
+    String resolve(HttpServletRequest request);
 }
