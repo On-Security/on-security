@@ -121,19 +121,19 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
             List<SecurityUserAuthorizeApplication> userAuthorizeClientList = userAuthorizeClientRepository.findByUserId(securityUser.getId());
             if (ObjectUtils.isEmpty(userAuthorizeClientList)) {
                 // @formatter:off
-                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
+                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_APPLICATION,
                         OAuth2ParameterNames.CLIENT_ID,
                         "Username: " + usernamePasswordAuthenticationToken.getUsername() +
-                                ", did not authorize client: " + applicationId + ".");
+                                ", did not authorize application: " + applicationId + ".");
                 // @formatter:on
             }
             Set<String> userAuthorizeClientIdSet = userAuthorizeClientList.stream().map(SecurityUserAuthorizeApplication::getApplicationId).collect(Collectors.toSet());
             if (!userAuthorizeClientIdSet.contains(applicationId)) {
                 // @formatter:off
-                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
+                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_APPLICATION,
                         OAuth2ParameterNames.CLIENT_ID,
                         "Username: " + usernamePasswordAuthenticationToken.getUsername() +
-                                ", did not authorize client: " + applicationId + ".");
+                                ", did not authorize application: " + applicationId + ".");
                 // @formatter:on
             }
             SecurityRegion securityRegion = regionRepository.findById(securityUser.getRegionId());

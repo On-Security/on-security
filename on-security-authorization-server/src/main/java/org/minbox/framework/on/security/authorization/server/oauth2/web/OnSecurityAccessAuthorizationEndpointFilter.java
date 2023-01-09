@@ -23,7 +23,7 @@ import org.minbox.framework.on.security.authorization.server.oauth2.authenticati
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityAccessAuthorizationRequestToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.converter.OnSecurityAccessAuthorizationRequestConverter;
 import org.minbox.framework.on.security.core.authorization.endpoint.AccessAuthorizationEndpointResponse;
-import org.minbox.framework.on.security.core.authorization.endpoint.jackson.OnSecurityTimeModule;
+import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityTimeModule;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;

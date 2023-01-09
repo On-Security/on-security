@@ -73,9 +73,9 @@ public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends Abstra
             securityApplication = securityApplicationRepository.findByClientId(preAuthenticationToken.getApplicationId());
             if (securityApplication == null || !securityApplication.isEnabled() || securityApplication.isDeleted()) {
                 //@formatter:off
-                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_CLIENT,
+                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_APPLICATION,
                         OAuth2ParameterNames.CLIENT_ID,
-                        "Invalid Client：" + preAuthenticationToken.getApplicationId() + "，Please check data validity.");
+                        "Invalid Application，ID：" + preAuthenticationToken.getApplicationId() + "，Please check data validity.");
                 // @formatter:on
             }
             SecurityRegion securityRegion = regionRepository.findById(securityApplication.getRegionId());
@@ -94,9 +94,9 @@ public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends Abstra
             List<SecurityUserAuthorizeApplication> userAuthorizeClientList =
                     userAuthorizeClientRepository.findByUserId(onSecurityUserDetails.getUserId());
             if(ObjectUtils.isEmpty(userAuthorizeClientList)) {
-                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
+                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_APPLICATION,
                         OAuth2ParameterNames.CLIENT_ID,
-                        "User: " + onSecurityUserDetails.getUsername() + ", not authorized to bind client: " + preAuthenticationToken.getApplicationId());
+                        "User: " + onSecurityUserDetails.getUsername() + ", not authorized to bind application: " + preAuthenticationToken.getApplicationId());
             }
             List<String> userAuthorizeClientIds = userAuthorizeClientList.stream()
                     .map(SecurityUserAuthorizeApplication::getApplicationId)
@@ -104,9 +104,9 @@ public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends Abstra
             // @formatter:on
             if (!userAuthorizeClientIds.contains(securityApplication.getId())) {
                 // @formatter:off
-                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_CLIENT,
+                OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.UNAUTHORIZED_APPLICATION,
                         OAuth2ParameterNames.CLIENT_ID,
-                        "User: " + onSecurityUserDetails.getUsername() + ", not authorized to bind client: " + preAuthenticationToken.getApplicationId());
+                        "User: " + onSecurityUserDetails.getUsername() + ", not authorized to bind application: " + preAuthenticationToken.getApplicationId());
                 // @formatter:on
             }
         }

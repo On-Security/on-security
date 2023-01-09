@@ -74,8 +74,7 @@ public class OnSecurityUserAuthorizeAttributeJwtClaimsCustomizer implements OnSe
         if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType()) && !OAuth2TokenFormat.SELF_CONTAINED.equals(tokenFormat)) {
             return;
         }
-        // 授权类型为client_credentials时，跳过
-        if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
+        if (!(context.getPrincipal() instanceof UsernamePasswordAuthenticationToken)) {
             return;
         }
         UsernamePasswordAuthenticationToken authenticationToken = context.getPrincipal();
