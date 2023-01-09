@@ -27,10 +27,10 @@
         <relativePath>../on-security-bom</relativePath>
     </parent>
 
-    <artifactId>on-security-identity-provider</artifactId>
+    <artifactId>on-security-federal-identity</artifactId>
 
     <description>
-        On-Security身份提供商（Identity Provider），提供集成社会常见的IdP以及标准协议（OAuth2.0、OIDC、SAML2.0等）的IdP。
+        On-Security联邦身份验证（Federal Identity Authorization），集成标准协议（OAuth2.0、OIDC、SAML2.0等）的SP（Service Provider）
     </description>
 
     <properties>

@@ -27,9 +27,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>on-security-web</artifactId>
+    <artifactId>on-security-console</artifactId>
     <description>
-        On-Security管理端接口、业务模块。
+        On-Security控制台，提供管理端业务管理。
     </description>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

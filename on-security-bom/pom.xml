@@ -45,7 +45,7 @@
             </dependency>
             <dependency>
                 <groupId>org.minbox.framework</groupId>
-                <artifactId>on-security-identity-provider</artifactId>
+                <artifactId>on-security-federal-identity</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -55,7 +55,7 @@
             </dependency>
             <dependency>
                 <groupId>org.minbox.framework</groupId>
-                <artifactId>on-security-web</artifactId>
+                <artifactId>on-security-console</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
