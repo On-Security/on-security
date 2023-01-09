@@ -15,11 +15,11 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.identity.provider.config.configuration;
+package org.minbox.framework.on.security.federal.identity.config.configuration;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.minbox.framework.on.security.identity.provider.JdbcOnSecurityClientRegistrationRepository;
+import org.minbox.framework.on.security.federal.identity.JdbcOnSecurityClientRegistrationRepository;
 import org.minbox.framework.util.BeanUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;

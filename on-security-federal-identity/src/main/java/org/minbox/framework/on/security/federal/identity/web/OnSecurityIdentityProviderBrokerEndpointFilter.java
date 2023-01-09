@@ -15,9 +15,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.identity.provider.web;
+package org.minbox.framework.on.security.federal.identity.web;
 
-import org.minbox.framework.on.security.identity.provider.authentication.OnSecurityIdentityProviderBrokerEndpointRequestToken;
+import org.minbox.framework.on.security.federal.identity.authentication.OnSecurityIdentityProviderBrokerEndpointRequestToken;
 import org.springframework.core.log.LogMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,9 +40,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import static org.minbox.framework.on.security.identity.provider.web.OnSecurityIdentityProviderBrokerEndpointRequestResolver.REGION_ID_URI_VARIABLE_NAME;
-import static org.minbox.framework.on.security.identity.provider.web.OnSecurityIdentityProviderBrokerEndpointRequestResolver.REGISTRATION_ID_URI_VARIABLE_NAME;
 
 /**
  * IdP（"Identity Provider"）身份供应商代理认证地址转发过滤器
@@ -75,8 +72,8 @@ public class OnSecurityIdentityProviderBrokerEndpointFilter extends OncePerReque
         try {
             OAuth2AuthorizationRequest authorizationRequest = this.authorizationRequestResolver.resolve(request);
             if (authorizationRequest != null) {
-                String regionId = String.valueOf(authorizationRequest.getAdditionalParameters().get(REGION_ID_URI_VARIABLE_NAME));
-                String registrationId = String.valueOf(authorizationRequest.getAdditionalParameters().get(REGISTRATION_ID_URI_VARIABLE_NAME));
+                String regionId = String.valueOf(authorizationRequest.getAdditionalParameters().get(OnSecurityIdentityProviderBrokerEndpointRequestResolver.REGION_ID_URI_VARIABLE_NAME));
+                String registrationId = String.valueOf(authorizationRequest.getAdditionalParameters().get(OnSecurityIdentityProviderBrokerEndpointRequestResolver.REGISTRATION_ID_URI_VARIABLE_NAME));
                 OnSecurityIdentityProviderBrokerEndpointRequestToken brokerEndpointRequestToken =
                         new OnSecurityIdentityProviderBrokerEndpointRequestToken(regionId, registrationId, authorizationRequest);
                 authenticationManager.authenticate(brokerEndpointRequestToken);

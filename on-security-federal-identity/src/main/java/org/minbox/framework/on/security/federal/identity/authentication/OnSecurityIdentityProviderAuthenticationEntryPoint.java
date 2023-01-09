@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package org.minbox.framework.on.security.identity.provider.authentication;
+package org.minbox.framework.on.security.federal.identity.authentication;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;

@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.identity.provider.convert;
+package org.minbox.framework.on.security.federal.identity.convert;
 
 import org.minbox.framework.on.security.core.authorization.data.idp.SecurityIdentityProvider;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionIdentityProvider;

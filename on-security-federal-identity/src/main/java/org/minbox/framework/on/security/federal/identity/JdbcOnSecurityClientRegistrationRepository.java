@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.identity.provider;
+package org.minbox.framework.on.security.federal.identity;
 
 import org.minbox.framework.on.security.core.authorization.data.idp.SecurityIdentityProvider;
 import org.minbox.framework.on.security.core.authorization.data.idp.SecurityIdentityProviderJdbcRepository;
@@ -23,8 +23,8 @@ import org.minbox.framework.on.security.core.authorization.data.idp.SecurityIden
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionIdentityProvider;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionIdentityProviderJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionIdentityProviderRepository;
-import org.minbox.framework.on.security.identity.provider.convert.ClientRegistrationAdapter;
-import org.minbox.framework.on.security.identity.provider.convert.ClientRegistrationConvert;
+import org.minbox.framework.on.security.federal.identity.convert.ClientRegistrationAdapter;
+import org.minbox.framework.on.security.federal.identity.convert.ClientRegistrationConvert;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;

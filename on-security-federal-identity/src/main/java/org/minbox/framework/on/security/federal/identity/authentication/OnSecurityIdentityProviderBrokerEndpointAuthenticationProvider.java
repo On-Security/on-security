@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.identity.provider.authentication;
+package org.minbox.framework.on.security.federal.identity.authentication;
 
 import org.minbox.framework.on.security.core.authorization.AbstractOnSecurityAuthenticationProvider;
 import org.minbox.framework.on.security.core.authorization.data.idp.SecurityIdentityProvider;

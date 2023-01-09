@@ -17,8 +17,8 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.config.configuration;
 
-import org.minbox.framework.on.security.identity.provider.config.configuration.OnSecurityIdentityProviderRegistrar;
-import org.minbox.framework.on.security.identity.provider.config.configurers.OnSecurityIdentityProviderBrokerConfigurer;
+import org.minbox.framework.on.security.federal.identity.config.configuration.OnSecurityIdentityProviderRegistrar;
+import org.minbox.framework.on.security.federal.identity.config.configurers.OnSecurityIdentityProviderBrokerConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

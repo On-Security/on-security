@@ -15,12 +15,12 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.identity.provider.config.configurers.support;
+package org.minbox.framework.on.security.federal.identity.config.configurers.support;
 
 import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
 import org.minbox.framework.on.security.core.authorization.util.HttpSecuritySharedObjectUtils;
-import org.minbox.framework.on.security.identity.provider.authentication.OnSecurityIdentityProviderBrokerEndpointAuthenticationProvider;
-import org.minbox.framework.on.security.identity.provider.web.OnSecurityIdentityProviderBrokerEndpointFilter;
+import org.minbox.framework.on.security.federal.identity.authentication.OnSecurityIdentityProviderBrokerEndpointAuthenticationProvider;
+import org.minbox.framework.on.security.federal.identity.web.OnSecurityIdentityProviderBrokerEndpointFilter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
