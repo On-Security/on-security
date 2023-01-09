@@ -250,7 +250,7 @@ INSERT INTO `security_application_scope` VALUES ('4c68d0f7-75f5-11ed-a42c-0242ac
 CREATE TABLE `security_application_secret` (
                                           `id` varchar(36) NOT NULL COMMENT 'ID',
                                           `application_id` varchar(36) NOT NULL COMMENT '应用ID',
-                                          `client_secret` varchar(100) NOT NULL COMMENT '客户端密钥',
+                                          `application_secret` varchar(100) NOT NULL COMMENT '客户端密钥',
                                           `secret_expires_at` datetime NOT NULL COMMENT '密钥过期时间',
                                           `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
                                           `create_time` datetime NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
@@ -438,7 +438,7 @@ CREATE TABLE `security_region_identity_provider` (
                                                      `unique_identifier` varchar(30) DEFAULT NULL COMMENT '唯一识别码',
                                                      `registration_id` varchar(24) NOT NULL COMMENT '唯一注册ID，用于参与构建IdP访问路径',
                                                      `application_id` varchar(200) NOT NULL COMMENT '应用ID',
-                                                     `client_secret` varchar(255) NOT NULL COMMENT '客户端密钥',
+                                                     `application_secret` varchar(255) NOT NULL COMMENT '客户端密钥',
                                                      `callback_url` varchar(255) NOT NULL COMMENT '认证回调地址',
                                                      `authorization_scopes` text DEFAULT NULL COMMENT '授权的scope列表，值参考security_identity_provider_scopes#alias',
                                                      `expand_metadata` text DEFAULT NULL COMMENT '扩展元数据',
