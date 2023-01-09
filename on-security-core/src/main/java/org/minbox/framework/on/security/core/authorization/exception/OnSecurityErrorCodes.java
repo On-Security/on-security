@@ -27,11 +27,11 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
  */
 public enum OnSecurityErrorCodes {
     /**
-     * 无效的客户端
+     * 无效的应用
      * <p>
-     * 未查询到客户端或客户端状态不正常或已被删除时使用的错误码
+     * 未查询到应用或应用状态不正常或已被删除时使用的错误码
      */
-    INVALID_CLIENT("invalid_client"),
+    INVALID_APPLICATION("invalid_application"),
     /**
      * 无效的用户
      * <p>
@@ -71,11 +71,11 @@ public enum OnSecurityErrorCodes {
      */
     INVALID_REGION("invalid_region"),
     /**
-     * 未授权客户端
+     * 未授权应用
      * <p>
-     * 用户在请求授权时，判定用户是否授权了发起请求的客户端
+     * 用户在请求授权时，判定用户是否授权了发起请求的应用
      */
-    UNAUTHORIZED_CLIENT("unauthorized_client"),
+    UNAUTHORIZED_APPLICATION("unauthorized_application"),
     /**
      * 不支持的授权类型
      * <p>
