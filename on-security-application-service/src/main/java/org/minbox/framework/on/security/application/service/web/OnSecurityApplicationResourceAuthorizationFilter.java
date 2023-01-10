@@ -3,10 +3,21 @@ package org.minbox.framework.on.security.application.service.web;
 import org.minbox.framework.on.security.application.service.authentication.OnSecurityApplicationResourceAuthorizationFailureHandler;
 import org.minbox.framework.on.security.application.service.authentication.OnSecurityApplicationResourceAuthorizationProvider;
 import org.minbox.framework.on.security.application.service.authentication.OnSecurityApplicationResourceAuthorizationToken;
+import org.minbox.framework.on.security.application.service.authentication.context.InheritableThreadLocalOnSecurityApplicationContextHolderStrategy;
 import org.minbox.framework.on.security.application.service.authentication.context.OnSecurityApplicationContext;
 import org.minbox.framework.on.security.application.service.authentication.context.OnSecurityApplicationContextHolder;
-import org.minbox.framework.on.security.application.service.authentication.context.InheritableThreadLocalOnSecurityApplicationContextHolderStrategy;
+import org.minbox.framework.on.security.application.service.exception.OnSecurityApplicationResourceAuthenticationException;
+import org.minbox.framework.on.security.application.service.exception.ResourceAuthenticationErrorCode;
+import org.minbox.framework.on.security.application.service.web.convert.OnSecurityApplicationResourceAuthorizationConvert;
+import org.minbox.framework.on.security.core.authorization.endpoint.resolver.BearerTokenResolver;
+import org.minbox.framework.on.security.core.authorization.endpoint.resolver.DefaultBearerTokenResolver;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.AuthenticationConverter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -34,15 +45,45 @@ import java.io.IOException;
  */
 public final class OnSecurityApplicationResourceAuthorizationFilter extends OncePerRequestFilter {
     private AuthenticationManager authenticationManager;
+    private BearerTokenResolver bearerTokenResolver;
+    private AuthenticationConverter authenticationConverter;
+    private AuthenticationFailureHandler authenticationFailureHandler;
 
     public OnSecurityApplicationResourceAuthorizationFilter(AuthenticationManager authenticationManager) {
+        // @formatter:off
+        this(authenticationManager,
+                new DefaultBearerTokenResolver(),
+                new OnSecurityApplicationResourceAuthorizationFailureHandler());
+        // @formatter:on
+    }
+
+    public OnSecurityApplicationResourceAuthorizationFilter(AuthenticationManager authenticationManager,
+                                                            BearerTokenResolver tokenResolver,
+                                                            AuthenticationFailureHandler authenticationFailureHandler) {
+        Assert.notNull(authenticationManager, "authenticationManager cannot be null");
+        Assert.notNull(tokenResolver, "tokenResolver cannot be null");
+        Assert.notNull(authenticationFailureHandler, "authenticationFailureHandler cannot be null");
         this.authenticationManager = authenticationManager;
+        this.authenticationFailureHandler = authenticationFailureHandler;
+        this.bearerTokenResolver = tokenResolver;
+        this.authenticationConverter = new OnSecurityApplicationResourceAuthorizationConvert(this.bearerTokenResolver);
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // TODO 转换OnSecurityApplicationResourceAuthorizationToken
-        // TODO AuthenticationManager认证，调用OnSecurityApplicationResourceAuthorizationProvider
-        // TODO 调用验证失败的处理器,OnSecurityApplicationResourceAuthorizationFailureHandler
+        try {
+            OnSecurityApplicationResourceAuthorizationToken resourceAuthorizationToken =
+                    (OnSecurityApplicationResourceAuthorizationToken) this.authenticationConverter.convert(request);
+            if (ObjectUtils.isEmpty(resourceAuthorizationToken.getAccessToken())) {
+                throw new OnSecurityApplicationResourceAuthenticationException("No valid access_token was extracted.",
+                        ResourceAuthenticationErrorCode.NO_ACCESS_TOKEN);
+            }
+            authenticationManager.authenticate(resourceAuthorizationToken);
+            filterChain.doFilter(request, response);
+        } catch (AuthenticationException e) {
+            SecurityContextHolder.clearContext();
+            OnSecurityApplicationContextHolder.clearContext();
+            this.authenticationFailureHandler.onAuthenticationFailure(request, response, e);
+        }
     }
 }

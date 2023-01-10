@@ -34,9 +34,10 @@ public final class OnSecurityApplicationContextHolder {
 
     /**
      * 设置应用上下文实例
+     * <p>
+     * 调用应用上下文持有者策略{@link OnSecurityApplicationContextHolderStrategy#setContext(OnSecurityApplicationContext)}的设置上下文方法
      *
      * @param context 应用上下文实例
-     * @see {@link OnSecurityApplicationContextHolderStrategy#setContext}
      */
     public static void setContext(OnSecurityApplicationContext context) {
         contextHolderStrategy.setContext(context);
@@ -44,8 +45,8 @@ public final class OnSecurityApplicationContextHolder {
 
     /**
      * 清空应用上下文实例
-     *
-     * @see {@link {@link OnSecurityApplicationContextHolderStrategy#clearContext()}
+     * <p>
+     * 调用应用上下文持有者策略{@link OnSecurityApplicationContextHolderStrategy#clearContext()}的清空上下文方法
      */
     public static void clearContext() {
         contextHolderStrategy.clearContext();
