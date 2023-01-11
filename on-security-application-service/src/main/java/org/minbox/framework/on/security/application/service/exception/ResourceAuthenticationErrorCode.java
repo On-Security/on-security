@@ -32,6 +32,10 @@ public enum ResourceAuthenticationErrorCode {
      * 未授权资源URI访问
      */
     UNAUTHORIZED_ACCESS("unauthorized_access", "Unauthorized access for uri : %s ."),
+    /**
+     * 无效的AccessToken
+     */
+    INVALID_ACCESS_TOKEN("invalid_access_token", "Invalid access token."),
     ;
     /**
      * 错误码

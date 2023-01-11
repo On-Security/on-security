@@ -22,7 +22,7 @@ import org.minbox.framework.on.security.core.authorization.data.resource.UserAut
 import org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole;
 import org.minbox.framework.on.security.core.authorization.data.session.SecuritySession;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUser;
-import org.minbox.framework.on.security.core.authorization.endpoint.AccessAuthorizationEndpointResponse;
+import org.minbox.framework.on.security.authorization.server.oauth2.web.AccessAuthorizationEndpointResponse;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.util.Assert;
 

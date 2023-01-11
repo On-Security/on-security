@@ -17,13 +17,13 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.authentication;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityPreAuthorizationCodeAuthenticationConfigurer;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.OnSecurityPreAuthorizationCodeAuthenticationFilter;
 import org.minbox.framework.on.security.core.authorization.AuthenticationFailureResponse;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityError;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityOAuth2AuthenticationException;
+import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -58,10 +58,10 @@ import static org.minbox.framework.on.security.core.authorization.util.OnSecurit
  * @since 0.0.1
  */
 public class OnSecurityDefaultAuthenticationFailureHandler implements AuthenticationFailureHandler {
-    private ObjectMapper objectMapper;
+    private OnSecurityJsonMapper objectMapper;
 
     public OnSecurityDefaultAuthenticationFailureHandler() {
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = new OnSecurityJsonMapper();
     }
 
     @Override

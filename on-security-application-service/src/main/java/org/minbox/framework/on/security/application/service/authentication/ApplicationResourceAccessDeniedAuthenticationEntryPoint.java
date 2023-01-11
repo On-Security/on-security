@@ -17,9 +17,9 @@
 
 package org.minbox.framework.on.security.application.service.authentication;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.minbox.framework.on.security.application.service.exception.OnSecurityApplicationResourceAuthenticationException;
 import org.minbox.framework.on.security.application.service.web.OnSecurityApplicationResourceAccessFailedResponse;
+import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -38,10 +38,10 @@ import java.nio.charset.StandardCharsets;
  * @since 0.0.6
  */
 public class ApplicationResourceAccessDeniedAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    private ObjectMapper objectMapper;
+    private OnSecurityJsonMapper jsonMapper;
 
     public ApplicationResourceAccessDeniedAuthenticationEntryPoint() {
-        this.objectMapper = new ObjectMapper();
+        this.jsonMapper = new OnSecurityJsonMapper();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ApplicationResourceAccessDeniedAuthenticationEntryPoint implements 
                             resourceAuthenticationException.getFormatParams()
                     );
             // @formatter:on
-            String responseJson = objectMapper.writeValueAsString(accessFailedResponse);
+            String responseJson = jsonMapper.writeValueAsString(accessFailedResponse);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON.toString());
             response.getWriter().write(responseJson);

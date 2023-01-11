@@ -34,6 +34,15 @@ import com.fasterxml.jackson.datatype.jsr310.deser.*;
 import com.fasterxml.jackson.datatype.jsr310.deser.key.*;
 import com.fasterxml.jackson.datatype.jsr310.ser.*;
 import com.fasterxml.jackson.datatype.jsr310.ser.key.ZonedDateTimeKeySerializer;
+import org.minbox.framework.on.security.core.authorization.AuthorizeMatchMethod;
+import org.minbox.framework.on.security.core.authorization.ResourceType;
+import org.minbox.framework.on.security.core.authorization.SessionState;
+import org.minbox.framework.on.security.core.authorization.jackson2.deserializer.AuthorizeMatchMethodDeserializer;
+import org.minbox.framework.on.security.core.authorization.jackson2.deserializer.ResourceTypeDeserializer;
+import org.minbox.framework.on.security.core.authorization.jackson2.deserializer.SessionStateDeserializer;
+import org.minbox.framework.on.security.core.authorization.jackson2.serializer.AuthorizeMatchMethodSerializer;
+import org.minbox.framework.on.security.core.authorization.jackson2.serializer.ResourceTypeSerializer;
+import org.minbox.framework.on.security.core.authorization.jackson2.serializer.SessionStateSerializer;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
 
 import java.time.*;
@@ -46,10 +55,10 @@ import java.util.Iterator;
  * @author 恒宇少年
  * @since 0.0.5
  */
-public class OnSecurityTimeModule extends SimpleModule {
+public class OnSecuritySerializableModule extends SimpleModule {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
 
-    public OnSecurityTimeModule() {
+    public OnSecuritySerializableModule() {
         super(PackageVersion.VERSION);
         // From JavaTimeModule
         this.addDeserializer(Instant.class, InstantDeserializer.INSTANT);
@@ -96,7 +105,7 @@ public class OnSecurityTimeModule extends SimpleModule {
         this.addKeyDeserializer(ZoneId.class, ZoneIdKeyDeserializer.INSTANCE);
         this.addKeyDeserializer(ZoneOffset.class, ZoneOffsetKeyDeserializer.INSTANCE);
 
-        // OnSecurity
+        // OnSecurity Customize
 
         // LocalDateTime
         this.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
@@ -107,6 +116,15 @@ public class OnSecurityTimeModule extends SimpleModule {
         // LocalTime
         this.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ISO_LOCAL_TIME));
         this.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ISO_LOCAL_TIME));
+
+        this.addDeserializer(SessionState.class, new SessionStateDeserializer());
+        this.addSerializer(SessionState.class, new SessionStateSerializer());
+
+        this.addDeserializer(ResourceType.class, new ResourceTypeDeserializer());
+        this.addSerializer(ResourceType.class, new ResourceTypeSerializer());
+
+        this.addDeserializer(AuthorizeMatchMethod.class, new AuthorizeMatchMethodDeserializer());
+        this.addSerializer(AuthorizeMatchMethod.class, new AuthorizeMatchMethodSerializer());
 
     }
 
@@ -126,7 +144,7 @@ public class OnSecurityTimeModule extends SimpleModule {
                     }
 
                     if (!inst.canCreateFromString()) {
-                        AnnotatedMethod factory = OnSecurityTimeModule.this._findFactory(ac, "of", String.class);
+                        AnnotatedMethod factory = OnSecuritySerializableModule.this._findFactory(ac, "of", String.class);
                         if (factory != null) {
                             inst.configureFromStringCreator(factory);
                         }

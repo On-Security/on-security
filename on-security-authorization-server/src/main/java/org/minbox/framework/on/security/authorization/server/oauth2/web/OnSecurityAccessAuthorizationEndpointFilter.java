@@ -17,13 +17,11 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityAccessAuthorizationAuthenticationToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityAccessAuthorizationRequestToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.converter.OnSecurityAccessAuthorizationRequestConverter;
-import org.minbox.framework.on.security.core.authorization.endpoint.AccessAuthorizationEndpointResponse;
-import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityTimeModule;
+import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -84,20 +82,14 @@ public final class OnSecurityAccessAuthorizationEndpointFilter extends OncePerRe
      * 认证成功后的处理器
      */
     private static class AccessAuthorizationSuccessHandler implements AuthenticationSuccessHandler {
-        private ObjectMapper objectMapper;
-
-        public AccessAuthorizationSuccessHandler() {
-            this.objectMapper = new ObjectMapper();
-            // Register OnSecurityTimeModule
-            this.objectMapper.registerModule(new OnSecurityTimeModule());
-        }
+        private OnSecurityJsonMapper jsonMapper = new OnSecurityJsonMapper();
 
         @Override
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
             OnSecurityAccessAuthorizationAuthenticationToken accessAuthorizationAuthenticationToken =
                     (OnSecurityAccessAuthorizationAuthenticationToken) authentication;
             AccessAuthorizationEndpointResponse endpointResponse = accessAuthorizationAuthenticationToken.toEndpointResponse();
-            String responseJson = objectMapper.writeValueAsString(endpointResponse);
+            String responseJson = jsonMapper.writeValueAsString(endpointResponse);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON.toString());
             response.getWriter().write(responseJson);

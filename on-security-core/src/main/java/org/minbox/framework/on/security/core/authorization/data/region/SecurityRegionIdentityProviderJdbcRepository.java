@@ -19,7 +19,7 @@ package org.minbox.framework.on.security.core.authorization.data.region;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
@@ -81,7 +81,7 @@ public class SecurityRegionIdentityProviderJdbcRepository implements SecurityReg
     }
 
     public static class SecurityRegionIdentityProviderRowMapper implements RowMapper<SecurityRegionIdentityProvider> {
-        private ObjectMapper objectMapper = new ObjectMapper();
+        private OnSecurityJsonMapper objectMapper = new OnSecurityJsonMapper();
 
         public SecurityRegionIdentityProviderRowMapper() {
             ClassLoader classLoader = SecurityRegionIdentityProviderJdbcRepository.class.getClassLoader();

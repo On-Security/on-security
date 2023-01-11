@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.endpoint;
+package org.minbox.framework.on.security.authorization.server.oauth2.web;
 
 import org.minbox.framework.on.security.core.authorization.SessionState;
 import org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute;

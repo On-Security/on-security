@@ -1,9 +1,9 @@
 package org.minbox.framework.on.security.application.service.authentication.context;
 
+import org.minbox.framework.on.security.application.service.authentication.AccessTokenAuthorization;
 import org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute;
 import org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource;
 import org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole;
-import org.minbox.framework.on.security.core.authorization.endpoint.AccessAuthorizationEndpointResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -12,20 +12,20 @@ import java.util.Map;
  * 应用上下文{@link OnSecurityApplicationContext}实现类
  *
  * @author 恒宇少年
- * @see AccessAuthorizationEndpointResponse
+ * @see AccessTokenAuthorization
  * @see UserAuthorizationResource
  * @see UserAuthorizationAttribute
  * @see UserAuthorizationRole
- * @see AccessAuthorizationEndpointResponse.Session
+ * @see AccessTokenAuthorization.AccessTokenSession
  * @since 0.0.6
  */
 public class OnSecurityApplicationContextImpl implements OnSecurityApplicationContext {
     private String accessToken;
     private Map<String, Object> user;
-    private AccessAuthorizationEndpointResponse.Session session;
-    private List<UserAuthorizationResource> userAuthorizationResource;
-    private List<UserAuthorizationAttribute> userAuthorizationAttribute;
-    private List<UserAuthorizationRole> userAuthorizationRole;
+    private AccessTokenAuthorization.AccessTokenSession session;
+    private List<AccessTokenAuthorization.AuthorizationResource> userAuthorizationResource;
+    private List<AccessTokenAuthorization.AuthorizationAttribute> userAuthorizationAttribute;
+    private List<AccessTokenAuthorization.AuthorizationRole> userAuthorizationRole;
 
     private OnSecurityApplicationContextImpl() {
     }
@@ -34,14 +34,14 @@ public class OnSecurityApplicationContextImpl implements OnSecurityApplicationCo
         return new OnSecurityApplicationContextImpl();
     }
 
-    public static OnSecurityApplicationContextImpl.Builder withAuthorizationEndpoint(AccessAuthorizationEndpointResponse endpointResponse) {
+    public static OnSecurityApplicationContextImpl.Builder withAccessTokenAuthorization(AccessTokenAuthorization accessTokenAuthorization) {
         // @formatter:off
         OnSecurityApplicationContextImpl.Builder builder =
-                new Builder(endpointResponse.getSession())
-                        .user(endpointResponse.getUser())
-                        .userAuthorizationResource(endpointResponse.getUserAuthorizationResource())
-                        .userAuthorizationAttribute(endpointResponse.getUserAuthorizationAttribute())
-                        .userAuthorizationRole(endpointResponse.getUserAuthorizationRole());
+                new Builder(accessTokenAuthorization.getSession())
+                        .user(accessTokenAuthorization.getUser())
+                        .userAuthorizationResource(accessTokenAuthorization.getUserAuthorizationResource())
+                        .userAuthorizationAttribute(accessTokenAuthorization.getUserAuthorizationAttribute())
+                        .userAuthorizationRole(accessTokenAuthorization.getUserAuthorizationRole());
         // @formatter:on
         return builder;
     }
@@ -57,22 +57,22 @@ public class OnSecurityApplicationContextImpl implements OnSecurityApplicationCo
     }
 
     @Override
-    public AccessAuthorizationEndpointResponse.Session getSession() {
+    public AccessTokenAuthorization.AccessTokenSession getSession() {
         return this.session;
     }
 
     @Override
-    public List<UserAuthorizationResource> getUserAuthorizationResource() {
+    public List<AccessTokenAuthorization.AuthorizationResource> getUserAuthorizationResource() {
         return this.userAuthorizationResource;
     }
 
     @Override
-    public List<UserAuthorizationAttribute> getUserAuthorizationAttribute() {
+    public List<AccessTokenAuthorization.AuthorizationAttribute> getUserAuthorizationAttribute() {
         return this.userAuthorizationAttribute;
     }
 
     @Override
-    public List<UserAuthorizationRole> getUserAuthorizationRole() {
+    public List<AccessTokenAuthorization.AuthorizationRole> getUserAuthorizationRole() {
         return this.userAuthorizationRole;
     }
 
@@ -82,12 +82,12 @@ public class OnSecurityApplicationContextImpl implements OnSecurityApplicationCo
     public static class Builder {
         private String accessToken;
         private Map<String, Object> user;
-        private AccessAuthorizationEndpointResponse.Session session;
-        private List<UserAuthorizationResource> userAuthorizationResource;
-        private List<UserAuthorizationAttribute> userAuthorizationAttribute;
-        private List<UserAuthorizationRole> userAuthorizationRole;
+        private AccessTokenAuthorization.AccessTokenSession session;
+        private List<AccessTokenAuthorization.AuthorizationResource> userAuthorizationResource;
+        private List<AccessTokenAuthorization.AuthorizationAttribute> userAuthorizationAttribute;
+        private List<AccessTokenAuthorization.AuthorizationRole> userAuthorizationRole;
 
-        public Builder(AccessAuthorizationEndpointResponse.Session session) {
+        public Builder(AccessTokenAuthorization.AccessTokenSession session) {
             this.session = session;
         }
 
@@ -101,17 +101,17 @@ public class OnSecurityApplicationContextImpl implements OnSecurityApplicationCo
             return this;
         }
 
-        public Builder userAuthorizationResource(List<UserAuthorizationResource> userAuthorizationResource) {
+        public Builder userAuthorizationResource(List<AccessTokenAuthorization.AuthorizationResource> userAuthorizationResource) {
             this.userAuthorizationResource = userAuthorizationResource;
             return this;
         }
 
-        public Builder userAuthorizationAttribute(List<UserAuthorizationAttribute> userAuthorizationAttribute) {
+        public Builder userAuthorizationAttribute(List<AccessTokenAuthorization.AuthorizationAttribute> userAuthorizationAttribute) {
             this.userAuthorizationAttribute = userAuthorizationAttribute;
             return this;
         }
 
-        public Builder userAuthorizationRole(List<UserAuthorizationRole> userAuthorizationRole) {
+        public Builder userAuthorizationRole(List<AccessTokenAuthorization.AuthorizationRole> userAuthorizationRole) {
             this.userAuthorizationRole = userAuthorizationRole;
             return this;
         }
