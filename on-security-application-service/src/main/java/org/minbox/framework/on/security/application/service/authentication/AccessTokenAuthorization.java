@@ -34,7 +34,7 @@ public class AccessTokenAuthorization implements Serializable {
      * @see org.minbox.framework.on.security.core.authorization.data.user.SecurityUser
      */
     public Map<String, Object> getUser() {
-        return user;
+        return this.user;
     }
 
     /**
@@ -43,7 +43,7 @@ public class AccessTokenAuthorization implements Serializable {
      * @return {@link AccessTokenSession}
      */
     public AccessTokenSession getSession() {
-        return session;
+        return this.session;
     }
 
     /**
@@ -52,7 +52,7 @@ public class AccessTokenAuthorization implements Serializable {
      * @return {@link AuthorizationResource}
      */
     public List<AuthorizationResource> getUserAuthorizationResource() {
-        return userAuthorizationResource;
+        return this.userAuthorizationResource;
     }
 
     /**
@@ -61,7 +61,7 @@ public class AccessTokenAuthorization implements Serializable {
      * @return {@link AuthorizationAttribute}
      */
     public List<AuthorizationAttribute> getUserAuthorizationAttribute() {
-        return userAuthorizationAttribute;
+        return this.userAuthorizationAttribute;
     }
 
     /**
@@ -70,7 +70,7 @@ public class AccessTokenAuthorization implements Serializable {
      * @return {@link AuthorizationRole}
      */
     public List<AuthorizationRole> getUserAuthorizationRole() {
-        return userAuthorizationRole;
+        return this.userAuthorizationRole;
     }
 
     /**
@@ -83,19 +83,19 @@ public class AccessTokenAuthorization implements Serializable {
         private String roleDescribe;
 
         public String getRoleId() {
-            return roleId;
+            return this.roleId;
         }
 
         public String getRoleName() {
-            return roleName;
+            return this.roleName;
         }
 
         public String getRoleCode() {
-            return roleCode;
+            return this.roleCode;
         }
 
         public String getRoleDescribe() {
-            return roleDescribe;
+            return this.roleDescribe;
         }
     }
 
@@ -108,15 +108,15 @@ public class AccessTokenAuthorization implements Serializable {
         private String attributeValue;
 
         public String getAttributeId() {
-            return attributeId;
+            return this.attributeId;
         }
 
         public String getAttributeKey() {
-            return attributeKey;
+            return this.attributeKey;
         }
 
         public String getAttributeValue() {
-            return attributeValue;
+            return this.attributeValue;
         }
     }
 
@@ -132,27 +132,27 @@ public class AccessTokenAuthorization implements Serializable {
         private AuthorizeMatchMethod matchMethod;
 
         public String getResourceId() {
-            return resourceId;
+            return this.resourceId;
         }
 
         public String getResourceName() {
-            return resourceName;
+            return this.resourceName;
         }
 
         public String getResourceCode() {
-            return resourceCode;
+            return this.resourceCode;
         }
 
         public Set<String> getResourceUris() {
-            return resourceUris;
+            return this.resourceUris;
         }
 
         public ResourceType getResourceType() {
-            return resourceType;
+            return this.resourceType;
         }
 
         public AuthorizeMatchMethod getMatchMethod() {
-            return matchMethod;
+            return this.matchMethod;
         }
     }
 
@@ -166,19 +166,19 @@ public class AccessTokenAuthorization implements Serializable {
         private Set<String> accessTokenScopes;
 
         public SessionState getState() {
-            return state;
+            return this.state;
         }
 
         public LocalDateTime getAccessTokenIssuedAt() {
-            return accessTokenIssuedAt;
+            return this.accessTokenIssuedAt;
         }
 
         public LocalDateTime getAccessTokenExpiresAt() {
-            return accessTokenExpiresAt;
+            return this.accessTokenExpiresAt;
         }
 
         public Set<String> getAccessTokenScopes() {
-            return accessTokenScopes;
+            return this.accessTokenScopes;
         }
     }
 }

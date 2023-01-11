@@ -45,14 +45,14 @@ public final class OnSecurityApplicationResourceAuthorizationProvider extends Ab
         AccessTokenAuthorization accessAuthorization = AccessTokenAuthorizationCache.getAccessAuthorization(accessToken);
         // hit cache
         if (accessAuthorization == null) {
-            accessAuthorization = this.getAccessAuthorization(accessToken);
+            accessAuthorization = this.getAccessAuthorizationFromIssuer(accessToken);
             AccessTokenAuthorizationCache.setAccessAuthorization(accessToken, accessAuthorization);
         }
         // @formatter:off
         OnSecurityApplicationContextImpl.Builder builder =
                 OnSecurityApplicationContextImpl
-                        .withAccessTokenAuthorization(accessAuthorization)
-                        .accessToken(accessToken);
+                        .withAccessToken(accessToken)
+                        .accessTokenAuthorization(accessAuthorization);
         // @formatter:on
         OnSecurityApplicationContext applicationContext = builder.build();
         OnSecurityApplicationContextHolder.setContext(applicationContext);
@@ -71,7 +71,7 @@ public final class OnSecurityApplicationResourceAuthorizationProvider extends Ab
      * @param accessToken 访问令牌
      * @return 令牌授权的访问信息 {@link AccessTokenAuthorization}
      */
-    private AccessTokenAuthorization getAccessAuthorization(String accessToken) throws OnSecurityApplicationResourceAuthenticationException {
+    private AccessTokenAuthorization getAccessAuthorizationFromIssuer(String accessToken) throws OnSecurityApplicationResourceAuthenticationException {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set(HttpHeaders.AUTHORIZATION, String.format(BEARER_TOKEN_VALUE_FORMAT, accessToken));
