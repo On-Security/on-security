@@ -59,10 +59,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -275,8 +272,14 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
                 this.logger.trace("Authenticated token request");
             }
 
+            Map<String, Object> additionalParameters = Collections.emptyMap();
+            if (idToken != null) {
+                additionalParameters = new HashMap<>();
+                additionalParameters.put(OidcParameterNames.ID_TOKEN, idToken.getTokenValue());
+            }
+
             OAuth2AccessTokenAuthenticationToken accessTokenAuthenticationToken = new OAuth2AccessTokenAuthenticationToken(
-                    registeredClient, usernamePasswordAuthenticationToken, accessToken, refreshToken, clientAuthenticationToken.getAdditionalParameters());
+                    registeredClient, usernamePasswordAuthenticationToken, accessToken, refreshToken, additionalParameters);
             accessTokenAuthenticationToken.setAuthenticated(clientAuthenticationToken.isAuthenticated());
             return accessTokenAuthenticationToken;
 
