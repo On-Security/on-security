@@ -19,10 +19,10 @@ package org.minbox.framework.on.security.core.authorization.data.session;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.minbox.framework.on.security.core.authorization.AccessTokenType;
 import org.minbox.framework.on.security.core.authorization.SessionState;
 import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityAuthorizationServerJackson2Module;
+import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
 import org.springframework.jdbc.core.*;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -187,7 +187,7 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
      * 将{@link ResultSet}转换为{@link SecuritySession}对象实例
      */
     public static class SecuritySessionRowMapper implements RowMapper<SecuritySession> {
-        private ObjectMapper objectMapper = new ObjectMapper();
+        private OnSecurityJsonMapper objectMapper = new OnSecurityJsonMapper();
 
         public SecuritySessionRowMapper() {
             ClassLoader classLoader = SecuritySessionJdbcRepository.class.getClassLoader();
@@ -300,7 +300,7 @@ public class SecuritySessionJdbcRepository implements SecuritySessionRepository 
      * 将{@link SecuritySession}转换为{@link SqlParameterValue}列表
      */
     public static class SecuritySessionParametersMapper implements Function<SecuritySession, List<SqlParameterValue>> {
-        private ObjectMapper objectMapper = new ObjectMapper();
+        private OnSecurityJsonMapper objectMapper = new OnSecurityJsonMapper();
 
         public SecuritySessionParametersMapper() {
             ClassLoader classLoader = SecuritySessionJdbcRepository.class.getClassLoader();

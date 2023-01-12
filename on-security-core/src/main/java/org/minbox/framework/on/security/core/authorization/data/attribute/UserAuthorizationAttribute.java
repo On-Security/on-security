@@ -29,17 +29,9 @@ import java.io.Serializable;
  */
 public final class UserAuthorizationAttribute implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
-    /**
-     * 属性ID
-     */
+
     private String attributeId;
-    /**
-     * 属性Key
-     */
     private String attributeKey;
-    /**
-     * 属性Value
-     */
     private String attributeValue;
 
     public UserAuthorizationAttribute(String attributeId, String attributeKey, String attributeValue) {

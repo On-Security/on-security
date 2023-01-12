@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUserDetails;
+import org.minbox.framework.on.security.core.authorization.jackson2.deserializer.OnSecurityUserDetailsDeserializer;
 
 /**
  * {@link OnSecurityUserDetails} Jackson Mixin
