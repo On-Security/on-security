@@ -22,30 +22,41 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 
 /**
- * 应用服务资源认证提供者
+ * AccessToken授权信息加载提供者
+ * <p>
+ * 根据JWT令牌解析出来的{@link IdTokenClaimNames#ISS}令牌颁发者的地址来获取令牌的授权信息，授权信息获取地址为："/access/authorization"
  *
  * @author 恒宇少年
+ * @see RestTemplate
+ * @see AccessTokenAuthorization
+ * @see OnSecurityAccessTokenAuthorizationToken
+ * @see OnSecurityApplicationContext
+ * @see SecurityContext
  * @since 0.0.6
  */
-public final class OnSecurityApplicationResourceAuthorizationProvider extends AbstractOnSecurityAuthenticationProvider {
+public final class OnSecurityAccessTokenAuthorizationProvider extends AbstractOnSecurityAuthenticationProvider {
     private static final String BEARER_TOKEN_VALUE_FORMAT = "Bearer %s";
     private static final String ACCESS_AUTHORIZATION_URI = "/access/authorization";
     private static final String ERROR_CODE_RESPONSE_PARAM = "errorCode";
     private RestTemplate restTemplate;
 
-    public OnSecurityApplicationResourceAuthorizationProvider(Map<Class<?>, Object> sharedObjects) {
+    public OnSecurityAccessTokenAuthorizationProvider(Map<Class<?>, Object> sharedObjects) {
         super(sharedObjects);
         this.restTemplate = new RestTemplate();
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        OnSecurityApplicationResourceAuthorizationToken resourceAuthorizationToken = (OnSecurityApplicationResourceAuthorizationToken) authentication;
+        OnSecurityAccessTokenAuthorizationToken resourceAuthorizationToken = (OnSecurityAccessTokenAuthorizationToken) authentication;
         String accessToken = resourceAuthorizationToken.getAccessToken();
         AccessTokenAuthorization accessAuthorization = AccessTokenAuthorizationCache.getAccessAuthorization(accessToken);
         // hit cache
         if (accessAuthorization == null) {
             accessAuthorization = this.getAccessAuthorizationFromIssuer(accessToken);
+            if (accessAuthorization == null) {
+                throw new OnSecurityApplicationResourceAuthenticationException("Failed to get token authorization resource.",
+                        ResourceAuthenticationErrorCode.UNAUTHORIZED_ACCESS);
+            }
             AccessTokenAuthorizationCache.setAccessAuthorization(accessToken, accessAuthorization);
         }
         // @formatter:off
@@ -56,13 +67,12 @@ public final class OnSecurityApplicationResourceAuthorizationProvider extends Ab
         // @formatter:on
         OnSecurityApplicationContext applicationContext = builder.build();
         OnSecurityApplicationContextHolder.setContext(applicationContext);
-        // TODO 验证资源是否授权允许访问，允许,拒绝，最好是根据策略来
         return resourceAuthorizationToken;
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return OnSecurityApplicationResourceAuthorizationToken.class.isAssignableFrom(authentication);
+        return OnSecurityAccessTokenAuthorizationToken.class.isAssignableFrom(authentication);
     }
 
     /**

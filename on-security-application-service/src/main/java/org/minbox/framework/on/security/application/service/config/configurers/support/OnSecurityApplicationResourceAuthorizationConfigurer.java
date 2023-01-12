@@ -17,8 +17,8 @@
 
 package org.minbox.framework.on.security.application.service.config.configurers.support;
 
-import org.minbox.framework.on.security.application.service.authentication.OnSecurityApplicationResourceAuthorizationProvider;
-import org.minbox.framework.on.security.application.service.web.OnSecurityApplicationResourceAuthorizationFilter;
+import org.minbox.framework.on.security.application.service.authentication.OnSecurityAccessTokenAuthorizationProvider;
+import org.minbox.framework.on.security.application.service.web.OnSecurityAccessTokenAuthorizationFilter;
 import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
 import org.minbox.framework.on.security.core.authorization.util.HttpSecuritySharedObjectUtils;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,12 +29,12 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 /**
  * 应用服务资源权限验证配置类
  * <p>
- * 该配置类会将应用服务的资源访问相关的认证提供者 {@link OnSecurityApplicationResourceAuthorizationProvider}、
- * 认证过滤器进行注册{@link OnSecurityApplicationResourceAuthorizationFilter}
+ * 该配置类会将应用服务的资源访问相关的认证提供者 {@link OnSecurityAccessTokenAuthorizationProvider}、
+ * 认证过滤器进行注册{@link OnSecurityAccessTokenAuthorizationFilter}
  *
  * @author 恒宇少年
- * @see OnSecurityApplicationResourceAuthorizationProvider
- * @see OnSecurityApplicationResourceAuthorizationFilter
+ * @see OnSecurityAccessTokenAuthorizationProvider
+ * @see OnSecurityAccessTokenAuthorizationFilter
  * @since 0.0.6
  */
 public class OnSecurityApplicationResourceAuthorizationConfigurer extends AbstractOnSecurityOAuth2Configurer {
@@ -45,8 +45,8 @@ public class OnSecurityApplicationResourceAuthorizationConfigurer extends Abstra
     @Override
     public void init(HttpSecurity httpSecurity) {
         // @formatter:off
-        OnSecurityApplicationResourceAuthorizationProvider resourceAuthorizationProvider =
-                new OnSecurityApplicationResourceAuthorizationProvider(httpSecurity.getSharedObjects());
+        OnSecurityAccessTokenAuthorizationProvider resourceAuthorizationProvider =
+                new OnSecurityAccessTokenAuthorizationProvider(httpSecurity.getSharedObjects());
         // @formatter:on
         httpSecurity.authenticationProvider(resourceAuthorizationProvider);
     }
@@ -54,8 +54,8 @@ public class OnSecurityApplicationResourceAuthorizationConfigurer extends Abstra
     @Override
     public void configure(HttpSecurity httpSecurity) {
         AuthenticationManager authenticationManager = HttpSecuritySharedObjectUtils.getAuthenticationManager(httpSecurity);
-        OnSecurityApplicationResourceAuthorizationFilter resourceAuthorizationFilter =
-                new OnSecurityApplicationResourceAuthorizationFilter(authenticationManager);
+        OnSecurityAccessTokenAuthorizationFilter resourceAuthorizationFilter =
+                new OnSecurityAccessTokenAuthorizationFilter(authenticationManager);
         httpSecurity.addFilterAfter(resourceAuthorizationFilter, BearerTokenAuthenticationFilter.class);
     }
 }

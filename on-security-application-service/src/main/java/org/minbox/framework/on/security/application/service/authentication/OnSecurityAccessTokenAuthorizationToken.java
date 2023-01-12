@@ -11,7 +11,7 @@ import java.util.Collections;
  * @author 恒宇少年
  * @since 0.0.6
  */
-public final class OnSecurityApplicationResourceAuthorizationToken extends AbstractAuthenticationToken {
+public final class OnSecurityAccessTokenAuthorizationToken extends AbstractAuthenticationToken {
     /**
      * 请求时携带的"AccessToken"
      */
@@ -26,7 +26,7 @@ public final class OnSecurityApplicationResourceAuthorizationToken extends Abstr
     private String requestUri;
 
 
-    public OnSecurityApplicationResourceAuthorizationToken(String accessToken, String requestUri, String requestSessionId) {
+    public OnSecurityAccessTokenAuthorizationToken(String accessToken, String requestUri, String requestSessionId) {
         super(Collections.emptyList());
         Assert.hasText(requestUri, "requestUri cannot be empty");
         this.accessToken = accessToken;

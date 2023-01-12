@@ -29,7 +29,7 @@ public enum ResourceAuthenticationErrorCode {
      */
     NO_ACCESS_TOKEN("no_access_token", "Does not carry BearerToken in the request header."),
     /**
-     * 未授权资源URI访问
+     * 未授权资源访问
      */
     UNAUTHORIZED_ACCESS("unauthorized_access", "Unauthorized access for uri : %s ."),
     /**

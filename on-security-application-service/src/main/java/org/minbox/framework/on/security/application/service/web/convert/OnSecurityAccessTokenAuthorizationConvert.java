@@ -17,7 +17,7 @@
 
 package org.minbox.framework.on.security.application.service.web.convert;
 
-import org.minbox.framework.on.security.application.service.authentication.OnSecurityApplicationResourceAuthorizationToken;
+import org.minbox.framework.on.security.application.service.authentication.OnSecurityAccessTokenAuthorizationToken;
 import org.minbox.framework.on.security.core.authorization.endpoint.resolver.BearerTokenResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationConverter;
@@ -29,13 +29,13 @@ import javax.servlet.http.HttpServletRequest;
  * 转换应用资源认证请求实体
  *
  * @author 恒宇少年
- * @see OnSecurityApplicationResourceAuthorizationToken
+ * @see OnSecurityAccessTokenAuthorizationToken
  * @since 0.0.6
  */
-public class OnSecurityApplicationResourceAuthorizationConvert implements AuthenticationConverter {
+public class OnSecurityAccessTokenAuthorizationConvert implements AuthenticationConverter {
     private BearerTokenResolver bearerTokenResolver;
 
-    public OnSecurityApplicationResourceAuthorizationConvert(BearerTokenResolver bearerTokenResolver) {
+    public OnSecurityAccessTokenAuthorizationConvert(BearerTokenResolver bearerTokenResolver) {
         Assert.notNull("bearerTokenResolver cannot be null");
         this.bearerTokenResolver = bearerTokenResolver;
     }
@@ -44,8 +44,8 @@ public class OnSecurityApplicationResourceAuthorizationConvert implements Authen
     public Authentication convert(HttpServletRequest request) {
         String accessToken = bearerTokenResolver.resolve(request);
         // @formatter:off
-        OnSecurityApplicationResourceAuthorizationToken applicationResourceAuthorizationToken =
-                new OnSecurityApplicationResourceAuthorizationToken(
+        OnSecurityAccessTokenAuthorizationToken applicationResourceAuthorizationToken =
+                new OnSecurityAccessTokenAuthorizationToken(
                         accessToken,
                         request.getRequestURI(),
                         request.getRequestedSessionId());
