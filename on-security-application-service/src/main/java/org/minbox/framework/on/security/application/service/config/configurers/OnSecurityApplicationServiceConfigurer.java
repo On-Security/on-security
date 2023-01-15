@@ -17,7 +17,8 @@
 
 package org.minbox.framework.on.security.application.service.config.configurers;
 
-import org.minbox.framework.on.security.application.service.config.configurers.support.OnSecurityApplicationResourceAuthorizationConfigurer;
+import org.minbox.framework.on.security.application.service.config.configurers.support.ApplicationResourceAccessAuthenticationConfigurer;
+import org.minbox.framework.on.security.application.service.config.configurers.support.OnSecurityApplicationAccessTokenAuthorizationConfigurer;
 import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -48,8 +49,11 @@ public final class OnSecurityApplicationServiceConfigurer extends AbstractHttpCo
         Map<Class<? extends AbstractOnSecurityOAuth2Configurer>, AbstractOnSecurityOAuth2Configurer> configurers = new LinkedHashMap<>();
         // @formatter:off
         // Put OnSecurityApplicationResourceAuthorizationConfigurer
-        configurers.put(OnSecurityApplicationResourceAuthorizationConfigurer.class,
-                postProcess(new OnSecurityApplicationResourceAuthorizationConfigurer(this::postProcess)));
+        configurers.put(OnSecurityApplicationAccessTokenAuthorizationConfigurer.class,
+                postProcess(new OnSecurityApplicationAccessTokenAuthorizationConfigurer(this::postProcess)));
+        // Put ApplicationResourceAccessAuthenticationConfigurer
+        configurers.put(ApplicationResourceAccessAuthenticationConfigurer.class,
+                postProcess(new ApplicationResourceAccessAuthenticationConfigurer(this::postProcess)));
         // @formatter:on
         return configurers;
     }

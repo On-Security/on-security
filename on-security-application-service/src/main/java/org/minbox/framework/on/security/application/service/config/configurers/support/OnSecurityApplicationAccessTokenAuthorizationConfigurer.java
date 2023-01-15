@@ -37,8 +37,8 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
  * @see OnSecurityAccessTokenAuthorizationFilter
  * @since 0.0.6
  */
-public class OnSecurityApplicationResourceAuthorizationConfigurer extends AbstractOnSecurityOAuth2Configurer {
-    public OnSecurityApplicationResourceAuthorizationConfigurer(ObjectPostProcessor<Object> objectPostProcessor) {
+public class OnSecurityApplicationAccessTokenAuthorizationConfigurer extends AbstractOnSecurityOAuth2Configurer {
+    public OnSecurityApplicationAccessTokenAuthorizationConfigurer(ObjectPostProcessor<Object> objectPostProcessor) {
         super(objectPostProcessor);
     }
 

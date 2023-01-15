@@ -19,6 +19,7 @@ package org.minbox.framework.on.security.application.service.authentication;
 
 import org.minbox.framework.on.security.application.service.exception.OnSecurityApplicationResourceAuthenticationException;
 import org.minbox.framework.on.security.application.service.web.OnSecurityApplicationResourceAccessFailedResponse;
+import org.minbox.framework.on.security.application.service.web.OnSecurityApplicationResourceAuthorizationFailureHandler;
 import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
