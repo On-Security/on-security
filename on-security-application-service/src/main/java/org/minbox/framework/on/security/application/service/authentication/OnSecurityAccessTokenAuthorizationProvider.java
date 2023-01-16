@@ -1,6 +1,7 @@
 package org.minbox.framework.on.security.application.service.authentication;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.minbox.framework.on.security.application.service.authorization.AccessTokenAuthorization;
 import org.minbox.framework.on.security.application.service.authentication.context.OnSecurityApplicationContext;
 import org.minbox.framework.on.security.application.service.authentication.context.OnSecurityApplicationContextHolder;
 import org.minbox.framework.on.security.application.service.authentication.context.OnSecurityApplicationContextImpl;

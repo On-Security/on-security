@@ -1,6 +1,6 @@
 package org.minbox.framework.on.security.application.service.authentication.context;
 
-import org.minbox.framework.on.security.application.service.authentication.AccessTokenAuthorization;
+import org.minbox.framework.on.security.application.service.authorization.*;
 import org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute;
 import org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource;
 import org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole;
@@ -16,7 +16,7 @@ import java.util.Map;
  * @see UserAuthorizationResource
  * @see UserAuthorizationAttribute
  * @see UserAuthorizationRole
- * @see AccessTokenAuthorization.AccessTokenSession
+ * @see AccessTokenSession
  * @since 0.0.6
  */
 public class OnSecurityApplicationContextImpl implements OnSecurityApplicationContext {
@@ -45,22 +45,22 @@ public class OnSecurityApplicationContextImpl implements OnSecurityApplicationCo
     }
 
     @Override
-    public AccessTokenAuthorization.AccessTokenSession getSession() {
+    public AccessTokenSession getSession() {
         return this.accessTokenAuthorization.getSession();
     }
 
     @Override
-    public List<AccessTokenAuthorization.AuthorizationResource> getUserAuthorizationResource() {
+    public List<AuthorizationResource> getUserAuthorizationResource() {
         return this.accessTokenAuthorization.getUserAuthorizationResource();
     }
 
     @Override
-    public List<AccessTokenAuthorization.AuthorizationAttribute> getUserAuthorizationAttribute() {
+    public List<AuthorizationAttribute> getUserAuthorizationAttribute() {
         return this.accessTokenAuthorization.getUserAuthorizationAttribute();
     }
 
     @Override
-    public List<AccessTokenAuthorization.AuthorizationRole> getUserAuthorizationRole() {
+    public List<AuthorizationRole> getUserAuthorizationRole() {
         return this.accessTokenAuthorization.getUserAuthorizationRole();
     }
 
