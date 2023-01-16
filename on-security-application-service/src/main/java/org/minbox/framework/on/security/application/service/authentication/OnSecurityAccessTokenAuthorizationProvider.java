@@ -1,13 +1,13 @@
 package org.minbox.framework.on.security.application.service.authentication;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.minbox.framework.on.security.application.service.authorization.AccessTokenAuthorization;
 import org.minbox.framework.on.security.application.service.authentication.context.OnSecurityApplicationContext;
 import org.minbox.framework.on.security.application.service.authentication.context.OnSecurityApplicationContextHolder;
 import org.minbox.framework.on.security.application.service.authentication.context.OnSecurityApplicationContextImpl;
 import org.minbox.framework.on.security.application.service.exception.OnSecurityApplicationResourceAuthenticationException;
 import org.minbox.framework.on.security.application.service.exception.ResourceAuthenticationErrorCode;
 import org.minbox.framework.on.security.core.authorization.AbstractOnSecurityAuthenticationProvider;
+import org.minbox.framework.on.security.core.authorization.endpoint.AccessTokenAuthorization;
 import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

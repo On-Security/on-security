@@ -61,12 +61,11 @@ public class SecurityRoleService {
                     if (role == null || role.isDeleted()) {
                         return null;
                     }
-                    return new UserAuthorizationRole(
-                            role.getId(),
-                            role.getName(),
-                            role.getCode(),
-                            role.getDescribe()
-                    );
+                    return UserAuthorizationRole.withRoleId(role.getId())
+                            .roleName(role.getName())
+                            .roleCode(role.getCode())
+                            .roleDescribe(role.getDescribe())
+                            .build();
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());

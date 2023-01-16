@@ -15,9 +15,8 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.authorization.server.oauth2.web;
+package org.minbox.framework.on.security.core.authorization.endpoint;
 
-import org.minbox.framework.on.security.core.authorization.SessionState;
 import org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute;
 import org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource;
 import org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole;
@@ -27,11 +26,9 @@ import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersio
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 令牌所属用户授权访问的响应实体定义
@@ -42,22 +39,22 @@ import java.util.Set;
  * @see org.minbox.framework.on.security.core.authorization.data.attribute.SecurityAttribute
  * @since 0.0.5
  */
-public final class AccessAuthorizationEndpointResponse implements Serializable {
+public final class AccessTokenAuthorization implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private Map<String, Object> user;
-    private Session session;
+    private AccessTokenSession session;
     private List<UserAuthorizationResource> userAuthorizationResource;
     private List<UserAuthorizationAttribute> userAuthorizationAttribute;
     private List<UserAuthorizationRole> userAuthorizationRole;
 
-    private AccessAuthorizationEndpointResponse() {
+    private AccessTokenAuthorization() {
     }
 
     public Map<String, Object> getUser() {
         return user;
     }
 
-    public Session getSession() {
+    public AccessTokenSession getSession() {
         return session;
     }
 
@@ -79,7 +76,7 @@ public final class AccessAuthorizationEndpointResponse implements Serializable {
     }
 
     /**
-     * The {@link AccessAuthorizationEndpointResponse} Builder
+     * The {@link AccessTokenAuthorization} Builder
      */
     public static class Builder implements Serializable {
         private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
@@ -94,7 +91,7 @@ public final class AccessAuthorizationEndpointResponse implements Serializable {
         );
         // @formatter:on
         private SecurityUser securityUser;
-        private Session session;
+        private AccessTokenSession session;
         private List<UserAuthorizationResource> userAuthorizationResource;
         private List<UserAuthorizationAttribute> userAuthorizationAttribute;
         private List<UserAuthorizationRole> userAuthorizationRole;
@@ -103,7 +100,7 @@ public final class AccessAuthorizationEndpointResponse implements Serializable {
             this.securityUser = user;
         }
 
-        public Builder session(Session session) {
+        public Builder session(AccessTokenSession session) {
             this.session = session;
             return this;
         }
@@ -123,8 +120,8 @@ public final class AccessAuthorizationEndpointResponse implements Serializable {
             return this;
         }
 
-        public AccessAuthorizationEndpointResponse build() {
-            AccessAuthorizationEndpointResponse endpointResponse = new AccessAuthorizationEndpointResponse();
+        public AccessTokenAuthorization build() {
+            AccessTokenAuthorization endpointResponse = new AccessTokenAuthorization();
             endpointResponse.user = this.toUserMap();
             endpointResponse.session = this.session;
             endpointResponse.userAuthorizationResource = this.userAuthorizationResource;
@@ -140,39 +137,6 @@ public final class AccessAuthorizationEndpointResponse implements Serializable {
          */
         private Map<String, Object> toUserMap() {
             return MapUtils.objectToMap(this.securityUser, USER_TO_MAP_IGNORE_KEYS);
-        }
-    }
-
-    /**
-     * 会话响应实体
-     */
-    public static class Session implements Serializable {
-        private SessionState state;
-        private LocalDateTime accessTokenIssuedAt;
-        private LocalDateTime accessTokenExpiresAt;
-        private Set<String> accessTokenScopes;
-
-        public Session(SessionState state, LocalDateTime accessTokenIssuedAt, LocalDateTime accessTokenExpiresAt, Set<String> accessTokenScopes) {
-            this.state = state;
-            this.accessTokenIssuedAt = accessTokenIssuedAt;
-            this.accessTokenExpiresAt = accessTokenExpiresAt;
-            this.accessTokenScopes = accessTokenScopes;
-        }
-
-        public SessionState getState() {
-            return state;
-        }
-
-        public LocalDateTime getAccessTokenIssuedAt() {
-            return accessTokenIssuedAt;
-        }
-
-        public LocalDateTime getAccessTokenExpiresAt() {
-            return accessTokenExpiresAt;
-        }
-
-        public Set<String> getAccessTokenScopes() {
-            return accessTokenScopes;
         }
     }
 }

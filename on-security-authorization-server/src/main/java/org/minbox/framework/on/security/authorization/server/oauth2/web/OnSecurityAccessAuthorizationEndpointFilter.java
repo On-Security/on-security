@@ -21,6 +21,7 @@ import org.minbox.framework.on.security.authorization.server.oauth2.authenticati
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityAccessAuthorizationAuthenticationToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityAccessAuthorizationRequestToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.converter.OnSecurityAccessAuthorizationRequestConverter;
+import org.minbox.framework.on.security.core.authorization.endpoint.AccessTokenAuthorization;
 import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -88,7 +89,7 @@ public final class OnSecurityAccessAuthorizationEndpointFilter extends OncePerRe
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
             OnSecurityAccessAuthorizationAuthenticationToken accessAuthorizationAuthenticationToken =
                     (OnSecurityAccessAuthorizationAuthenticationToken) authentication;
-            AccessAuthorizationEndpointResponse endpointResponse = accessAuthorizationAuthenticationToken.toEndpointResponse();
+            AccessTokenAuthorization endpointResponse = accessAuthorizationAuthenticationToken.toEndpointResponse();
             String responseJson = jsonMapper.writeValueAsString(endpointResponse);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON.toString());

@@ -2,7 +2,7 @@ package org.minbox.framework.on.security.application.service.authentication;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.minbox.framework.on.security.application.service.authorization.AccessTokenAuthorization;
+import org.minbox.framework.on.security.core.authorization.endpoint.AccessTokenAuthorization;
 import org.springframework.util.Assert;
 
 import java.util.concurrent.TimeUnit;

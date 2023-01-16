@@ -1,9 +1,10 @@
 package org.minbox.framework.on.security.application.service.authentication.context;
 
-import org.minbox.framework.on.security.application.service.authorization.*;
 import org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute;
 import org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource;
 import org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole;
+import org.minbox.framework.on.security.core.authorization.endpoint.AccessTokenAuthorization;
+import org.minbox.framework.on.security.core.authorization.endpoint.AccessTokenSession;
 
 import java.util.List;
 import java.util.Map;
@@ -13,9 +14,9 @@ import java.util.Map;
  *
  * @author 恒宇少年
  * @see AccessTokenAuthorization
- * @see UserAuthorizationResource
- * @see UserAuthorizationAttribute
- * @see UserAuthorizationRole
+ * @see org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource
+ * @see org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute
+ * @see org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole
  * @see AccessTokenSession
  * @since 0.0.6
  */
@@ -50,17 +51,17 @@ public class OnSecurityApplicationContextImpl implements OnSecurityApplicationCo
     }
 
     @Override
-    public List<AuthorizationResource> getUserAuthorizationResource() {
+    public List<UserAuthorizationResource> getUserAuthorizationResource() {
         return this.accessTokenAuthorization.getUserAuthorizationResource();
     }
 
     @Override
-    public List<AuthorizationAttribute> getUserAuthorizationAttribute() {
+    public List<UserAuthorizationAttribute> getUserAuthorizationAttribute() {
         return this.accessTokenAuthorization.getUserAuthorizationAttribute();
     }
 
     @Override
-    public List<AuthorizationRole> getUserAuthorizationRole() {
+    public List<UserAuthorizationRole> getUserAuthorizationRole() {
         return this.accessTokenAuthorization.getUserAuthorizationRole();
     }
 

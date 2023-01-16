@@ -1,9 +1,9 @@
 package org.minbox.framework.on.security.application.service.authentication.context;
 
-import org.minbox.framework.on.security.application.service.authorization.*;
 import org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute;
 import org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource;
 import org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole;
+import org.minbox.framework.on.security.core.authorization.endpoint.AccessTokenSession;
 
 import java.util.List;
 import java.util.Map;
@@ -13,9 +13,9 @@ import java.util.Map;
  *
  * @author 恒宇少年
  * @see AccessTokenSession
- * @see UserAuthorizationResource
- * @see UserAuthorizationAttribute
- * @see UserAuthorizationRole
+ * @see org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource
+ * @see org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute
+ * @see org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole
  * @since 0.0.6
  */
 public interface OnSecurityApplicationContext {
@@ -44,21 +44,21 @@ public interface OnSecurityApplicationContext {
     /**
      * 获取用户授权的资源列表
      *
-     * @return 用户授权资源 {@link UserAuthorizationResource}
+     * @return 用户授权资源 {@link org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource}
      */
-    List<AuthorizationResource> getUserAuthorizationResource();
+    List<UserAuthorizationResource> getUserAuthorizationResource();
 
     /**
      * 获取用户授权的属性列表
      *
-     * @return 用户授权属性 {@link UserAuthorizationAttribute}
+     * @return 用户授权属性 {@link org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute}
      */
-    List<AuthorizationAttribute> getUserAuthorizationAttribute();
+    List<UserAuthorizationAttribute> getUserAuthorizationAttribute();
 
     /**
      * 获取用户授权的角色列表
      *
-     * @return 用户授权角色 {@link UserAuthorizationRole}
+     * @return 用户授权角色 {@link org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole}
      */
-    List<AuthorizationRole> getUserAuthorizationRole();
+    List<UserAuthorizationRole> getUserAuthorizationRole();
 }

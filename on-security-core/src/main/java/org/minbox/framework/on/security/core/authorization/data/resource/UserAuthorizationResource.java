@@ -20,6 +20,7 @@ package org.minbox.framework.on.security.core.authorization.data.resource;
 import org.minbox.framework.on.security.core.authorization.AuthorizeMatchMethod;
 import org.minbox.framework.on.security.core.authorization.ResourceType;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -38,15 +39,6 @@ public final class UserAuthorizationResource implements Serializable {
     private Set<String> resourceUris;
     private ResourceType resourceType;
     private AuthorizeMatchMethod matchMethod;
-
-    public UserAuthorizationResource(String resourceId, String resourceName, String resourceCode, Set<String> resourceUris, ResourceType resourceType, AuthorizeMatchMethod matchMethod) {
-        this.resourceId = resourceId;
-        this.resourceName = resourceName;
-        this.resourceCode = resourceCode;
-        this.resourceUris = resourceUris;
-        this.resourceType = resourceType;
-        this.matchMethod = matchMethod;
-    }
 
     public String getResourceId() {
         return resourceId;
@@ -70,5 +62,62 @@ public final class UserAuthorizationResource implements Serializable {
 
     public AuthorizeMatchMethod getMatchMethod() {
         return matchMethod;
+    }
+
+    public static Builder withResourceId(String resourceId) {
+        Assert.hasText(resourceId, "resourceId cannot be empty");
+        return new Builder(resourceId);
+    }
+
+    /**
+     * The {@link UserAuthorizationResource} Builder
+     */
+    public static class Builder implements Serializable {
+        private String resourceId;
+        private String resourceName;
+        private String resourceCode;
+        private Set<String> resourceUris;
+        private ResourceType resourceType;
+        private AuthorizeMatchMethod matchMethod;
+
+        public Builder(String resourceId) {
+            this.resourceId = resourceId;
+        }
+
+        public Builder resourceName(String resourceName) {
+            this.resourceName = resourceName;
+            return this;
+        }
+
+        public Builder resourceCode(String resourceCode) {
+            this.resourceCode = resourceCode;
+            return this;
+        }
+
+        public Builder resourceUris(Set<String> resourceUris) {
+            this.resourceUris = resourceUris;
+            return this;
+        }
+
+        public Builder resourceType(ResourceType resourceType) {
+            this.resourceType = resourceType;
+            return this;
+        }
+
+        public Builder matchMethod(AuthorizeMatchMethod matchMethod) {
+            this.matchMethod = matchMethod;
+            return this;
+        }
+
+        public UserAuthorizationResource build() {
+            UserAuthorizationResource authorizationResource = new UserAuthorizationResource();
+            authorizationResource.resourceId = this.resourceId;
+            authorizationResource.resourceName = this.resourceName;
+            authorizationResource.resourceCode = this.resourceCode;
+            authorizationResource.resourceUris = this.resourceUris;
+            authorizationResource.resourceType = this.resourceType;
+            authorizationResource.matchMethod = this.matchMethod;
+            return authorizationResource;
+        }
     }
 }

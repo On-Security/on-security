@@ -18,6 +18,7 @@
 package org.minbox.framework.on.security.core.authorization.data.role;
 
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
 
@@ -34,13 +35,6 @@ public final class UserAuthorizationRole implements Serializable {
     private String roleCode;
     private String roleDescribe;
 
-    public UserAuthorizationRole(String roleId, String roleName, String roleCode, String roleDescribe) {
-        this.roleId = roleId;
-        this.roleName = roleName;
-        this.roleCode = roleCode;
-        this.roleDescribe = roleDescribe;
-    }
-
     public String getRoleId() {
         return roleId;
     }
@@ -55,5 +49,49 @@ public final class UserAuthorizationRole implements Serializable {
 
     public String getRoleDescribe() {
         return roleDescribe;
+    }
+
+    public static Builder withRoleId(String roleId) {
+        Assert.hasText(roleId, "roleId cannot be empty");
+        return new Builder(roleId);
+    }
+
+    /**
+     * The {@link UserAuthorizationRole} Builder
+     */
+    public static class Builder implements Serializable {
+        private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
+        private String roleId;
+        private String roleName;
+        private String roleCode;
+        private String roleDescribe;
+
+        public Builder(String roleId) {
+            this.roleId = roleId;
+        }
+
+        public Builder roleName(String roleName) {
+            this.roleName = roleName;
+            return this;
+        }
+
+        public Builder roleCode(String roleCode) {
+            this.roleCode = roleCode;
+            return this;
+        }
+
+        public Builder roleDescribe(String roleDescribe) {
+            this.roleDescribe = roleDescribe;
+            return this;
+        }
+
+        public UserAuthorizationRole build() {
+            UserAuthorizationRole authorizationRole = new UserAuthorizationRole();
+            authorizationRole.roleId = this.roleId;
+            authorizationRole.roleName = this.roleName;
+            authorizationRole.roleCode = this.roleCode;
+            authorizationRole.roleDescribe = this.roleDescribe;
+            return authorizationRole;
+        }
     }
 }

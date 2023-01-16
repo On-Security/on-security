@@ -103,9 +103,9 @@ public class SecurityResourceAuthorizeAttributeJdbcRepository implements Securit
             // @formatter:off
             SecurityResourceAuthorizeAttribute.Builder builder = SecurityResourceAuthorizeAttribute
                     .withId(rs.getString("id"))
-                    .regionId("region_id")
-                    .resourceId("resource_id")
-                    .attributeId("attribute_id")
+                    .regionId(rs.getString("region_id"))
+                    .resourceId(rs.getString("resource_id"))
+                    .attributeId(rs.getString("attribute_id"))
                     .matchMethod(new AuthorizeMatchMethod(rs.getString("match_method")))
                     .authorizeTime(rs.getTimestamp("authorize_time").toLocalDateTime());
             // @formatter:on
