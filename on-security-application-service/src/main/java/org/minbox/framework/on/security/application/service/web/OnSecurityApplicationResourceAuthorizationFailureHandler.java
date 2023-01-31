@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 应用资源严重失败执行的处理器
+ * 应用资源验证失败执行的处理器
  *
  * @author 恒宇少年
  * @see ApplicationResourceAccessDeniedAuthenticationEntryPoint
