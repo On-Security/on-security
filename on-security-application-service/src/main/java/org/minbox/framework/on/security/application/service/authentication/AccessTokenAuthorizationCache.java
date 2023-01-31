@@ -19,7 +19,10 @@ import java.util.concurrent.TimeUnit;
  * @since 0.0.6
  */
 public final class AccessTokenAuthorizationCache {
-    private static final long DEFAULT_EXPIRE_SECONDS = 60 * 60;
+    /**
+     * 缓存默认过期时间，单位：秒
+     */
+    private static final long DEFAULT_EXPIRE_SECONDS = 60 * 5;
     /**
      * 授权信息缓存
      * <p>
