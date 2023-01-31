@@ -2,7 +2,6 @@ package org.minbox.framework.on.security.application.service.web;
 
 import org.minbox.framework.on.security.application.service.authentication.OnSecurityAccessTokenAuthorizationProvider;
 import org.minbox.framework.on.security.application.service.authentication.OnSecurityAccessTokenAuthorizationToken;
-import org.minbox.framework.on.security.application.service.authentication.OnSecurityApplicationResourceAuthorizationFailureHandler;
 import org.minbox.framework.on.security.application.service.authentication.context.InheritableThreadLocalOnSecurityApplicationContextHolderStrategy;
 import org.minbox.framework.on.security.application.service.authentication.context.OnSecurityApplicationContext;
 import org.minbox.framework.on.security.application.service.authentication.context.OnSecurityApplicationContextHolder;

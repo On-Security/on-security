@@ -22,7 +22,8 @@ import org.minbox.framework.on.security.core.authorization.data.resource.UserAut
 import org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole;
 import org.minbox.framework.on.security.core.authorization.data.session.SecuritySession;
 import org.minbox.framework.on.security.core.authorization.data.user.SecurityUser;
-import org.minbox.framework.on.security.authorization.server.oauth2.web.AccessAuthorizationEndpointResponse;
+import org.minbox.framework.on.security.core.authorization.endpoint.AccessTokenAuthorization;
+import org.minbox.framework.on.security.core.authorization.endpoint.AccessTokenSession;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.util.Assert;
 
@@ -94,20 +95,19 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
     /**
      * 转换成令牌授权端点响应实体
      *
-     * @return {@link AccessAuthorizationEndpointResponse}
+     * @return {@link AccessTokenAuthorization}
      */
-    public AccessAuthorizationEndpointResponse toEndpointResponse() {
+    public AccessTokenAuthorization toEndpointResponse() {
         // @formatter:off
-        AccessAuthorizationEndpointResponse.Session sessionResponse =
-                new AccessAuthorizationEndpointResponse.Session(
-                        this.session.getSessionState(),
-                        this.session.getAccessTokenIssuedAt(),
-                        this.session.getAccessTokenExpiresAt(),
-                        this.session.getAccessTokenScopes()
-                );
-        AccessAuthorizationEndpointResponse.Builder builder =
-                AccessAuthorizationEndpointResponse.withUser(this.user)
-                        .session(sessionResponse)
+        AccessTokenSession accessTokenSession =
+                AccessTokenSession.withIssuedAt(this.session.getAccessTokenIssuedAt())
+                        .state(this.session.getSessionState())
+                        .accessTokenExpiresAt(this.session.getAccessTokenExpiresAt())
+                        .accessTokenScopes(this.session.getAccessTokenScopes())
+                        .build();
+        AccessTokenAuthorization.Builder builder =
+                AccessTokenAuthorization.withUser(this.user)
+                        .session(accessTokenSession)
                         .userAuthorizationResource(this.userAuthorizationResourceList)
                         .userAuthorizationAttribute(this.userAuthorizationAttributeList)
                         .userAuthorizationRole(this.userAuthorizationRoleList);

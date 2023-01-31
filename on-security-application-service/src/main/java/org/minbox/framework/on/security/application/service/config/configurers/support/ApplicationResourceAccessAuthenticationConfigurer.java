@@ -17,45 +17,45 @@
 
 package org.minbox.framework.on.security.application.service.config.configurers.support;
 
-import org.minbox.framework.on.security.application.service.authentication.OnSecurityAccessTokenAuthorizationProvider;
+import org.minbox.framework.on.security.application.service.authentication.ApplicationResourceRoleBasedAccessControlAuthenticationProvider;
+import org.minbox.framework.on.security.application.service.web.ApplicationResourceRoleBasedAccessControlFilter;
 import org.minbox.framework.on.security.application.service.web.OnSecurityAccessTokenAuthorizationFilter;
 import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
 import org.minbox.framework.on.security.core.authorization.util.HttpSecuritySharedObjectUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 
 /**
- * 应用服务资源权限验证配置类
+ * 应用资源访问认证配置类
  * <p>
- * 该配置类会将应用服务的资源访问相关的认证提供者 {@link OnSecurityAccessTokenAuthorizationProvider}、
- * 认证过滤器进行注册{@link OnSecurityAccessTokenAuthorizationFilter}
+ * 该配置类会注册资源访问认证所需要的过滤器{@link ApplicationResourceRoleBasedAccessControlFilter}
+ * 以及认证业务逻辑处理器{@link ApplicationResourceRoleBasedAccessControlAuthenticationProvider}
  *
  * @author 恒宇少年
- * @see OnSecurityAccessTokenAuthorizationProvider
- * @see OnSecurityAccessTokenAuthorizationFilter
- * @since 0.0.6
+ * @see ApplicationResourceRoleBasedAccessControlAuthenticationProvider
+ * @see ApplicationResourceRoleBasedAccessControlFilter
+ * @since 0.0.7
  */
-public class OnSecurityApplicationResourceAuthorizationConfigurer extends AbstractOnSecurityOAuth2Configurer {
-    public OnSecurityApplicationResourceAuthorizationConfigurer(ObjectPostProcessor<Object> objectPostProcessor) {
+public final class ApplicationResourceAccessAuthenticationConfigurer extends AbstractOnSecurityOAuth2Configurer {
+    public ApplicationResourceAccessAuthenticationConfigurer(ObjectPostProcessor<Object> objectPostProcessor) {
         super(objectPostProcessor);
     }
 
     @Override
     public void init(HttpSecurity httpSecurity) {
         // @formatter:off
-        OnSecurityAccessTokenAuthorizationProvider resourceAuthorizationProvider =
-                new OnSecurityAccessTokenAuthorizationProvider(httpSecurity.getSharedObjects());
+        ApplicationResourceRoleBasedAccessControlAuthenticationProvider resourceAccessAuthenticationProvider =
+                new ApplicationResourceRoleBasedAccessControlAuthenticationProvider(httpSecurity.getSharedObjects());
         // @formatter:on
-        httpSecurity.authenticationProvider(resourceAuthorizationProvider);
+        httpSecurity.authenticationProvider(resourceAccessAuthenticationProvider);
     }
 
     @Override
     public void configure(HttpSecurity httpSecurity) {
         AuthenticationManager authenticationManager = HttpSecuritySharedObjectUtils.getAuthenticationManager(httpSecurity);
-        OnSecurityAccessTokenAuthorizationFilter resourceAuthorizationFilter =
-                new OnSecurityAccessTokenAuthorizationFilter(authenticationManager);
-        httpSecurity.addFilterAfter(resourceAuthorizationFilter, BearerTokenAuthenticationFilter.class);
+        ApplicationResourceRoleBasedAccessControlFilter resourceAccessAuthenticationFilter =
+                new ApplicationResourceRoleBasedAccessControlFilter(authenticationManager);
+        httpSecurity.addFilterAfter(resourceAccessAuthenticationFilter, OnSecurityAccessTokenAuthorizationFilter.class);
     }
 }

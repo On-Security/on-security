@@ -7,6 +7,7 @@ import org.minbox.framework.on.security.application.service.authentication.conte
 import org.minbox.framework.on.security.application.service.exception.OnSecurityApplicationResourceAuthenticationException;
 import org.minbox.framework.on.security.application.service.exception.ResourceAuthenticationErrorCode;
 import org.minbox.framework.on.security.core.authorization.AbstractOnSecurityAuthenticationProvider;
+import org.minbox.framework.on.security.core.authorization.endpoint.AccessTokenAuthorization;
 import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

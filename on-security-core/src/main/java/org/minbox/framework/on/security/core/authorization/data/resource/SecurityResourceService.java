@@ -80,14 +80,16 @@ public class SecurityResourceService {
                             .stream()
                             .map(SecurityResourceUri::getUri)
                             .collect(Collectors.toSet());
+
                     // Map UserAuthorizationResource
-                    return new UserAuthorizationResource(
-                            resource.getId(),
-                            resource.getName(),
-                            resource.getCode(),
-                            resourceUriPathSet,
-                            resource.getType(),
-                            authorizeResource.getMatchMethod());
+                    return UserAuthorizationResource
+                            .withResourceId(resource.getId())
+                            .resourceName(resource.getName())
+                            .resourceCode(resource.getCode())
+                            .resourceUris(resourceUriPathSet)
+                            .resourceType(resource.getType())
+                            .matchMethod(authorizeResource.getMatchMethod())
+                            .build();
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
