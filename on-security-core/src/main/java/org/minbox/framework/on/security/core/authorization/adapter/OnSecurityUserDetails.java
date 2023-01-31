@@ -25,6 +25,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -70,7 +71,7 @@ public final class OnSecurityUserDetails implements UserDetails, CredentialsCont
         this.accountNonExpired = accountNonExpired;
         this.credentialsNonExpired = credentialsNonExpired;
         this.accountNonLocked = accountNonLocked;
-        this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
+        this.authorities = !ObjectUtils.isEmpty(authorities) ? Collections.unmodifiableSet(sortAuthorities(authorities)) : null;
     }
 
     @Override
