@@ -1,0 +1,19 @@
+# 服务启动端口号
+server:
+  port: 59528
+spring:
+  # 服务名
+  application:
+    name: on-security-open-api
+  # 数据源配置
+  datasource:
+    url: jdbc:mariadb://127.0.0.1:3306/on_security
+    username: root
+    password: 123456
+    driver-class-name: org.mariadb.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:59527
