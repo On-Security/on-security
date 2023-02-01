@@ -43,7 +43,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class OnSecurityWebConfiguration {
     @Bean
     public SecurityFilterChain onSecurityWebSecurityFilterChain(HttpSecurity http) throws Exception {
-        this.defaultOnSecurityAuthorizationServer(http);
+        this.defaultOnSecurityWebConfig(http);
         // Enable Identity Provider
         OnSecurityIdentityProviderBrokerConfigurer identityProviderBrokerConfigurer = new OnSecurityIdentityProviderBrokerConfigurer();
         http.apply(identityProviderBrokerConfigurer);
@@ -58,7 +58,7 @@ public class OnSecurityWebConfiguration {
      * @param http {@link HttpSecurity}
      * @throws Exception
      */
-    protected void defaultOnSecurityAuthorizationServer(HttpSecurity http) throws Exception {
+    protected void defaultOnSecurityWebConfig(HttpSecurity http) throws Exception {
         // @formatter:off
         http
                 .authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())

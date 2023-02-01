@@ -19,6 +19,8 @@ package org.minbox.framework.on.security.console.configuration;
 
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configuration.OnSecurityWebConfiguration;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * 控制台服务Web安全配置类
@@ -28,5 +30,9 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class ConsoleServiceWebSecurityConfiguration extends OnSecurityWebConfiguration {
-    //...
+    @Override
+    public SecurityFilterChain onSecurityWebSecurityFilterChain(HttpSecurity http) throws Exception {
+        this.defaultOnSecurityWebConfig(http);
+        return http.build();
+    }
 }

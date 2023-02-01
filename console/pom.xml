@@ -20,17 +20,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>on-security-dependencies</artifactId>
+        <artifactId>on-security-bom</artifactId>
         <groupId>org.minbox.framework</groupId>
         <version>${revision}</version>
-        <relativePath>../dependencies</relativePath>
+        <relativePath>../bom</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>console ${project.version}</name>
     <url>https://github.com/On-Security/on-security</url>
     <artifactId>on-security-console</artifactId>
     <description>
-        On-Security控制台，提供管理端业务管理。
+        On-Security控制台，默认集成授权认证服务器，提供管理端业务管理。
     </description>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -69,10 +69,6 @@
             <groupId>org.minbox.framework</groupId>
             <artifactId>on-security-authorization-server</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.minbox.framework</groupId>
-            <artifactId>on-security-open</artifactId>
-        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -80,13 +76,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.minbox.framework</groupId>
-                <artifactId>on-security-bom</artifactId>
-                <version>${project.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

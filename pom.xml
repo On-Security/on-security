@@ -34,7 +34,7 @@
     <name>On-Security ${project.version}</name>
     <url>https://github.com/On-Security/on-security</url>
     <modules>
-        <module>dependencies</module>
+        <module>common-dependencies</module>
         <module>bom</module>
         <module>core</module>
         <module>console</module>
