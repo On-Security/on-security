@@ -20,6 +20,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <inceptionYear>2022</inceptionYear>
     <parent>
         <groupId>org.minbox.framework</groupId>
         <artifactId>minbox-parent</artifactId>
@@ -30,19 +31,37 @@
     <artifactId>on-security</artifactId>
     <packaging>pom</packaging>
     <version>${revision}</version>
+    <name>On-Security ${project.version}</name>
+    <url>https://github.com/On-Security/on-security</url>
     <modules>
-        <module>on-security-dependencies</module>
-        <module>on-security-bom</module>
-        <module>on-security-core</module>
-        <module>on-security-console</module>
-        <module>on-security-open</module>
-        <module>on-security-authorization-server</module>
-        <module>on-security-federal-identity</module>
-        <module>on-security-application-service</module>
+        <module>dependencies</module>
+        <module>bom</module>
+        <module>core</module>
+        <module>console</module>
+        <module>open-api</module>
+        <module>authorization-server</module>
+        <module>federal-identity</module>
+        <module>application-service</module>
     </modules>
     <description>
         基于Spring Security编写，支持OpenID Connect 1.0、OAuth 2.1协议规范的统一安全认证、SSO单点登录框架。
     </description>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <organization>
+        <name>On-Security</name>
+        <url>https://github.com/On-Security</url>
+    </organization>
+
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/On-Security/on-security/issues</url>
+    </issueManagement>
     <properties>
         <revision>0.0.7-SNAPSHOT</revision>
         <maven.compiler.source>17</maven.compiler.source>
@@ -65,6 +84,7 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>${maven.gpg.plugin.version}</version>
                 <configuration>
