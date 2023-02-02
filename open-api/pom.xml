@@ -28,9 +28,9 @@
     <modelVersion>4.0.0</modelVersion>
     <name>open-api ${project.version}</name>
     <url>https://github.com/On-Security/on-security</url>
-    <artifactId>on-security-open</artifactId>
+    <artifactId>on-security-open-api</artifactId>
     <description>
-        On-Security开放接口（OpenApi）模块。
+        On-Security开放接口（OpenApi）模块，对外开放，用于管理终端用户（End User）的相关数据，如：登录、登出、个人资料、资源管理等。
     </description>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
