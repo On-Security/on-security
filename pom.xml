@@ -42,6 +42,7 @@
         <module>authorization-server</module>
         <module>federal-identity</module>
         <module>application-service</module>
+        <module>manage-api</module>
     </modules>
     <description>
         基于Spring Security编写，支持OpenID Connect 1.0、OAuth 2.1协议规范的统一安全认证、SSO单点登录框架。
