@@ -23,9 +23,9 @@ import org.minbox.framework.on.security.core.authorization.data.application.conv
 import org.minbox.framework.on.security.core.authorization.data.application.converter.SecurityApplicationToRegisteredClientConverter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.Assert;
@@ -52,7 +52,7 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
      */
     public static final String BEAN_NAME = "jdbcOnSecurityRegisteredClientRepository";
     private static final String DEFAULT_SECURITY_REGION_ID = "default";
-    private DataSourceTransactionManager dataSourceTransactionManager;
+    private PlatformTransactionManager platformTransactionManager;
     private Converter<RegisteredClient, SecurityApplication> registeredToSecurityClientConverter;
     private Converter<SecurityApplication, RegisteredClient> securityToRegisteredClientConverter;
     private SecurityApplicationRepository clientRepository;
@@ -61,10 +61,10 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
     private SecurityApplicationRedirectUriRepository clientRedirectUriRepository;
     private SecurityApplicationAuthenticationRepository clientAuthenticationRepository;
 
-    public JdbcOnSecurityRegisteredClientRepository(JdbcOperations jdbcOperations, DataSourceTransactionManager dataSourceTransactionManager) {
+    public JdbcOnSecurityRegisteredClientRepository(JdbcOperations jdbcOperations, PlatformTransactionManager platformTransactionManager) {
         Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
-        Assert.notNull(dataSourceTransactionManager, "dataSourceTransactionManager cannot be null");
-        this.dataSourceTransactionManager = dataSourceTransactionManager;
+        Assert.notNull(platformTransactionManager, "platformTransactionManager cannot be null");
+        this.platformTransactionManager = platformTransactionManager;
         this.registeredToSecurityClientConverter = new RegisteredToSecurityApplicationConverter();
         this.securityToRegisteredClientConverter = new SecurityApplicationToRegisteredClientConverter();
         this.clientRepository = new SecurityApplicationJdbcRepository(jdbcOperations);
@@ -81,7 +81,7 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
                 .regionId(DEFAULT_SECURITY_REGION_ID) // use default regionId
                 .protocol(ClientProtocol.OpenID_Connect_1_0)
                 .build();
-        TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(new DefaultTransactionDefinition());
+        TransactionStatus transactionStatus = this.platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
             // Save client
             clientRepository.save(securityApplication);
@@ -105,9 +105,9 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
                     clientRedirectUriRepository.save(redirectUri);
                 }
             }
-            this.dataSourceTransactionManager.commit(transactionStatus);
+            this.platformTransactionManager.commit(transactionStatus);
         } catch (Exception e) {
-            this.dataSourceTransactionManager.rollback(transactionStatus);
+            this.platformTransactionManager.rollback(transactionStatus);
             throw e;
         }
     }
