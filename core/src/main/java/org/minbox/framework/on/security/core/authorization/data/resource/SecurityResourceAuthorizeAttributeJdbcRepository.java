@@ -17,17 +17,13 @@
 
 package org.minbox.framework.on.security.core.authorization.data.resource;
 
-import org.minbox.framework.on.security.core.authorization.AuthorizeMatchMethod;
-import org.springframework.jdbc.core.*;
-import org.springframework.util.Assert;
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
+import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
+import org.springframework.jdbc.core.JdbcOperations;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * 资源授权属性JDBC数据存储库
@@ -35,97 +31,15 @@ import java.util.function.Function;
  * @author 恒宇少年
  * @since 0.0.4
  */
-public class SecurityResourceAuthorizeAttributeJdbcRepository implements SecurityResourceAuthorizeAttributeRepository {
-    // @formatter:off
-    private static final String COLUMN_NAMES = "id, "
-            + "region_id, "
-            + "resource_id, "
-            + "attribute_id, "
-            + "match_method, "
-            + "authorize_time";
-    // @formatter:on
-    private static final String TABLE_NAME = "security_resource_authorize_attributes";
-    private static final String ID_FILTER = "id = ?";
-    private static final String RESOURCE_ID_FILTER = "resource_id = ?";
-    private static final String SELECT_ALL_COLUMNS_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
-    // @formatter:off
-    private static final String INSERT_SQL = "INSERT INTO " + TABLE_NAME
-            + "(" + COLUMN_NAMES + ") VALUES (?, ?, ?, ?, ?, ?)";
-    // @formatter:on
-    private static final String REMOVE_SQL = "DELETE FROM " + TABLE_NAME + " WHERE ";
-    private JdbcOperations jdbcOperations;
-    private RowMapper<SecurityResourceAuthorizeAttribute> resourceAuthorizeAttributeRowMapper;
-    private Function<SecurityResourceAuthorizeAttribute, List<SqlParameterValue>> resourceAuthorizeAttributeParametersMapper;
-
+public class SecurityResourceAuthorizeAttributeJdbcRepository extends OnSecurityBaseJdbcRepositorySupport<SecurityResourceAuthorizeAttribute, String>
+        implements SecurityResourceAuthorizeAttributeRepository {
     public SecurityResourceAuthorizeAttributeJdbcRepository(JdbcOperations jdbcOperations) {
-        Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
-        this.jdbcOperations = jdbcOperations;
-        this.resourceAuthorizeAttributeRowMapper = new SecurityResourceAuthorizeAttributeRowMapper();
-        this.resourceAuthorizeAttributeParametersMapper = new SecurityResourceAuthorizeAttributeParameterMapper();
-    }
-
-    @Override
-    public void insert(SecurityResourceAuthorizeAttribute resourceAuthorizeAttribute) {
-        List<SqlParameterValue> parameters = this.resourceAuthorizeAttributeParametersMapper.apply(resourceAuthorizeAttribute);
-        PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
-        this.jdbcOperations.update(INSERT_SQL, pss);
+        super(OnSecurityTables.SecurityResourceAuthorizeAttributes, jdbcOperations);
     }
 
     @Override
     public List<SecurityResourceAuthorizeAttribute> findByResourceId(String resourceId) {
-        Assert.hasText(resourceId, "resourceId cannot be empty");
-        return this.findListBy(RESOURCE_ID_FILTER, resourceId);
-    }
-
-    @Override
-    public void removeById(String id) {
-        PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(new SqlParameterValue[]{
-                new SqlParameterValue(Types.VARCHAR, id)
-        });
-        this.jdbcOperations.update(REMOVE_SQL + ID_FILTER, pss);
-    }
-
-    @Override
-    public void removeByResourceId(String resourceId) {
-        PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(new SqlParameterValue[]{
-                new SqlParameterValue(Types.VARCHAR, resourceId)
-        });
-        this.jdbcOperations.update(REMOVE_SQL + RESOURCE_ID_FILTER, pss);
-    }
-
-    private List<SecurityResourceAuthorizeAttribute> findListBy(String filter, Object... args) {
-        return this.jdbcOperations.query(SELECT_ALL_COLUMNS_SQL + filter, this.resourceAuthorizeAttributeRowMapper, args);
-    }
-
-    public static class SecurityResourceAuthorizeAttributeRowMapper implements RowMapper<SecurityResourceAuthorizeAttribute> {
-        @Override
-        public SecurityResourceAuthorizeAttribute mapRow(ResultSet rs, int rowNum) throws SQLException {
-            // @formatter:off
-            SecurityResourceAuthorizeAttribute.Builder builder = SecurityResourceAuthorizeAttribute
-                    .withId(rs.getString("id"))
-                    .regionId(rs.getString("region_id"))
-                    .resourceId(rs.getString("resource_id"))
-                    .attributeId(rs.getString("attribute_id"))
-                    .matchMethod(new AuthorizeMatchMethod(rs.getString("match_method")))
-                    .authorizeTime(rs.getTimestamp("authorize_time").toLocalDateTime());
-            // @formatter:on
-            return builder.build();
-        }
-    }
-
-    public static class SecurityResourceAuthorizeAttributeParameterMapper implements Function<SecurityResourceAuthorizeAttribute, List<SqlParameterValue>> {
-        @Override
-        public List<SqlParameterValue> apply(SecurityResourceAuthorizeAttribute resourceAuthorizeAttribute) {
-            // @formatter:off
-            return Arrays.asList(
-                    new SqlParameterValue(Types.VARCHAR, resourceAuthorizeAttribute.getId()),
-                    new SqlParameterValue(Types.VARCHAR, resourceAuthorizeAttribute.getRegionId()),
-                    new SqlParameterValue(Types.VARCHAR, resourceAuthorizeAttribute.getResourceId()),
-                    new SqlParameterValue(Types.VARCHAR, resourceAuthorizeAttribute.getAttributeId()),
-                    new SqlParameterValue(Types.VARCHAR, resourceAuthorizeAttribute.getMatchMethod().getValue()),
-                    new SqlParameterValue(Types.VARCHAR, Timestamp.valueOf(resourceAuthorizeAttribute.getAuthorizeTime()))
-            );
-            // @formatter:on
-        }
+        Condition resourceIdCondition = Condition.withColumn(OnSecurityColumnName.ResourceId, resourceId).build();
+        return this.select(resourceIdCondition);
     }
 }

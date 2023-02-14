@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.role;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 import java.util.List;
 
 /**
@@ -25,15 +27,7 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecurityRoleRepository {
-    /**
-     * 根据角色ID查询角色基本信息
-     *
-     * @param id {@link SecurityRole#getId()} 角色ID
-     * @return {@link SecurityRole} 角色基本信息对象实例
-     */
-    SecurityRole findById(String id);
-
+public interface SecurityRoleRepository extends OnSecurityBaseJdbcRepository<SecurityRole, String> {
     /**
      * 根据角色编号集合查询多个角色
      *

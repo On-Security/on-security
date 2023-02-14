@@ -17,21 +17,27 @@
 
 package org.minbox.framework.on.security.core.authorization.jdbc.mapper.type.support;
 
+import org.minbox.framework.on.security.core.authorization.SignatureAlgorithm;
 import org.minbox.framework.on.security.core.authorization.jdbc.mapper.type.TypeMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 /**
- * 获取{@link java.sql.Types#TIMESTAMP}类型的列值
+ * {@link SignatureAlgorithm}列值转换映射器
  *
  * @author 恒宇少年
  * @since 0.0.8
  */
-public class TimestampTypeMapper implements TypeMapper<Timestamp> {
+public class SignatureAlgorithmTypeMapper implements TypeMapper<SignatureAlgorithm, String> {
     @Override
-    public Timestamp accept(ResultSet rs, String columnName) throws SQLException {
-        return rs.getTimestamp(columnName);
+    public String toColumn(SignatureAlgorithm originalValue, String columnName) {
+        return originalValue != null ? originalValue.getValue() : null;
+    }
+
+    @Override
+    public SignatureAlgorithm fromColumn(ResultSet rs, String columnName) throws SQLException {
+        String columnValue = rs.getString(columnName);
+        return columnValue != null ? new SignatureAlgorithm(columnValue) : null;
     }
 }

@@ -17,18 +17,13 @@
 
 package org.minbox.framework.on.security.core.authorization.data.region;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 /**
  * 安全域数据存储库
  *
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecurityRegionRepository {
-    /**
-     * 根据安全域ID查询安全域
-     *
-     * @param id 安全域ID {@link SecurityRegion#getId()}
-     * @return 安全域实例 {@link SecurityRegion}
-     */
-    SecurityRegion findById(String id);
+public interface SecurityRegionRepository extends OnSecurityBaseJdbcRepository<SecurityRegion, String> {
 }

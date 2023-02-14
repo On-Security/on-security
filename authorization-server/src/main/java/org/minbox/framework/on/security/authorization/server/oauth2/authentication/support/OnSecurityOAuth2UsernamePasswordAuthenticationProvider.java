@@ -133,7 +133,7 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
                                 ", did not authorize application: " + applicationId + ".");
                 // @formatter:on
             }
-            SecurityRegion securityRegion = regionRepository.findById(securityUser.getRegionId());
+            SecurityRegion securityRegion = regionRepository.selectOne(securityUser.getRegionId());
             if (securityRegion == null || !securityRegion.isEnabled() || securityRegion.isDeleted()) {
                 //@formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_REGION,

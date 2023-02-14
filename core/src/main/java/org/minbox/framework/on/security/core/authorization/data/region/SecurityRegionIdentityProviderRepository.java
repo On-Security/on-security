@@ -17,13 +17,15 @@
 
 package org.minbox.framework.on.security.core.authorization.data.region;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 /**
  * 安全域下身份供应商配置参数数据接口
  *
  * @author 恒宇少年
  * @since 0.0.2
  */
-public interface SecurityRegionIdentityProviderRepository {
+public interface SecurityRegionIdentityProviderRepository extends OnSecurityBaseJdbcRepository<SecurityRegionIdentityProvider, String> {
     /**
      * 根据唯一注册ID查询安全身份提供商配置参数
      *

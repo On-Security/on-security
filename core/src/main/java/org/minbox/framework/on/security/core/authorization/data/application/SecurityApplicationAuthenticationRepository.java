@@ -17,13 +17,15 @@
 
 package org.minbox.framework.on.security.core.authorization.data.application;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 /**
  * 客户端认证数据存储库接口
  *
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecurityApplicationAuthenticationRepository {
+public interface SecurityApplicationAuthenticationRepository extends OnSecurityBaseJdbcRepository<SecurityApplicationAuthentication, String> {
     /**
      * 存储客户端认证信息
      * <p>
@@ -34,18 +36,10 @@ public interface SecurityApplicationAuthenticationRepository {
     void save(SecurityApplicationAuthentication clientAuthentication);
 
     /**
-     * 根据{@link SecurityApplicationAuthentication#getId()}查询客户端认证信息
-     *
-     * @param id {@link SecurityApplicationAuthentication#getId()}
-     * @return 客户端认证信息对象实例 {@link SecurityApplicationAuthentication}
-     */
-    SecurityApplicationAuthentication findById(String id);
-
-    /**
      * 根据{@link SecurityApplication#getId()}查询客户端认证信息
      *
      * @param applicationId 应用ID {@link SecurityApplicationAuthentication#getApplicationId()}
      * @return 客户端认证信息对象实例 {@link SecurityApplicationAuthentication}
      */
-    SecurityApplicationAuthentication findByClientId(String applicationId);
+    SecurityApplicationAuthentication findByApplicationId(String applicationId);
 }

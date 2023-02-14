@@ -17,7 +17,7 @@
 
 package org.minbox.framework.on.security.core.authorization.data.user;
 
-import org.minbox.framework.on.security.core.authorization.data.attribute.SecurityAttribute;
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
 
 import java.util.List;
 
@@ -26,13 +26,7 @@ import java.util.List;
  *
  * @author 恒宇少年
  */
-public interface SecurityUserAuthorizeAttributeRepository {
-    /**
-     * 新增用户与属性的授权关系
-     *
-     * @param userAuthorizeAttribute {@link SecurityUserAuthorizeAttribute}
-     */
-    void insert(SecurityUserAuthorizeAttribute userAuthorizeAttribute);
+public interface SecurityUserAuthorizeAttributeRepository extends OnSecurityBaseJdbcRepository<SecurityUserAuthorizeAttribute, String> {
 
     /**
      * 查询用户授权的属性ID列表
@@ -41,12 +35,4 @@ public interface SecurityUserAuthorizeAttributeRepository {
      * @return 用户授权的属性关系实例列表 {@link SecurityUserAuthorizeAttribute}
      */
     List<SecurityUserAuthorizeAttribute> findByUserId(String userId);
-
-    /**
-     * 查询属性已被授权的用户ID列表
-     *
-     * @param attributeId 属性ID {@link SecurityAttribute#getId()}
-     * @return 属性授权的用户关系实例列表 {@link SecurityUserAuthorizeAttribute}
-     */
-    List<SecurityUserAuthorizeAttribute> findByAttributeId(String attributeId);
 }

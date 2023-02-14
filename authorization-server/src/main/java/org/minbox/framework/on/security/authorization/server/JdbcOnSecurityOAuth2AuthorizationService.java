@@ -71,7 +71,7 @@ public class JdbcOnSecurityOAuth2AuthorizationService implements OAuth2Authoriza
     public void save(OAuth2Authorization authorization) {
         SecuritySession securitySession = oAuth2AuthorizationToSecuritySessionConverter.convert(authorization);
         SecuritySession.Builder builder = SecuritySession.with(securitySession);
-        SecurityApplicationAuthentication clientAuthentication = clientAuthenticationRepository.findByClientId(securitySession.getApplicationId());
+        SecurityApplicationAuthentication clientAuthentication = clientAuthenticationRepository.findByApplicationId(securitySession.getApplicationId());
         LocalDateTime issuedAt = LocalDateTime.now();
         // set access token expire time
         // authorization_code || password || client_credentials
@@ -101,13 +101,13 @@ public class JdbcOnSecurityOAuth2AuthorizationService implements OAuth2Authoriza
 
     @Override
     public void remove(OAuth2Authorization authorization) {
-        sessionRepository.removeById(authorization.getId());
+        sessionRepository.delete(authorization.getId());
     }
 
     @Override
     public OAuth2Authorization findById(String id) {
         Assert.hasText(id, "id cannot be empty");
-        SecuritySession securitySession = sessionRepository.findById(id);
+        SecuritySession securitySession = sessionRepository.selectOne(id);
         Assert.notNull(securitySession, "Session ID: " + id + ", no data retrieved");
         return securitySessionToOAuth2AuthorizationConverter.convert(securitySession);
     }

@@ -17,6 +17,7 @@
 
 package org.minbox.framework.on.security.core.authorization.data.session;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 
 /**
@@ -25,7 +26,7 @@ import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecuritySessionRepository {
+public interface SecuritySessionRepository extends OnSecurityBaseJdbcRepository<SecuritySession, String> {
     /**
      * 保存会话
      * <p>
@@ -34,21 +35,6 @@ public interface SecuritySessionRepository {
      * @param session 会话实例 {@link SecuritySession}
      */
     void save(SecuritySession session);
-
-    /**
-     * 删除会话
-     *
-     * @param sessionId 会话ID {@link SecuritySession#getId()}
-     */
-    void removeById(String sessionId);
-
-    /**
-     * 根据会话ID查询
-     *
-     * @param id 会话ID {@link SecuritySession#getId()}
-     * @return 会话实例 {@link SecuritySession}
-     */
-    SecuritySession findById(String id);
 
     /**
      * 根据会话令牌查询

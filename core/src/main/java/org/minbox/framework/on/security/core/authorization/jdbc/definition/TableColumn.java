@@ -17,6 +17,14 @@
 
 package org.minbox.framework.on.security.core.authorization.jdbc.definition;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.mapper.type.TypeMapper;
+import org.minbox.framework.on.security.core.authorization.jdbc.mapper.type.TypeMappers;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.time.LocalDateTime;
+
 /**
  * 数据库表中单个列定义
  *
@@ -24,72 +32,159 @@ package org.minbox.framework.on.security.core.authorization.jdbc.definition;
  * @since 0.0.8
  */
 public class TableColumn {
-    private OnSecurityColumns column;
+    private OnSecurityColumnName column;
     private boolean pk;
     private boolean insertable;
     private boolean updatable;
+    private int sqlType;
+    private TypeMapper typeMapper;
 
-    private TableColumn(OnSecurityColumns column) {
+    private TableColumn(OnSecurityColumnName column) {
         this(column, true, true);
     }
 
-    private TableColumn(OnSecurityColumns column, boolean insertable, boolean updatable) {
+    private TableColumn(OnSecurityColumnName column, boolean insertable, boolean updatable) {
         this.column = column;
         this.insertable = insertable;
         this.updatable = updatable;
+        this.sqlType = Types.VARCHAR;
+        this.typeMapper = TypeMappers.STRING;
     }
 
-    public static TableColumn build(OnSecurityColumns onSecurityColumns) {
-        return new TableColumn(onSecurityColumns);
+    public static TableColumn withColumnName(OnSecurityColumnName column) {
+        return new TableColumn(column);
     }
 
+    /**
+     * 配置该列为主键
+     *
+     * @return {@link TableColumn} 本类当前对象实例
+     */
     public TableColumn primaryKey() {
         this.pk = true;
+        this.updatable = false;
         return this;
     }
 
+    /**
+     * 配置该列为布尔类型的值
+     *
+     * @return {@link TableColumn} 本类当前对象实例
+     */
+    public TableColumn booleanValue() {
+        this.sqlType = Types.BOOLEAN;
+        this.typeMapper = TypeMappers.BOOLEAN;
+        return this;
+    }
+
+    /**
+     * 配置该列为整型类型的值
+     *
+     * @return {@link TableColumn} 本类当前对象实例
+     */
+    public TableColumn intValue() {
+        this.sqlType = Types.INTEGER;
+        this.typeMapper = TypeMappers.INTEGER;
+        return this;
+    }
+
+    /**
+     * 配置该列为{@link LocalDateTime}类型的值
+     *
+     * @return {@link TableColumn} 本类当前对象实例
+     */
+    public TableColumn localDateTimeValue() {
+        this.sqlType = Types.TIMESTAMP;
+        this.typeMapper = TypeMappers.LOCAL_DATE_TIME;
+        return this;
+    }
+
+    /**
+     * 配置该列是否参与insert
+     *
+     * @param insertable 配置为true时表示参与insert
+     * @return {@link TableColumn} 本类当前对象实例
+     */
     public TableColumn insertable(boolean insertable) {
         this.insertable = insertable;
         return this;
     }
 
+    /**
+     * 配置该列不参与insert也不参与update
+     *
+     * @return {@link TableColumn} 本类当前对象实例
+     */
+    public TableColumn notOperate() {
+        this.insertable = false;
+        this.updatable = false;
+        return this;
+    }
+
+    /**
+     * 配置该列是否参与update
+     *
+     * @param updatable 配置为true时表示参与update
+     * @return {@link TableColumn} 本类当前对象实例
+     */
     public TableColumn updatable(boolean updatable) {
         this.updatable = updatable;
         return this;
     }
 
     /**
-     * 获取列信息
+     * 配置该列的SQL类型
      *
-     * @return {@link OnSecurityColumns}
+     * @param sqlType SqlType
+     * @return {@link TableColumn} 本类当前对象实例
+     * @see Types
      */
-    public OnSecurityColumns getColumn() {
-        return column;
+    public TableColumn sqlType(int sqlType) {
+        this.sqlType = sqlType;
+        return this;
     }
 
     /**
-     * 是否为主键
+     * 配置该列使用的类型转换映射器
+     *
+     * @param typeMapper {@link TypeMapper} 对象实例
+     * @return {@link TableColumn} 本类当前对象实例
      */
+    public TableColumn typeMapper(TypeMapper typeMapper) {
+        this.typeMapper = typeMapper;
+        return this;
+    }
+
+    public OnSecurityColumnName getColumnName() {
+        return column;
+    }
+
     public boolean isPk() {
         return pk;
     }
 
-    /**
-     * 是否参与insert
-     *
-     * @return 返回true时表示参与insert
-     */
     public boolean isInsertable() {
         return insertable;
     }
 
-    /**
-     * 是否参与update
-     *
-     * @return 返回true时表示参与update
-     */
     public boolean isUpdatable() {
         return updatable;
+    }
+
+    public TypeMapper getTypeMapper() {
+        return typeMapper;
+    }
+
+    public int getSqlType() {
+        return sqlType;
+    }
+
+    public Object toColumnValue(Object originalValue) {
+        return this.typeMapper.toColumn(originalValue, this.getColumnName().getName());
+    }
+
+    public Object fromColumnValue(ResultSet rs, String columnName) throws SQLException {
+        return this.typeMapper.fromColumn(rs, columnName);
     }
 
     @Override

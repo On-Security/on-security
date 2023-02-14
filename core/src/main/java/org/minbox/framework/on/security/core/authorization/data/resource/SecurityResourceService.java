@@ -68,7 +68,7 @@ public class SecurityResourceService {
         List<UserAuthorizationResource> userAuthorizationResourceList = userRoleAuthorizeResourceList
                 .stream()
                 .map(authorizeResource -> {
-                    SecurityResource resource = resourceRepository.findById(authorizeResource.getResourceId());
+                    SecurityResource resource = resourceRepository.selectOne(authorizeResource.getResourceId());
                     if (resource == null || resource.isDeleted()) {
                         return null;
                     }

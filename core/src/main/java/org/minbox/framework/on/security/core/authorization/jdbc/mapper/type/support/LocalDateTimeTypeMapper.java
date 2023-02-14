@@ -30,9 +30,14 @@ import java.time.LocalDateTime;
  * @author 恒宇少年
  * @since 0.0.8
  */
-public class LocalDateTimeTypeMapper implements TypeMapper<LocalDateTime> {
+public class LocalDateTimeTypeMapper implements TypeMapper<LocalDateTime, Timestamp> {
     @Override
-    public LocalDateTime accept(ResultSet rs, String columnName) throws SQLException {
+    public Timestamp toColumn(LocalDateTime originalValue, String columnName) {
+        return originalValue != null ? Timestamp.valueOf(originalValue) : null;
+    }
+
+    @Override
+    public LocalDateTime fromColumn(ResultSet rs, String columnName) throws SQLException {
         Timestamp timestamp = rs.getTimestamp(columnName);
         return timestamp != null ? timestamp.toLocalDateTime() : null;
     }

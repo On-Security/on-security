@@ -17,7 +17,7 @@
 
 package org.minbox.framework.on.security.core.authorization.jdbc.sql;
 
-import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumns;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.operator.SqlComparisonOperator;
 import org.springframework.util.Assert;
 
@@ -40,8 +40,8 @@ public final class Condition {
         return operator;
     }
 
-    public OnSecurityColumns getColumn() {
-        return columnValue.getColumn();
+    public OnSecurityColumnName getColumnName() {
+        return columnValue.getColumnName();
     }
 
     public Object getValue() {
@@ -49,13 +49,13 @@ public final class Condition {
     }
 
     public String getSql() {
-        return String.format(SQL_FORMAT, this.getColumn().getName(), this.operator.getValue());
+        return String.format(SQL_FORMAT, this.getColumnName().getName(), this.operator.getValue());
     }
 
-    public static Builder withColumn(OnSecurityColumns column, Object value) {
-        Assert.notNull(column, "The column cannot be null");
+    public static Builder withColumn(OnSecurityColumnName columnName, Object value) {
+        Assert.notNull(columnName, "The column cannot be null");
         Assert.notNull(value, "value cannot be null");
-        return new Builder(column, value, SqlComparisonOperator.EqualTo);
+        return new Builder(columnName, value, SqlComparisonOperator.EqualTo);
     }
 
     /**
@@ -65,9 +65,9 @@ public final class Condition {
         private SqlComparisonOperator operator;
         private ColumnValue columnValue;
 
-        public Builder(OnSecurityColumns column, Object value, SqlComparisonOperator operator) {
+        public Builder(OnSecurityColumnName columnName, Object value, SqlComparisonOperator operator) {
             this.operator = operator;
-            this.columnValue = ColumnValue.with(column, value).build();
+            this.columnValue = ColumnValue.with(columnName, value).build();
         }
 
         public Builder operator(SqlComparisonOperator operator) {

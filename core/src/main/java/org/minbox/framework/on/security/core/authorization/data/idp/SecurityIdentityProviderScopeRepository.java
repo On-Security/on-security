@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.idp;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 import java.util.List;
 
 /**
@@ -25,14 +27,7 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.2
  */
-public interface SecurityIdentityProviderScopeRepository {
-    /**
-     * 根据ID查询身份提供商授权范围
-     *
-     * @param id {@link SecurityIdentityProviderScope#getId()}
-     * @return {@link SecurityIdentityProviderScope}
-     */
-    SecurityIdentityProviderScope findById(String id);
+public interface SecurityIdentityProviderScopeRepository extends OnSecurityBaseJdbcRepository<SecurityIdentityProviderScope, String> {
 
     /**
      * 根据身份提供商ID查询授权范围列表

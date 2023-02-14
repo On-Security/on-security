@@ -17,8 +17,9 @@
 
 package org.minbox.framework.on.security.core.authorization.data.user;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.util.Assert;
 
 /**
  * 用户登录日志数据存储库JDBC实现类
@@ -26,11 +27,9 @@ import org.springframework.util.Assert;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityUserLoginLogJdbcRepository implements SecurityUserLoginLogRepository {
-    private JdbcOperations jdbcOperations;
-
+public class SecurityUserLoginLogJdbcRepository extends OnSecurityBaseJdbcRepositorySupport<SecurityUserLoginLog, String>
+        implements SecurityUserLoginLogRepository {
     public SecurityUserLoginLogJdbcRepository(JdbcOperations jdbcOperations) {
-        Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
-        this.jdbcOperations = jdbcOperations;
+        super(OnSecurityTables.SecurityUserLoginLog, jdbcOperations);
     }
 }

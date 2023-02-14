@@ -22,6 +22,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,7 @@ public class Table {
     private static final String QUERY_SQL_STENCIL = "select %s from %s" + DEFAULT_FILTER;
     private String tableName;
     private TableColumn[] columnArray;
+    private Map<OnSecurityColumnName, TableColumn> tableColumnMap;
 
     private Table(String tableName) {
         this.tableName = tableName;
@@ -56,6 +58,7 @@ public class Table {
     public Table columns(TableColumn... columns) {
         Assert.notEmpty(columns, "Table columns cannot be empty.");
         this.columnArray = columns;
+        this.tableColumnMap = Arrays.stream(columns).collect(Collectors.toMap(TableColumn::getColumnName, v -> v));
         return this;
     }
 
@@ -70,6 +73,14 @@ public class Table {
                         .filter(tableColumn -> tableColumn.isPk()).findFirst();
         // @formatter:on
         return optional.isPresent() ? optional.get() : null;
+    }
+
+    public boolean containsColumn(OnSecurityColumnName columnName) {
+        return this.tableColumnMap.containsKey(columnName);
+    }
+
+    public TableColumn getColumn(OnSecurityColumnName columnName) {
+        return this.tableColumnMap.get(columnName);
     }
 
     public List<TableColumn> getTableColumns() {
@@ -119,13 +130,13 @@ public class Table {
         // @formatter:off
         String updateColumnSql = this.getUpdatableTableColumns()
                 .stream()
-                .map(tableColumn -> String.format(COLUMN_EQ_VALUE, tableColumn.getColumn().getName()))
+                .map(tableColumn -> String.format(COLUMN_EQ_VALUE, tableColumn.getColumnName().getName()))
                 .collect(Collectors.joining(DELIMITER));
         // @formatter:on
         return String.format(UPDATE_SQL_STENCIL, this.getTableName(), updateColumnSql);
     }
 
-    public String getUpdateSql(List<OnSecurityColumns> columnList) {
+    public String getUpdateSql(List<OnSecurityColumnName> columnList) {
         if (!ObjectUtils.isEmpty(columnList)) {
             // @formatter:off
             String updateColumnSql = columnList.stream()
@@ -152,7 +163,7 @@ public class Table {
                     }
                     return true;
                 })
-                .map(tableColumn -> tableColumn.getColumn().getName()).distinct()
+                .map(tableColumn -> tableColumn.getColumnName().getName()).distinct()
                 .collect(Collectors.joining(DELIMITER));
         // @formatter:on
     }

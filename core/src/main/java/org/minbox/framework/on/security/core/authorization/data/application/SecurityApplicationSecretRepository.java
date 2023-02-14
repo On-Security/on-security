@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.application;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecurityApplicationSecretRepository {
+public interface SecurityApplicationSecretRepository extends OnSecurityBaseJdbcRepository<SecurityApplicationSecret, String> {
     /**
      * 保存客户端秘钥
      * <p>
@@ -41,5 +43,5 @@ public interface SecurityApplicationSecretRepository {
      * @param applicationId 应用ID {@link SecurityApplicationSecret#getApplicationId()}
      * @return 客户端秘钥对象列表 {@link SecurityApplicationSecret}
      */
-    List<SecurityApplicationSecret> findByClientId(String applicationId);
+    List<SecurityApplicationSecret> findByApplicationId(String applicationId);
 }

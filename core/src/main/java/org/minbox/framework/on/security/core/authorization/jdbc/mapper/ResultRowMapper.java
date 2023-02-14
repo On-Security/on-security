@@ -17,8 +17,9 @@
 
 package org.minbox.framework.on.security.core.authorization.jdbc.mapper;
 
-import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumns;
-import org.minbox.framework.on.security.core.authorization.jdbc.mapper.type.TypeMapper;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.Table;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.TableColumn;
 import org.minbox.framework.on.security.core.authorization.jdbc.utils.ObjectClassUtils;
 import org.minbox.framework.on.security.core.authorization.util.StringUtils;
 import org.springframework.jdbc.core.RowMapper;
@@ -38,13 +39,12 @@ import java.util.Map;
  * @author 恒宇少年
  * @since 0.0.8
  */
-public class ResultRowMapper implements RowMapper<Object> {
-    /**
-     * 映射封装实体类型
-     */
+public class ResultRowMapper<T> implements RowMapper<T> {
+    private Table table;
     private Class mapEntityClass;
 
-    public ResultRowMapper(Class mapEntityClass) {
+    public ResultRowMapper(Table table, Class mapEntityClass) {
+        this.table = table;
         this.mapEntityClass = mapEntityClass;
     }
 
@@ -57,7 +57,7 @@ public class ResultRowMapper implements RowMapper<Object> {
      * @throws SQLException
      */
     @Override
-    public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public T mapRow(ResultSet rs, int rowNum) throws SQLException {
         try {
             List<String> columnNameList = this.getResultSetColumnNameList(rs);
             // Instance Result Object
@@ -65,16 +65,19 @@ public class ResultRowMapper implements RowMapper<Object> {
             if (!ObjectUtils.isEmpty(columnNameList)) {
                 Map<String, Object> columnValueMap = new HashMap();
                 for (String columnName : columnNameList) {
-                    OnSecurityColumns onSecurityColumn = OnSecurityColumns.valueOfColumnName(columnName);
+                    OnSecurityColumnName onSecurityColumn = OnSecurityColumnName.valueOfColumnName(columnName);
+                    if (!this.table.containsColumn(onSecurityColumn)) {
+                        continue;
+                    }
+                    TableColumn tableColumn = this.table.getColumn(onSecurityColumn);
                     // Get the converted column value
-                    TypeMapper typeMapper = onSecurityColumn.getTypeMapper();
-                    Object columnValue = typeMapper.accept(rs, columnName);
+                    Object columnValue = tableColumn.fromColumnValue(rs, columnName);
                     String setMethodName = ObjectClassUtils.getSetMethodName(StringUtils.toUpperCamelName(columnName));
                     columnValueMap.put(setMethodName, columnValue);
                 }
                 // Invoke Result Object Set Methods
                 ObjectClassUtils.invokeObjectSetMethod(mapEntityObject, columnValueMap);
-                return mapEntityObject;
+                return (T) mapEntityObject;
             }
         } catch (Exception e) {
             e.printStackTrace();

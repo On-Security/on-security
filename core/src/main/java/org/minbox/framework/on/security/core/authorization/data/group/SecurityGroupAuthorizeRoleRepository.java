@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.group;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.5
  */
-public interface SecurityGroupAuthorizeRoleRepository {
+public interface SecurityGroupAuthorizeRoleRepository extends OnSecurityBaseJdbcRepository<SecurityGroupAuthorizeRole, String> {
     /**
      * 查询分组授权的角色列表
      *
