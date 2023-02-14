@@ -17,18 +17,14 @@
 
 package org.minbox.framework.on.security.core.authorization.data.resource;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 /**
  * 资源数据存储库
  *
  * @author 恒宇少年
  * @since 0.0.5
  */
-public interface SecurityResourceRepository {
-    /**
-     * 根据资源ID查询资源信息
-     *
-     * @param resourceId 资源ID {@link SecurityResource#getId()}
-     * @return 资源信息 {@link SecurityResource}
-     */
-    SecurityResource findById(String resourceId);
+public interface SecurityResourceRepository extends OnSecurityBaseJdbcRepository<SecurityResource, String> {
+    
 }

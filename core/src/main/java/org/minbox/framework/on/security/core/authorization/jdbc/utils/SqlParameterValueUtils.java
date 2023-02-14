@@ -17,7 +17,7 @@
 
 package org.minbox.framework.on.security.core.authorization.jdbc.utils;
 
-import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumns;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.Table;
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.TableColumn;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.ColumnValue;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
@@ -38,13 +38,19 @@ public class SqlParameterValueUtils {
     /**
      * 根据查询条件{@link Condition}转换{@link SqlParameterValue}
      *
+     * @param table      获取查询条件的表{@link Table}
      * @param conditions {@link Condition} 对象列表
      * @return {@link SqlParameterValue} 对象列表
      */
-    public static SqlParameterValue[] getWithCondition(Condition... conditions) {
+    public static SqlParameterValue[] getWithCondition(Table table, Condition... conditions) {
         // @formatter:off
         return Arrays.stream(conditions)
-                .map(condition -> new SqlParameterValue(condition.getColumn().getSqlType(), condition.getValue()))
+                .filter(condition -> table.containsColumn(condition.getColumnName()))
+                .map(condition -> {
+                    TableColumn tableColumn = table.getColumn(condition.getColumnName());
+                    Object convertedValue = tableColumn.toColumnValue(condition.getValue());
+                    return new SqlParameterValue(tableColumn.getSqlType(), convertedValue);
+                })
                 .toArray(SqlParameterValue[]::new);
         // @formatter:on
     }
@@ -52,28 +58,35 @@ public class SqlParameterValueUtils {
     /**
      * 根据查询条件分组{@link ConditionGroup}转换{@link SqlParameterValue}
      *
+     * @param table           获取查询条件的表{@link Table}
      * @param conditionGroups {@link ConditionGroup} 对象列表
      * @return {@link SqlParameterValue} 对象列表
      */
-    public static SqlParameterValue[] getWithConditionGroup(ConditionGroup... conditionGroups) {
+    public static SqlParameterValue[] getWithConditionGroup(Table table, ConditionGroup... conditionGroups) {
         // @formatter:off
         Condition[] conditions = Arrays.stream(conditionGroups)
                 .flatMap(conditionGroup -> conditionGroup.getConditions().stream())
                 .toArray(Condition[]::new);
         // @formatter:on
-        return getWithCondition(conditions);
+        return getWithCondition(table, conditions);
     }
 
     /**
      * 根据列值关系实体{@link ColumnValue}转换{@link SqlParameterValue}
      *
+     * @param table        获取查询条件的表{@link Table}
      * @param columnValues {@link ColumnValue} 对象列表
      * @return {@link SqlParameterValue} 对象列表
      */
-    public static SqlParameterValue[] getWithColumnValue(ColumnValue... columnValues) {
+    public static SqlParameterValue[] getWithColumnValue(Table table, ColumnValue... columnValues) {
         // @formatter:off
         return Arrays.stream(columnValues)
-                .map(columnValue -> new SqlParameterValue(columnValue.getColumn().getSqlType(), columnValue.getValue()))
+                .filter(columnValue -> table.containsColumn(columnValue.getColumnName()))
+                .map(columnValue -> {
+                    TableColumn tableColumn = table.getColumn(columnValue.getColumnName());
+                    Object convertedValue = tableColumn.toColumnValue(columnValue.getValue());
+                    return new SqlParameterValue(tableColumn.getSqlType(), convertedValue);
+                })
                 .toArray(SqlParameterValue[]::new);
         // @formatter:on
     }
@@ -89,10 +102,10 @@ public class SqlParameterValueUtils {
         // @formatter:off
         return tableColumns.stream()
                 .map(tableColumn -> {
-                    OnSecurityColumns column = tableColumn.getColumn();
-                    String getMethodName = ObjectClassUtils.getGetMethodName(column.getUpperCamelName());
+                    String getMethodName = ObjectClassUtils.getGetMethodName(tableColumn.getColumnName().getUpperCamelName());
                     Object getMethodResult = getMethodResultMap.get(getMethodName);
-                    return new SqlParameterValue(column.getSqlType(), getMethodResult);
+                    Object convertedValue = tableColumn.toColumnValue(getMethodResult);
+                    return new SqlParameterValue(tableColumn.getSqlType(), convertedValue);
                 })
                 .toArray(SqlParameterValue[]::new);
         // @formatter:on
@@ -104,10 +117,15 @@ public class SqlParameterValueUtils {
      * @param columnValues {@link ColumnValue} 对象列表
      * @return {@link SqlParameterValue} 对象列表
      */
-    public static SqlParameterValue[] getWithColumnValue(List<ColumnValue> columnValues) {
+    public static SqlParameterValue[] getWithColumnValue(Table table, List<ColumnValue> columnValues) {
         // @formatter:off
         return columnValues.stream()
-                .map(columnValue -> new SqlParameterValue(columnValue.getColumn().getSqlType(), columnValue.getValue()))
+                .filter(columnValue -> table.containsColumn(columnValue.getColumnName()))
+                .map(columnValue -> {
+                    TableColumn tableColumn = table.getColumn(columnValue.getColumnName());
+                    Object convertedValue = tableColumn.toColumnValue(columnValue.getValue());
+                    return new SqlParameterValue(tableColumn.getSqlType(), convertedValue);
+                })
                 .toArray(SqlParameterValue[]::new);
         // @formatter:on
     }

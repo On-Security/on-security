@@ -39,7 +39,7 @@ public class SecurityConsoleManager implements Serializable {
     private LocalDateTime lastLoginTime;
     private String describe;
     private LocalDateTime createTime;
-    private LocalDateTime deletedTime;
+    private LocalDateTime deleteTime;
 
     public String getId() {
         return id;
@@ -73,7 +73,7 @@ public class SecurityConsoleManager implements Serializable {
         this.password = password;
     }
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
@@ -81,7 +81,7 @@ public class SecurityConsoleManager implements Serializable {
         this.enabled = enabled;
     }
 
-    public boolean isDeleted() {
+    public boolean getDeleted() {
         return deleted;
     }
 
@@ -113,11 +113,11 @@ public class SecurityConsoleManager implements Serializable {
         this.createTime = createTime;
     }
 
-    public LocalDateTime getDeletedTime() {
-        return deletedTime;
+    public LocalDateTime getDeleteTime() {
+        return deleteTime;
     }
 
-    public void setDeletedTime(LocalDateTime deletedTime) {
-        this.deletedTime = deletedTime;
+    public void setDeleteTime(LocalDateTime deleteTime) {
+        this.deleteTime = deleteTime;
     }
 }

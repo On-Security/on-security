@@ -17,18 +17,14 @@
 
 package org.minbox.framework.on.security.core.authorization.data.idp;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 /**
  * 身份提供商数据接口
  *
  * @author 恒宇少年
  * @since 0.0.2
  */
-public interface SecurityIdentityProviderRepository {
-    /**
-     * 根据ID查询身份提供商详细信息
-     *
-     * @param id {@link SecurityIdentityProvider#getId()}
-     * @return {@link SecurityIdentityProvider}
-     */
-    SecurityIdentityProvider findById(String id);
+public interface SecurityIdentityProviderRepository extends OnSecurityBaseJdbcRepository<SecurityIdentityProvider, String> {
+
 }

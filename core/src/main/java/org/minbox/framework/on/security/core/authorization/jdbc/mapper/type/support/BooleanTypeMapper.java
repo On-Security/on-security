@@ -28,9 +28,14 @@ import java.sql.SQLException;
  * @author 恒宇少年
  * @since 0.0.8
  */
-public class BooleanTypeMapper implements TypeMapper<Boolean> {
+public class BooleanTypeMapper implements TypeMapper<Boolean, Boolean> {
     @Override
-    public Boolean accept(ResultSet rs, String columnName) throws SQLException {
+    public Boolean toColumn(Boolean originalValue, String columnName) {
+        return originalValue;
+    }
+
+    @Override
+    public Boolean fromColumn(ResultSet rs, String columnName) throws SQLException {
         return rs.getBoolean(columnName);
     }
 }

@@ -17,8 +17,9 @@
 
 package org.minbox.framework.on.security.core.authorization.data.group;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.util.Assert;
 
 /**
  * 安全组存储库JDBC实现类
@@ -26,11 +27,9 @@ import org.springframework.util.Assert;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityGroupJdbcRepository implements SecurityGroupRepository {
-    private JdbcOperations jdbcOperations;
-
+public class SecurityGroupJdbcRepository extends OnSecurityBaseJdbcRepositorySupport<SecurityGroup, String>
+        implements SecurityGroupRepository {
     public SecurityGroupJdbcRepository(JdbcOperations jdbcOperations) {
-        Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
-        this.jdbcOperations = jdbcOperations;
+        super(OnSecurityTables.SecurityGroup, jdbcOperations);
     }
 }

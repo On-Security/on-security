@@ -28,9 +28,14 @@ import java.sql.SQLException;
  * @author 恒宇少年
  * @since 0.0.8
  */
-public class StringTypeMapper implements TypeMapper<String> {
+public class StringTypeMapper implements TypeMapper<String, String> {
     @Override
-    public String accept(ResultSet rs, String columnName) throws SQLException {
+    public String toColumn(String originalValue, String columnName) {
+        return originalValue;
+    }
+
+    @Override
+    public String fromColumn(ResultSet rs, String columnName) throws SQLException {
         return rs.getString(columnName);
     }
 }

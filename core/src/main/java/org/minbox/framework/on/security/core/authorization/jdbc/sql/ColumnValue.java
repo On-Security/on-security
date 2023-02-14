@@ -17,7 +17,7 @@
 
 package org.minbox.framework.on.security.core.authorization.jdbc.sql;
 
-import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumns;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
 import org.springframework.util.Assert;
 
 /**
@@ -27,42 +27,42 @@ import org.springframework.util.Assert;
  * @since 0.0.8
  */
 public class ColumnValue {
-    private OnSecurityColumns column;
+    private OnSecurityColumnName columnName;
     private Object value;
 
     // @formatter:off
     private ColumnValue() { }
     // @formatter:on
 
-    public OnSecurityColumns getColumn() {
-        return column;
+    public OnSecurityColumnName getColumnName() {
+        return columnName;
     }
 
     public Object getValue() {
         return value;
     }
 
-    public static Builder with(OnSecurityColumns column, Object value) {
-        Assert.notNull(column, "The filter column cannot be null.");
+    public static Builder with(OnSecurityColumnName columnName, Object value) {
+        Assert.notNull(columnName, "The filter column cannot be null.");
         Assert.notNull(value, "The filter column value cannot be null.");
-        return new Builder(column, value);
+        return new Builder(columnName, value);
     }
 
     /**
      * The {@link ColumnValue} Builder
      */
     public static class Builder {
-        private OnSecurityColumns column;
+        private OnSecurityColumnName columnName;
         private Object value;
 
-        public Builder(OnSecurityColumns column, Object value) {
-            this.column = column;
+        public Builder(OnSecurityColumnName columnName, Object value) {
+            this.columnName = columnName;
             this.value = value;
         }
 
         public ColumnValue build() {
             ColumnValue columnValue = new ColumnValue();
-            columnValue.column = this.column;
+            columnValue.columnName = this.columnName;
             columnValue.value = this.value;
             return columnValue;
         }

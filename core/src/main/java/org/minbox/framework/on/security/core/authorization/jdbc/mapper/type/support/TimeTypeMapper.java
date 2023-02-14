@@ -22,6 +22,7 @@ import org.minbox.framework.on.security.core.authorization.jdbc.mapper.type.Type
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalTime;
 
 /**
  * 获取{@link java.sql.Types#TIME}类型的列值
@@ -29,9 +30,15 @@ import java.sql.Time;
  * @author 恒宇少年
  * @since 0.0.8
  */
-public class TimeTypeMapper implements TypeMapper<Time> {
+public class TimeTypeMapper implements TypeMapper<LocalTime, Time> {
     @Override
-    public Time accept(ResultSet rs, String columnName) throws SQLException {
-        return rs.getTime(columnName);
+    public Time toColumn(LocalTime originalValue, String columnName) {
+        return originalValue != null ? Time.valueOf(originalValue) : null;
+    }
+
+    @Override
+    public LocalTime fromColumn(ResultSet rs, String columnName) throws SQLException {
+        Time time = rs.getTime(columnName);
+        return time != null ? time.toLocalTime() : null;
     }
 }

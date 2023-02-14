@@ -75,7 +75,7 @@ public final class JdbcOnSecurityUserDetailsService implements UserDetailsServic
         if (!ObjectUtils.isEmpty(userAuthorizeRoleList)) {
             // @formatter:off
             List<String> roleCodeList = userAuthorizeRoleList.stream()
-                    .map(uar -> roleRepository.findById(uar.getRoleId()))
+                    .map(uar -> roleRepository.selectOne(uar.getRoleId()))
                     .filter(securityRole -> !ObjectUtils.isEmpty(securityRole))
                     .map(SecurityRole::getCode)
                     .collect(Collectors.toList());

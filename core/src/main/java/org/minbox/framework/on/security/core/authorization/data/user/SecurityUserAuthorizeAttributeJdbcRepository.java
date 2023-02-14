@@ -17,16 +17,13 @@
 
 package org.minbox.framework.on.security.core.authorization.data.user;
 
-import org.springframework.jdbc.core.*;
-import org.springframework.util.Assert;
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
+import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
+import org.springframework.jdbc.core.JdbcOperations;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * 用户授权属性关系JDBC方式存储库
@@ -34,76 +31,15 @@ import java.util.function.Function;
  * @author 恒宇少年
  * @since 0.0.4
  */
-public class SecurityUserAuthorizeAttributeJdbcRepository implements SecurityUserAuthorizeAttributeRepository {
-    // @formatter:off
-    private static final String COLUMN_NAMES = "user_id, "
-            + "attribute_id, "
-            + "authorize_time";
-    // @formatter:on
-    private static final String TABLE_NAME = "security_user_authorize_attributes";
-    private static final String USER_ID_FILTER = "user_id = ?";
-    private static final String ATTRIBUTE_ID_FILTER = "attribute_id = ?";
-    private static final String SELECT_ALL_COLUMNS_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
-    private static final String INSERT_SQL = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_NAMES + ") VALUES (?, ?, ?)";
-    private JdbcOperations jdbcOperations;
-    private RowMapper<SecurityUserAuthorizeAttribute> userAuthorizeAttributeRowMapper;
-    private Function<SecurityUserAuthorizeAttribute, List<SqlParameterValue>> userAuthorizeAttributeParameterMapper;
-
+public class SecurityUserAuthorizeAttributeJdbcRepository extends OnSecurityBaseJdbcRepositorySupport<SecurityUserAuthorizeAttribute, String>
+        implements SecurityUserAuthorizeAttributeRepository {
     public SecurityUserAuthorizeAttributeJdbcRepository(JdbcOperations jdbcOperations) {
-        Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
-        this.jdbcOperations = jdbcOperations;
-        this.userAuthorizeAttributeRowMapper = new SecurityUserAuthorizeAttributeRowMapper();
-        this.userAuthorizeAttributeParameterMapper = new SecurityUserAuthorizeAttributeParameterMapper();
-    }
-
-    @Override
-    public void insert(SecurityUserAuthorizeAttribute userAuthorizeAttribute) {
-        Assert.notNull(userAuthorizeAttribute, "userAuthorizeAttribute cannot be null");
-        List<SqlParameterValue> parameters = this.userAuthorizeAttributeParameterMapper.apply(userAuthorizeAttribute);
-        PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
-        this.jdbcOperations.update(INSERT_SQL, pss);
+        super(OnSecurityTables.SecurityUserAuthorizeAttributes, jdbcOperations);
     }
 
     @Override
     public List<SecurityUserAuthorizeAttribute> findByUserId(String userId) {
-        Assert.hasText(userId, "userId cannot be empty");
-        return this.findListBy(USER_ID_FILTER, userId);
-    }
-
-    @Override
-    public List<SecurityUserAuthorizeAttribute> findByAttributeId(String attributeId) {
-        Assert.hasText(attributeId, "attributeId cannot be empty");
-        return this.findListBy(ATTRIBUTE_ID_FILTER, attributeId);
-    }
-
-    private List<SecurityUserAuthorizeAttribute> findListBy(String filter, Object... args) {
-        return this.jdbcOperations.query(SELECT_ALL_COLUMNS_SQL + filter, this.userAuthorizeAttributeRowMapper, args);
-    }
-
-    public static class SecurityUserAuthorizeAttributeRowMapper implements RowMapper<SecurityUserAuthorizeAttribute> {
-        @Override
-        public SecurityUserAuthorizeAttribute mapRow(ResultSet rs, int rowNum) throws SQLException {
-            // @formatter:off
-            SecurityUserAuthorizeAttribute.Builder builder =
-                    SecurityUserAuthorizeAttribute
-                        .withUserId(rs.getString("user_id"))
-                        .attributeId(rs.getString("attribute_id"))
-                        .authorizeTime(rs.getTimestamp("authorize_time").toLocalDateTime());
-            // @formatter:on
-            return builder.build();
-        }
-    }
-
-    public static class SecurityUserAuthorizeAttributeParameterMapper implements Function<SecurityUserAuthorizeAttribute, List<SqlParameterValue>> {
-        @Override
-        public List<SqlParameterValue> apply(SecurityUserAuthorizeAttribute securityUserAuthorizeAttribute) {
-            // @formatter:off
-            return Arrays.asList(
-                    new SqlParameterValue(Types.VARCHAR, securityUserAuthorizeAttribute.getUserId()),
-                    new SqlParameterValue(Types.VARCHAR, securityUserAuthorizeAttribute.getAttributeId()),
-                    new SqlParameterValue(Types.TIMESTAMP, Timestamp.valueOf(securityUserAuthorizeAttribute.getAuthorizeTime()))
-            );
-            // @formatter:on
-        }
+        Condition userIdCondition = Condition.withColumn(OnSecurityColumnName.UserId, userId).build();
+        return this.select(userIdCondition);
     }
 }

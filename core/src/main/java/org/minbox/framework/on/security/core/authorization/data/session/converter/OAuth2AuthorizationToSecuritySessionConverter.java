@@ -59,7 +59,7 @@ public final class OAuth2AuthorizationToSecuritySessionConverter implements Conv
     @Override
     public SecuritySession convert(OAuth2Authorization authorization) {
         // Load security client
-        SecurityApplication securityApplication = clientRepository.findById(authorization.getRegisteredClientId());
+        SecurityApplication securityApplication = clientRepository.selectOne(authorization.getRegisteredClientId());
         Assert.notNull(securityApplication, "Client ID: " + authorization.getRegisteredClientId() + ", no data retrieved");
 
         String authorizationId = authorization.getId();

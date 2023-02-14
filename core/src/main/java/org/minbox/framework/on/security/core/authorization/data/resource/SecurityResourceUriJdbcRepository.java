@@ -17,12 +17,12 @@
 
 package org.minbox.framework.on.security.core.authorization.data.resource;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
+import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.util.Assert;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -31,50 +31,15 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.5
  */
-public class SecurityResourceUriJdbcRepository implements SecurityResourceUriRepository {
-    // @formatter:off
-    private static final String COLUMN_NAMES = "id, "
-            + "resource_id, "
-            + "uri, "
-            + "create_time";
-    // @formatter:on
-    private static final String TABLE_NAME = "security_resource_uris";
-    private static final String RESOURCE_ID_FILTER = "resource_id = ?";
-    private static final String SELECT_ALL_COLUMNS_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
-
-    private JdbcOperations jdbcOperations;
-    private RowMapper<SecurityResourceUri> securityResourceRowMapper;
-
+public class SecurityResourceUriJdbcRepository extends OnSecurityBaseJdbcRepositorySupport<SecurityResourceUri, String>
+        implements SecurityResourceUriRepository {
     public SecurityResourceUriJdbcRepository(JdbcOperations jdbcOperations) {
-        Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
-        this.jdbcOperations = jdbcOperations;
-        this.securityResourceRowMapper = new SecurityResourceUriRowMapper();
+        super(OnSecurityTables.SecurityResourceUris, jdbcOperations);
     }
 
     @Override
     public List<SecurityResourceUri> findByResourceId(String resourceId) {
-        Assert.hasText(resourceId, "resourceId cannot be empty");
-        return this.findListBy(RESOURCE_ID_FILTER, resourceId);
-    }
-
-    private List<SecurityResourceUri> findListBy(String filter, Object... args) {
-        return this.jdbcOperations.query(SELECT_ALL_COLUMNS_SQL + filter, this.securityResourceRowMapper, args);
-    }
-
-    /**
-     * 将{@link ResultSet}映射为{@link SecurityResourceUri}对象实例
-     */
-    public static class SecurityResourceUriRowMapper implements RowMapper<SecurityResourceUri> {
-        @Override
-        public SecurityResourceUri mapRow(ResultSet rs, int rowNum) throws SQLException {
-            // @formatter:off
-            SecurityResourceUri.Builder builder = SecurityResourceUri
-                    .withId(rs.getString("id"))
-                    .resourceId(rs.getString("resource_id"))
-                    .uri(rs.getString("uri"))
-                    .createTime(rs.getTimestamp("create_time").toLocalDateTime());
-            // @formatter:on
-            return builder.build();
-        }
+        Condition resourceIdCondition = Condition.withColumn(OnSecurityColumnName.ResourceId, resourceId).build();
+        return this.select(resourceIdCondition);
     }
 }

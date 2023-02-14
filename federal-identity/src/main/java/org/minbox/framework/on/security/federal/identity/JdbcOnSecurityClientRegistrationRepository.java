@@ -67,7 +67,7 @@ public final class JdbcOnSecurityClientRegistrationRepository implements ClientR
         if (regionIdentityProvider == null) {
             return null;
         }
-        SecurityIdentityProvider identityProvider = identityProviderRepository.findById(regionIdentityProvider.getIdpId());
+        SecurityIdentityProvider identityProvider = identityProviderRepository.selectOne(regionIdentityProvider.getIdpId());
         return converter.convert(new ClientRegistrationAdapter(regionIdentityProvider, identityProvider));
     }
 }

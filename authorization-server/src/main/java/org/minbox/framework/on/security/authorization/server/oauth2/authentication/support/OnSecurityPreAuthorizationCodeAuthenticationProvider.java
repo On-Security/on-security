@@ -70,7 +70,7 @@ public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends Abstra
         // Verification ClientId
         SecurityApplication securityApplication = null;
         if (!ObjectUtils.isEmpty(preAuthenticationToken.getApplicationId())) {
-            securityApplication = securityApplicationRepository.findByClientId(preAuthenticationToken.getApplicationId());
+            securityApplication = securityApplicationRepository.findByApplicationId(preAuthenticationToken.getApplicationId());
             if (securityApplication == null || !securityApplication.isEnabled() || securityApplication.isDeleted()) {
                 //@formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_APPLICATION,
@@ -78,7 +78,7 @@ public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends Abstra
                         "Invalid Application，ID：" + preAuthenticationToken.getApplicationId() + "，Please check data validity.");
                 // @formatter:on
             }
-            SecurityRegion securityRegion = regionRepository.findById(securityApplication.getRegionId());
+            SecurityRegion securityRegion = regionRepository.selectOne(securityApplication.getRegionId());
             if (securityRegion == null || !securityRegion.isEnabled() || securityRegion.isDeleted()) {
                 //@formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_REGION,

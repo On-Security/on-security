@@ -17,12 +17,12 @@
 
 package org.minbox.framework.on.security.core.authorization.data.user;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
+import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.util.Assert;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -31,57 +31,15 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityUserAuthorizeRoleJdbcRepository implements SecurityUserAuthorizeRoleRepository {
-    // @formatter:off
-    private static final String COLUMN_NAMES = "user_id, "
-            + "role_id, "
-            + "authorize_time";
-    // @formatter:on
-    private static final String TABLE_NAME = "security_user_authorize_roles";
-    private static final String USER_ID_FILTER = "user_id = ?";
-    private static final String SELECT_USER_AUTHORIZE_ROLE_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
-
-    private JdbcOperations jdbcOperations;
-    private RowMapper<SecurityUserAuthorizeRole> userAuthorizeRoleRowMapper;
-
+public class SecurityUserAuthorizeRoleJdbcRepository extends OnSecurityBaseJdbcRepositorySupport<SecurityUserAuthorizeRole, String>
+        implements SecurityUserAuthorizeRoleRepository {
     public SecurityUserAuthorizeRoleJdbcRepository(JdbcOperations jdbcOperations) {
-        Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
-        this.jdbcOperations = jdbcOperations;
-        this.userAuthorizeRoleRowMapper = new SecurityUserAuthorizeRoleRowMapper();
+        super(OnSecurityTables.SecurityUserAuthorizeRoles, jdbcOperations);
     }
 
     @Override
     public List<SecurityUserAuthorizeRole> findByUserId(String userId) {
-        Assert.hasText(userId, "userId cannot be empty");
-        return this.findListBy(USER_ID_FILTER, userId);
-    }
-
-    private SecurityUserAuthorizeRole findBy(String filter, Object... args) {
-        List<SecurityUserAuthorizeRole> result = this.jdbcOperations.query(
-                SELECT_USER_AUTHORIZE_ROLE_SQL + filter, this.userAuthorizeRoleRowMapper, args);
-        return !result.isEmpty() ? result.get(0) : null;
-    }
-
-    private List<SecurityUserAuthorizeRole> findListBy(String filter, Object... args) {
-        List<SecurityUserAuthorizeRole> result = this.jdbcOperations.query(
-                SELECT_USER_AUTHORIZE_ROLE_SQL + filter, this.userAuthorizeRoleRowMapper, args);
-        return result;
-    }
-
-    /**
-     * 将{@link ResultSet}映射成{@link SecurityUserAuthorizeRole}对象实例
-     */
-    public static class SecurityUserAuthorizeRoleRowMapper implements RowMapper<SecurityUserAuthorizeRole> {
-        @Override
-        public SecurityUserAuthorizeRole mapRow(ResultSet rs, int rowNum) throws SQLException {
-            // @formatter:off
-            SecurityUserAuthorizeRole.Builder builder =
-                    SecurityUserAuthorizeRole
-                            .withUserId(rs.getString("user_id"))
-                            .roleId(rs.getString("role_id"))
-                            .authorizeTime(rs.getTimestamp("authorize_time").toLocalDateTime());
-            // @formatter:on
-            return builder.build();
-        }
+        Condition userIdCondition = Condition.withColumn(OnSecurityColumnName.UserId, userId).build();
+        return this.select(userIdCondition);
     }
 }

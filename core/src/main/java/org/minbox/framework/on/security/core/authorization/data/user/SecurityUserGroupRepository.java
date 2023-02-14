@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.user;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.5
  */
-public interface SecurityUserGroupRepository {
+public interface SecurityUserGroupRepository extends OnSecurityBaseJdbcRepository<SecurityUserGroup, String> {
     /**
      * 查询用户绑定的分组列表
      *

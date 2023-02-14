@@ -17,13 +17,9 @@
 
 package org.minbox.framework.on.security.core.authorization.data.region;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.util.Assert;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
 
 /**
  * 安全域数据存储库JDBC实现类
@@ -31,58 +27,9 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public class SecurityRegionJdbcRepository implements SecurityRegionRepository {
-    // @formatter:off
-    private static final String COLUMN_NAMES = "id, "
-            + "region_id, "
-            + "display_name, "
-            + "enabled, "
-            + "deleted, "
-            + "create_time, "
-            + "`describe`";
-    // @formatter:on
-    private static final String TABLE_NAME = "security_region";
-    private static final String ID_FILTER = "id = ?";
-    private static final String SELECT_REGION_SQL = "SELECT " + COLUMN_NAMES + " FROM " + TABLE_NAME + " WHERE ";
-
-    private JdbcOperations jdbcOperations;
-    private RowMapper<SecurityRegion> regionRowMapper;
-
+public class SecurityRegionJdbcRepository extends OnSecurityBaseJdbcRepositorySupport<SecurityRegion, String>
+        implements SecurityRegionRepository {
     public SecurityRegionJdbcRepository(JdbcOperations jdbcOperations) {
-        Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
-        this.jdbcOperations = jdbcOperations;
-        this.regionRowMapper = new SecurityRegionJdbcRepository.SecurityRegionRowMapper();
-    }
-
-    @Override
-    public SecurityRegion findById(String id) {
-        Assert.hasText(id, "id cannot be empty");
-        return this.findBy(ID_FILTER, id);
-    }
-
-    private SecurityRegion findBy(String filter, Object... args) {
-        List<SecurityRegion> result = this.jdbcOperations.query(
-                SELECT_REGION_SQL + filter, this.regionRowMapper, args);
-        return !result.isEmpty() ? result.get(0) : null;
-    }
-
-    /**
-     * 将{@link ResultSet}数据行映射绑定到{@link SecurityRegion}
-     */
-    public static class SecurityRegionRowMapper implements RowMapper<SecurityRegion> {
-        @Override
-        public SecurityRegion mapRow(ResultSet rs, int rowNum) throws SQLException {
-            // @formatter:off
-            SecurityRegion region = SecurityRegion.withId(rs.getString("id"))
-                    .regionId(rs.getString("region_id"))
-                    .displayName(rs.getString("display_name"))
-                    .enabled(rs.getBoolean("enabled"))
-                    .deleted(rs.getBoolean("deleted"))
-                    .createTime(rs.getTimestamp("create_time").toLocalDateTime())
-                    .describe(rs.getString("describe"))
-                    .build();
-            // @formatter:on
-            return region;
-        }
+        super(OnSecurityTables.SecurityRegion, jdbcOperations);
     }
 }

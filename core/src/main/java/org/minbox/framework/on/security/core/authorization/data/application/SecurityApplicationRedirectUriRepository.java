@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.application;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecurityApplicationRedirectUriRepository {
+public interface SecurityApplicationRedirectUriRepository extends OnSecurityBaseJdbcRepository<SecurityApplicationRedirectUri, String> {
     /**
      * 存储客户端跳转地址
      * <p>
@@ -41,5 +43,5 @@ public interface SecurityApplicationRedirectUriRepository {
      * @param applicationId 应用ID {@link SecurityApplicationRedirectUri#getApplicationId()}
      * @return 客户端跳转地址对象列表 {@link SecurityApplicationRedirectUri}
      */
-    List<SecurityApplicationRedirectUri> findByClientId(String applicationId);
+    List<SecurityApplicationRedirectUri> findByApplicationId(String applicationId);
 }

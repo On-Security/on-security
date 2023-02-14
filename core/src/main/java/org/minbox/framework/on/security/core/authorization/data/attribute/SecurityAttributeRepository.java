@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.attribute;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 import java.util.List;
 
 /**
@@ -25,21 +27,13 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.4
  */
-public interface SecurityAttributeRepository {
+public interface SecurityAttributeRepository extends OnSecurityBaseJdbcRepository<SecurityAttribute, String> {
     /**
      * 保存属性
      *
      * @param attribute {@link SecurityAttribute}
      */
     void save(SecurityAttribute attribute);
-
-    /**
-     * 根据ID查询属性
-     *
-     * @param attributeId {@link SecurityAttribute#getId()}
-     * @return {@link SecurityAttribute}
-     */
-    SecurityAttribute findById(String attributeId);
 
     /**
      * 根据安全域ID查询属性列表

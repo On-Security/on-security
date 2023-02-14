@@ -64,7 +64,7 @@ public class OnSecurityIdentityProviderBrokerEndpointAuthenticationProvider exte
         SecurityRegionIdentityProvider regionIdentityProvider =
                 regionIdentityProviderRepository.findByRegistrationId(brokerEndpointRequestToken.getRegistrationId());
         Assert.notNull(regionIdentityProvider, "registrationId: " + brokerEndpointRequestToken.getRegistrationId() + ", no IdP found.");
-        SecurityIdentityProvider identityProvider = identityProviderRepository.findById(regionIdentityProvider.getIdpId());
+        SecurityIdentityProvider identityProvider = identityProviderRepository.selectOne(regionIdentityProvider.getIdpId());
         if (identityProvider == null || !identityProvider.isEnabled()) {
             OnSecurityError onSecurityError = new OnSecurityError(OnSecurityErrorCodes.INVALID_IDENTITY_PROVIDER.getValue());
             throw new OnSecurityOAuth2AuthenticationException(onSecurityError);

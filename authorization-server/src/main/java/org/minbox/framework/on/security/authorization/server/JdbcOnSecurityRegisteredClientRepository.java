@@ -116,7 +116,7 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
     public RegisteredClient findById(String id) {
         Assert.hasText(id, "id cannot be empty");
         // Load client
-        SecurityApplication securityApplication = clientRepository.findById(id);
+        SecurityApplication securityApplication = clientRepository.selectOne(id);
         if (securityApplication == null) {
             return null;
         }
@@ -129,7 +129,7 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
     public RegisteredClient findByClientId(String applicationId) {
         Assert.hasText(applicationId, "applicationId cannot be empty");
         // Load client
-        SecurityApplication securityApplication = clientRepository.findByClientId(applicationId);
+        SecurityApplication securityApplication = clientRepository.findByApplicationId(applicationId);
         if (securityApplication == null) {
             return null;
         }
@@ -147,24 +147,24 @@ public final class JdbcOnSecurityRegisteredClientRepository implements Registere
     private SecurityApplication buildSecurityClient(SecurityApplication securityApplication) {
         // Load client authentication
         SecurityApplication.Builder builder = SecurityApplication.with(securityApplication);
-        SecurityApplicationAuthentication clientAuthentication = clientAuthenticationRepository.findByClientId(securityApplication.getId());
+        SecurityApplicationAuthentication clientAuthentication = clientAuthenticationRepository.findByApplicationId(securityApplication.getId());
         Assert.notNull(clientAuthentication, "No client authentication information was retrieved based on client ID: " + securityApplication.getId());
         builder.authentication(clientAuthentication);
 
         // Load client scopes
-        List<SecurityApplicationScope> clientScopeList = clientScopeRepository.findByClientId(securityApplication.getId());
+        List<SecurityApplicationScope> clientScopeList = clientScopeRepository.findByApplicationId(securityApplication.getId());
         if (!ObjectUtils.isEmpty(clientScopeList)) {
             builder.scopes(clientScopeList);
         }
 
         // Load client redirect uris
-        List<SecurityApplicationRedirectUri> redirectUris = clientRedirectUriRepository.findByClientId(securityApplication.getId());
+        List<SecurityApplicationRedirectUri> redirectUris = clientRedirectUriRepository.findByApplicationId(securityApplication.getId());
         if (!ObjectUtils.isEmpty(redirectUris)) {
             builder.redirectUris(redirectUris);
         }
 
         // Load client secrets
-        List<SecurityApplicationSecret> secrets = clientSecretRepository.findByClientId(securityApplication.getId());
+        List<SecurityApplicationSecret> secrets = clientSecretRepository.findByApplicationId(securityApplication.getId());
         if (!ObjectUtils.isEmpty(secrets)) {
             builder.secrets(secrets);
         }

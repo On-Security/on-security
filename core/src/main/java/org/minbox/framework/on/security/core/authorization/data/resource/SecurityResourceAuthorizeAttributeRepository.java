@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.resource;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 import java.util.List;
 
 /**
@@ -25,14 +27,7 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.4
  */
-public interface SecurityResourceAuthorizeAttributeRepository {
-    /**
-     * 新增资源授权属性关系
-     *
-     * @param resourceAuthorizeAttribute {@link SecurityResourceAuthorizeAttribute}
-     */
-    void insert(SecurityResourceAuthorizeAttribute resourceAuthorizeAttribute);
-
+public interface SecurityResourceAuthorizeAttributeRepository extends OnSecurityBaseJdbcRepository<SecurityResourceAuthorizeAttribute, String> {
     /**
      * 根据资源ID查询授权属性关系列表
      *
@@ -40,18 +35,4 @@ public interface SecurityResourceAuthorizeAttributeRepository {
      * @return {@link SecurityResourceAuthorizeAttribute}
      */
     List<SecurityResourceAuthorizeAttribute> findByResourceId(String resourceId);
-
-    /**
-     * 根据ID删除
-     *
-     * @param id {@link SecurityResourceAuthorizeAttribute#getId()}
-     */
-    void removeById(String id);
-
-    /**
-     * 根据资源ID删除
-     *
-     * @param resourceId {@link SecurityResourceAuthorizeAttribute#getResourceId()}
-     */
-    void removeByResourceId(String resourceId);
 }

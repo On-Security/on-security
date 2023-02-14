@@ -17,7 +17,7 @@
 
 package org.minbox.framework.on.security.core.authorization.jdbc.sql;
 
-import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumns;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
 import org.springframework.util.Assert;
 
 /**
@@ -27,14 +27,14 @@ import org.springframework.util.Assert;
  * @since 0.0.8
  */
 public class FilterColumnValue {
-    private OnSecurityColumns column;
+    private OnSecurityColumnName column;
     private Object value;
 
     // @formatter:off
     private FilterColumnValue() { }
     // @formatter:on
 
-    public OnSecurityColumns getColumn() {
+    public OnSecurityColumnName getColumn() {
         return column;
     }
 
@@ -42,7 +42,7 @@ public class FilterColumnValue {
         return value;
     }
 
-    public static Builder withColumnValue(OnSecurityColumns column, Object value) {
+    public static Builder withColumnValue(OnSecurityColumnName column, Object value) {
         Assert.notNull(column, "The filter column cannot be null.");
         Assert.notNull(value, "The filter column value cannot be null.");
         return new Builder(column, value);
@@ -52,10 +52,10 @@ public class FilterColumnValue {
      * The {@link FilterColumnValue} Builder
      */
     public static class Builder {
-        private OnSecurityColumns column;
+        private OnSecurityColumnName column;
         private Object value;
 
-        public Builder(OnSecurityColumns column, Object value) {
+        public Builder(OnSecurityColumnName column, Object value) {
             this.column = column;
             this.value = value;
         }

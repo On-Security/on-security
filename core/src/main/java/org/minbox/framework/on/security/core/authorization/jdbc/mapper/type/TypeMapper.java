@@ -26,15 +26,23 @@ import java.sql.SQLException;
  * @author 恒宇少年
  * @since 0.0.8
  */
-@FunctionalInterface
-public interface TypeMapper<R> {
+public interface TypeMapper<F, T> {
     /**
-     * 从{@link ResultSet}中获取指定列的值
+     * 根据原始值转换写入数据库列的值
+     *
+     * @param originalValue 原始值
+     * @param columnName    列名称
+     * @return 将原始值根据类型转换后的列值
+     */
+    T toColumn(F originalValue, String columnName);
+
+    /**
+     * 从{@link ResultSet}获取列的值并转换后返回
      *
      * @param rs         {@link ResultSet}
      * @param columnName 列名
-     * @return 根据类型转换后的列值
+     * @return 将列值根据类型转换后的值
      * @throws SQLException
      */
-    R accept(ResultSet rs, String columnName) throws SQLException;
+    F fromColumn(ResultSet rs, String columnName) throws SQLException;
 }

@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.role;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 import java.util.List;
 
 /**
@@ -25,14 +27,7 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.4
  */
-public interface SecurityRoleAuthorizeResourceRepository {
-    /**
-     * 新增角色授权资源关系
-     *
-     * @param roleAuthorizeResource {@link SecurityRoleAuthorizeResource}
-     */
-    void insert(SecurityRoleAuthorizeResource roleAuthorizeResource);
-
+public interface SecurityRoleAuthorizeResourceRepository extends OnSecurityBaseJdbcRepository<SecurityRoleAuthorizeResource, String> {
     /**
      * 查询角色授权的资源关系列表
      *
@@ -48,18 +43,4 @@ public interface SecurityRoleAuthorizeResourceRepository {
      * @return {@link SecurityRoleAuthorizeResource}
      */
     List<SecurityRoleAuthorizeResource> findByRoleIds(List<String> roleIds);
-
-    /**
-     * 根据ID删除角色资源的授权关系
-     *
-     * @param id {@link SecurityRoleAuthorizeResource#getId()}
-     */
-    void removeById(String id);
-
-    /**
-     * 根据角色ID删除全部授权的资源关系
-     *
-     * @param roleId 角色ID {@link SecurityRoleAuthorizeResource#getRoleId()}
-     */
-    void removeByRoleId(String roleId);
 }

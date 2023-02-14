@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.resource;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ import java.util.List;
  * @author 恒宇少年
  * @since 0.0.5
  */
-public interface SecurityResourceUriRepository {
+public interface SecurityResourceUriRepository extends OnSecurityBaseJdbcRepository<SecurityResourceUri, String> {
     /**
      * 根据资源ID查询资源绑定的路径列表
      *
