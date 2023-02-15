@@ -21,6 +21,7 @@ import org.minbox.framework.on.security.core.authorization.jdbc.definition.Table
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.ColumnValue;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.ConditionGroup;
+import org.minbox.framework.on.security.core.authorization.jdbc.sql.SortCondition;
 
 import java.io.Serializable;
 import java.util.List;
@@ -201,6 +202,27 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
     T selectOne(Condition... conditions);
 
     /**
+     * 根据条件分组查询单条数据
+     * <pre>
+     *     {@code
+     *      consoleManagerJdbcRepository.selectOne(
+     *                 ConditionGroup.withCondition(
+     *                         Condition.withColumn(OnSecurityColumnName.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003").build()
+     *                 ).build(),
+     *                 ConditionGroup.withCondition(
+     *                         Condition.withColumn(OnSecurityColumnName.Id, "083b2f2c-a2dc-11ed-8423-0242ac110002").build()
+     *                 ).operator(SqlLogicalOperator.OR)
+     *                 .build()
+     *         );
+     *     }
+     * </pre>
+     *
+     * @param conditionGroups 查询条件分组列表 {@link ConditionGroup}
+     * @return 返回的泛型类型对象实例
+     */
+    T selectOne(ConditionGroup... conditionGroups);
+
+    /**
      * 根据条件查询多条数据
      *
      * <pre>
@@ -212,9 +234,27 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      * </pre>
      *
      * @param conditions 查询条件列表 {@link Condition}
-     * @return 查询到的对象列表
+     * @return 查询结果对象列表
      */
     List<T> select(Condition... conditions);
+
+    /**
+     * 根据排序条件、查询条件查询多条数据
+     * <pre>
+     *     {@code
+     *      consoleManagerJdbcRepository.select(
+     *                 SortCondition.withSort(OnSecurityColumnName.CreateTime, SortBy.desc)
+     *                         .addSort(OnSecurityColumnName.DeleteTime,SortBy.asc),
+     *                 Condition.withColumn(OnSecurityColumnName.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003").build()
+     *         );
+     *     }
+     * </pre>
+     *
+     * @param sort       排序条件 {@link SortCondition}
+     * @param conditions 查询条件列表 {@link Condition}
+     * @return 查询结果对象列表
+     */
+    List<T> select(SortCondition sort, Condition... conditions);
 
     /**
      * 根据条件分组查询多条数据
@@ -236,4 +276,13 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      * @return 查询到的对象列表
      */
     List<T> select(ConditionGroup... conditionGroups);
+
+    /**
+     * 根据排序条件、查询条件分组查询多条数据
+     *
+     * @param sort            排序条件 {@link SortCondition}
+     * @param conditionGroups 查询条件分组列表 {@link ConditionGroup}
+     * @return 查询结果对象列表
+     */
+    List<T> select(SortCondition sort, ConditionGroup... conditionGroups);
 }
