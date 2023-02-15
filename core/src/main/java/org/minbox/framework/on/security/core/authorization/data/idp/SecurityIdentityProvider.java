@@ -52,9 +52,6 @@ public class SecurityIdentityProvider implements Serializable {
     private boolean enabled;
     private LocalDateTime createTime;
 
-    protected SecurityIdentityProvider() {
-    }
-
     public String getId() {
         return id;
     }
@@ -115,12 +112,80 @@ public class SecurityIdentityProvider implements Serializable {
         return authorizationGrantType;
     }
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
     public LocalDateTime getCreateTime() {
         return createTime;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void setProtocolId(String protocolId) {
+        this.protocolId = protocolId;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public void setIssuerUri(String issuerUri) {
+        this.issuerUri = issuerUri;
+    }
+
+    public void setAuthorizationUri(String authorizationUri) {
+        this.authorizationUri = authorizationUri;
+    }
+
+    public void setTokenUri(String tokenUri) {
+        this.tokenUri = tokenUri;
+    }
+
+    public void setUserInfoUri(String userInfoUri) {
+        this.userInfoUri = userInfoUri;
+    }
+
+    public void setUserInfoAuthenticationMethod(AuthenticationMethod userInfoAuthenticationMethod) {
+        this.userInfoAuthenticationMethod = userInfoAuthenticationMethod;
+    }
+
+    public void setUserNameAttribute(String userNameAttribute) {
+        this.userNameAttribute = userNameAttribute;
+    }
+
+    public void setEndSessionUri(String endSessionUri) {
+        this.endSessionUri = endSessionUri;
+    }
+
+    public void setJwkSetUri(String jwkSetUri) {
+        this.jwkSetUri = jwkSetUri;
+    }
+
+    public void setClientAuthenticationMethod(ClientAuthenticationMethod clientAuthenticationMethod) {
+        this.clientAuthenticationMethod = clientAuthenticationMethod;
+    }
+
+    public void setAuthorizationGrantType(AuthorizationGrantType authorizationGrantType) {
+        this.authorizationGrantType = authorizationGrantType;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
     public String toString() {
@@ -132,7 +197,7 @@ public class SecurityIdentityProvider implements Serializable {
                 this.getUserInfoAuthenticationMethod() + ", userNameAttribute=" + this.getUserNameAttribute() + ", endSessionUri=" +
                 this.getEndSessionUri() + ", jwkSetUri=" + this.getJwkSetUri() + ", clientAuthenticationMethod=" +
                 this.getClientAuthenticationMethod() + ", authorizationGrantType=" + this.getAuthorizationGrantType() +
-                ", enabled=" + this.isEnabled() + ", createTime=" + this.getCreateTime() + ")";
+                ", enabled=" + this.getEnabled() + ", createTime=" + this.getCreateTime() + ")";
         // @formatter:on
     }
 

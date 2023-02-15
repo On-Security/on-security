@@ -41,9 +41,6 @@ public class SecurityRole implements Serializable {
     private boolean deleted;
     private LocalDateTime createTime;
 
-    protected SecurityRole() {
-    }
-
     public String getId() {
         return id;
     }
@@ -68,12 +65,44 @@ public class SecurityRole implements Serializable {
         return describe;
     }
 
-    public boolean isDeleted() {
+    public boolean getDeleted() {
         return deleted;
     }
 
     public LocalDateTime getCreateTime() {
         return createTime;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
     public static Builder withId(String id) {

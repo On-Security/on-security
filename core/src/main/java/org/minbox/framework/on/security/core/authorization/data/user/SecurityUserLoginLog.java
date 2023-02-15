@@ -47,9 +47,6 @@ public class SecurityUserLoginLog implements Serializable {
     private String city;
     private SecuritySession session;
 
-    protected SecurityUserLoginLog() {
-    }
-
     public String getId() {
         return id;
     }
@@ -100,6 +97,58 @@ public class SecurityUserLoginLog implements Serializable {
 
     public SecuritySession getSession() {
         return session;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setUserGroupId(String userGroupId) {
+        this.userGroupId = userGroupId;
+    }
+
+    public void setLoginTime(LocalDateTime loginTime) {
+        this.loginTime = loginTime;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public void setDeviceSystem(String deviceSystem) {
+        this.deviceSystem = deviceSystem;
+    }
+
+    public void setBrowser(String browser) {
+        this.browser = browser;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setSession(SecuritySession session) {
+        this.session = session;
     }
 
     public static Builder withId(String id) {

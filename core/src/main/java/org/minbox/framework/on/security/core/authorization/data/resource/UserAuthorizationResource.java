@@ -64,6 +64,30 @@ public final class UserAuthorizationResource implements Serializable {
         return matchMethod;
     }
 
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
+    }
+
+    public void setResourceCode(String resourceCode) {
+        this.resourceCode = resourceCode;
+    }
+
+    public void setResourceUris(Set<String> resourceUris) {
+        this.resourceUris = resourceUris;
+    }
+
+    public void setResourceType(ResourceType resourceType) {
+        this.resourceType = resourceType;
+    }
+
+    public void setMatchMethod(AuthorizeMatchMethod matchMethod) {
+        this.matchMethod = matchMethod;
+    }
+
     public static Builder withResourceId(String resourceId) {
         Assert.hasText(resourceId, "resourceId cannot be empty");
         return new Builder(resourceId);

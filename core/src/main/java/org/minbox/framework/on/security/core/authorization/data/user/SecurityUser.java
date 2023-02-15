@@ -56,9 +56,6 @@ public class SecurityUser implements Serializable {
     private Set<SecurityUserAuthorizeRole> authorizeRoles;
     private Set<SecurityUserGroup> groups;
 
-    protected SecurityUser() {
-    }
-
     public String getId() {
         return id;
     }

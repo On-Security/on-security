@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.jdbc.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -33,7 +35,12 @@ import java.util.stream.Collectors;
  * @since 0.0.8
  */
 public class ObjectClassUtils {
+    /**
+     * logger instance
+     */
+    static Logger logger = LoggerFactory.getLogger(ObjectClassUtils.class);
     private static final String GET_METHOD_PREFIX = "get";
+    private static final String IS_BOOLEAN_METHOD_PREFIX = "is";
     private static final String SET_METHOD_PREFIX = "set";
 
     public static String getGetMethodName(String fieldUpperCamelName) {
@@ -54,7 +61,7 @@ public class ObjectClassUtils {
         // @formatter:off
         Method[] declaredMethods = ReflectionUtils.getDeclaredMethods(clazz);
         return Arrays.stream(declaredMethods)
-                .filter(method -> method.getName().startsWith(GET_METHOD_PREFIX))
+                .filter(method -> method.getName().startsWith(GET_METHOD_PREFIX) || method.getName().startsWith(IS_BOOLEAN_METHOD_PREFIX))
                 .collect(Collectors.toList())
                 .stream()
                 .toArray(Method[]::new);
@@ -102,8 +109,14 @@ public class ObjectClassUtils {
      */
     public static void invokeObjectSetMethod(Object object, Map<String, Object> setMethodParameterMap) {
         Method[] setMethods = getClassSetMethod(object.getClass());
-        Arrays.stream(setMethods).forEach(setMethod -> {
-            Object setMethodParameter = setMethodParameterMap.get(setMethod.getName());
+        Map<String, Method> setMethodMap = Arrays.stream(setMethods).collect(Collectors.toMap(Method::getName, v -> v));
+        setMethodParameterMap.forEach((setMethodName, value) -> {
+            if (!setMethodMap.containsKey(setMethodName)) {
+                logger.warn("The [{}#{}] not defined.", object.getClass().getSimpleName(), setMethodName);
+                return;
+            }
+            Method setMethod = setMethodMap.get(setMethodName);
+            Object setMethodParameter = setMethodParameterMap.get(setMethodName);
             if (!ObjectUtils.isEmpty(setMethodParameter)) {
                 ReflectionUtils.invokeMethod(setMethod, object, setMethodParameter);
             }

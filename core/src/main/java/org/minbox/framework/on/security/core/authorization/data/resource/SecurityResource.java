@@ -45,9 +45,6 @@ public class SecurityResource implements Serializable {
     private LocalDateTime createTime;
     private Set<SecurityResourceUri> resourceUris;
 
-    protected SecurityResource() {
-    }
-
     public String getId() {
         return id;
     }
@@ -76,7 +73,7 @@ public class SecurityResource implements Serializable {
         return describe;
     }
 
-    public boolean isDeleted() {
+    public boolean getDeleted() {
         return deleted;
     }
 
@@ -86,6 +83,46 @@ public class SecurityResource implements Serializable {
 
     public Set<SecurityResourceUri> getResourceUris() {
         return resourceUris;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setType(ResourceType type) {
+        this.type = type;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setResourceUris(Set<SecurityResourceUri> resourceUris) {
+        this.resourceUris = resourceUris;
     }
 
     public static Builder withId(String id) {

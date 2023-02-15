@@ -39,9 +39,6 @@ public class SecurityAttribute implements Serializable {
     private String mark;
     private boolean deleted;
 
-    private SecurityAttribute() {
-    }
-
     public String getId() {
         return id;
     }
@@ -66,8 +63,36 @@ public class SecurityAttribute implements Serializable {
         return mark;
     }
 
-    public boolean isDeleted() {
+    public boolean getDeleted() {
         return deleted;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public String toString() {

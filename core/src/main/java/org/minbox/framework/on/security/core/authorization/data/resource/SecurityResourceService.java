@@ -69,7 +69,7 @@ public class SecurityResourceService {
                 .stream()
                 .map(authorizeResource -> {
                     SecurityResource resource = resourceRepository.selectOne(authorizeResource.getResourceId());
-                    if (resource == null || resource.isDeleted()) {
+                    if (resource == null || resource.getDeleted()) {
                         return null;
                     }
                     List<SecurityResourceUri> resourceUriList = resourceUriRepository.findByResourceId(authorizeResource.getResourceId());

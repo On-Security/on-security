@@ -51,6 +51,22 @@ public final class UserAuthorizationRole implements Serializable {
         return roleDescribe;
     }
 
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
+    public void setRoleDescribe(String roleDescribe) {
+        this.roleDescribe = roleDescribe;
+    }
+
     public static Builder withRoleId(String roleId) {
         Assert.hasText(roleId, "roleId cannot be empty");
         return new Builder(roleId);

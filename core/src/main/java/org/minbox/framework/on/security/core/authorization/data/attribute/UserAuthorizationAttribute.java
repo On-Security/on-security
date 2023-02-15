@@ -47,6 +47,18 @@ public final class UserAuthorizationAttribute implements Serializable {
         return attributeValue;
     }
 
+    public void setAttributeId(String attributeId) {
+        this.attributeId = attributeId;
+    }
+
+    public void setAttributeKey(String attributeKey) {
+        this.attributeKey = attributeKey;
+    }
+
+    public void setAttributeValue(String attributeValue) {
+        this.attributeValue = attributeValue;
+    }
+
     public static Builder withAttributeId(String attributeId) {
         Assert.hasText(attributeId, "attributeId cannot be empty");
         return new Builder(attributeId);

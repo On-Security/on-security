@@ -22,6 +22,8 @@ import org.minbox.framework.on.security.core.authorization.jdbc.definition.Table
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.TableColumn;
 import org.minbox.framework.on.security.core.authorization.jdbc.utils.ObjectClassUtils;
 import org.minbox.framework.on.security.core.authorization.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.ObjectUtils;
 
@@ -40,6 +42,10 @@ import java.util.Map;
  * @since 0.0.8
  */
 public class ResultRowMapper<T> implements RowMapper<T> {
+    /**
+     * logger instance
+     */
+    static Logger logger = LoggerFactory.getLogger(ResultRowMapper.class);
     private Table table;
     private Class mapEntityClass;
 
@@ -67,12 +73,16 @@ public class ResultRowMapper<T> implements RowMapper<T> {
                 for (String columnName : columnNameList) {
                     OnSecurityColumnName onSecurityColumn = OnSecurityColumnName.valueOfColumnName(columnName);
                     if (!this.table.containsColumn(onSecurityColumn)) {
+                        logger.warn("Table：[{}]，column：[{}] is not defined.", this.table.getTableName(), columnName);
                         continue;
                     }
                     TableColumn tableColumn = this.table.getColumn(onSecurityColumn);
                     // Get the converted column value
                     Object columnValue = tableColumn.fromColumnValue(rs, columnName);
                     String setMethodName = ObjectClassUtils.getSetMethodName(StringUtils.toUpperCamelName(columnName));
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Table：[{}]，column：[{}] value is [{}].", this.table.getTableName(), columnName, columnValue);
+                    }
                     columnValueMap.put(setMethodName, columnValue);
                 }
                 // Invoke Result Object Set Methods

@@ -42,9 +42,6 @@ public class SecurityApplicationScope implements Serializable {
     private ClientScopeType type;
     private LocalDateTime createTime;
 
-    protected SecurityApplicationScope() {
-    }
-
     public String getId() {
         return id;
     }
@@ -67,6 +64,30 @@ public class SecurityApplicationScope implements Serializable {
 
     public LocalDateTime getCreateTime() {
         return createTime;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setScopeName(String scopeName) {
+        this.scopeName = scopeName;
+    }
+
+    public void setScopeCode(String scopeCode) {
+        this.scopeCode = scopeCode;
+    }
+
+    public void setType(ClientScopeType type) {
+        this.type = type;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
     public static Builder withId(String id) {

@@ -71,7 +71,7 @@ public class SecurityRegionSecret implements Serializable {
         this.secretExpiresAt = secretExpiresAt;
     }
 
-    public boolean isDeleted() {
+    public boolean getDeleted() {
         return deleted;
     }
 

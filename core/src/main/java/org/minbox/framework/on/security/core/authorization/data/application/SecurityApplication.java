@@ -40,7 +40,7 @@ public class SecurityApplication implements Serializable {
     private String id;
     private String applicationId;
     private String regionId;
-    private ClientProtocol protocol;
+    private ClientProtocol protocolId;
     private String displayName;
     private String describe;
     private boolean enabled;
@@ -51,9 +51,6 @@ public class SecurityApplication implements Serializable {
     private List<SecurityApplicationScope> scopes;
     private List<SecurityApplicationRedirectUri> redirectUris;
     private List<SecurityApplicationSecret> secrets;
-
-    protected SecurityApplication() {
-    }
 
     public String getId() {
         return id;
@@ -67,8 +64,8 @@ public class SecurityApplication implements Serializable {
         return regionId;
     }
 
-    public ClientProtocol getProtocol() {
-        return protocol;
+    public ClientProtocol getProtocolId() {
+        return protocolId;
     }
 
     public String getDisplayName() {
@@ -107,6 +104,42 @@ public class SecurityApplication implements Serializable {
         return secrets;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setProtocolId(ClientProtocol protocolId) {
+        this.protocolId = protocolId;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
     public static Builder withId(String id) {
         Assert.hasText(id, "id cannot be empty.");
         return new Builder(id);
@@ -120,7 +153,7 @@ public class SecurityApplication implements Serializable {
     public String toString() {
         // @formatter:off
         return "SecurityClient(id=" + this.getId() + ", applicationId=" + this.getApplicationId() + ", regionId=" + this.getRegionId() +
-                ", protocol=" + this.getProtocol() + ", displayName=" + this.getDisplayName() + ", describe=" + this.getDescribe() +
+                ", protocol=" + this.getProtocolId() + ", displayName=" + this.getDisplayName() + ", describe=" + this.getDescribe() +
                 ", enabled=" + this.isEnabled() + ", deleted=" + this.isDeleted() + ", createTime=" + this.getCreateTime() +
                 ", authentication=" + this.getAuthentication() + ", scopes=" + this.getScopes() + ", redirectUris=" +
                 this.getRedirectUris() + ", secrets=" + this.getSecrets() + ")";
@@ -154,7 +187,7 @@ public class SecurityApplication implements Serializable {
             this.id = client.id;
             this.applicationId = client.applicationId;
             this.regionId = client.regionId;
-            this.protocol = client.protocol;
+            this.protocol = client.protocolId;
             this.displayName = client.displayName;
             this.describe = client.describe;
             this.enabled = client.enabled;
@@ -234,7 +267,7 @@ public class SecurityApplication implements Serializable {
                     long notDeletedCount = this.secrets.stream().filter(s -> !s.isDeleted()).count();
                     Assert.isTrue(notDeletedCount > 0, "confidential client must be configured with at least 1 valid secret");
                 }
-                if (authentication.getGrantTypes().contains(AuthorizationGrantType.AUTHORIZATION_CODE)) {
+                if (authentication.getAuthorizationGrantTypes().contains(AuthorizationGrantType.AUTHORIZATION_CODE)) {
                     Assert.notEmpty(this.redirectUris, "redirectUris cannot be empty.");
                     long loginRedirectUriCount = this.redirectUris.stream().filter(ru -> ClientRedirectUriType.LOGIN.equals(ru.getRedirectType())).count();
                     Assert.isTrue(loginRedirectUriCount > 0, "The client has enabled the authorization_code grant type, " +
@@ -249,7 +282,7 @@ public class SecurityApplication implements Serializable {
             client.id = this.id;
             client.applicationId = this.applicationId;
             client.regionId = this.regionId;
-            client.protocol = this.protocol;
+            client.protocolId = this.protocol;
             client.displayName = this.displayName;
             client.describe = this.describe;
             client.enabled = this.enabled;

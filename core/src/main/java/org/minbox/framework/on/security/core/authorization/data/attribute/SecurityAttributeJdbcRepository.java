@@ -37,7 +37,7 @@ import java.util.List;
  */
 public class SecurityAttributeJdbcRepository extends OnSecurityBaseJdbcRepositorySupport<SecurityAttribute, String>
         implements SecurityAttributeRepository {
-    private static final String ID_IN_FILTER = "id in (:ids) and deleted = false";
+    private static final String ID_IN_FILTER = " and id in (:ids) and deleted = false";
 
     public SecurityAttributeJdbcRepository(JdbcOperations jdbcOperations) {
         super(OnSecurityTables.SecurityAttribute, jdbcOperations);

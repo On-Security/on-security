@@ -45,10 +45,6 @@ public class SecurityRegionIdentityProvider implements Serializable {
     private Map<String, Object> expandMetadata;
     private String describe;
     private LocalDateTime createTime;
-
-    protected SecurityRegionIdentityProvider() {
-    }
-
     public String getId() {
         return id;
     }
@@ -95,6 +91,54 @@ public class SecurityRegionIdentityProvider implements Serializable {
 
     public LocalDateTime getCreateTime() {
         return createTime;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setIdpId(String idpId) {
+        this.idpId = idpId;
+    }
+
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
+    }
+
+    public void setRegistrationId(String registrationId) {
+        this.registrationId = registrationId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
+    }
+
+    public void setCallbackUrl(String callbackUrl) {
+        this.callbackUrl = callbackUrl;
+    }
+
+    public void setAuthorizationScopes(Set<String> authorizationScopes) {
+        this.authorizationScopes = authorizationScopes;
+    }
+
+    public void setExpandMetadata(Map<String, Object> expandMetadata) {
+        this.expandMetadata = expandMetadata;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
     public String toString() {

@@ -69,9 +69,6 @@ public class SecuritySession implements Serializable {
     private Map<String, Object> refreshTokenMetadata;
     private LocalDateTime createTime;
 
-    protected SecuritySession() {
-    }
-
     public String getId() {
         return id;
     }
