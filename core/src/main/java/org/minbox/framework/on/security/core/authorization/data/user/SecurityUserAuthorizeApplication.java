@@ -35,9 +35,6 @@ public class SecurityUserAuthorizeApplication implements Serializable {
     private String applicationId;
     private LocalDateTime authorizeTime;
 
-    protected SecurityUserAuthorizeApplication() {
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -48,6 +45,18 @@ public class SecurityUserAuthorizeApplication implements Serializable {
 
     public LocalDateTime getAuthorizeTime() {
         return authorizeTime;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setAuthorizeTime(LocalDateTime authorizeTime) {
+        this.authorizeTime = authorizeTime;
     }
 
     public static Builder withUserId(String userId) {

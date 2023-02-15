@@ -79,7 +79,7 @@ public class OnSecurityPreAuthorizationCodeAuthenticationProvider extends Abstra
                 // @formatter:on
             }
             SecurityRegion securityRegion = regionRepository.selectOne(securityApplication.getRegionId());
-            if (securityRegion == null || !securityRegion.isEnabled() || securityRegion.isDeleted()) {
+            if (securityRegion == null || !securityRegion.getEnabled() || securityRegion.getDeleted()) {
                 //@formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_REGION,
                         null,

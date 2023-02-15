@@ -37,7 +37,7 @@ import java.util.List;
  */
 public class SecurityRoleAuthorizeResourceJdbcRepository extends OnSecurityBaseJdbcRepositorySupport<SecurityRoleAuthorizeResource, String>
         implements SecurityRoleAuthorizeResourceRepository {
-    private static final String ROLE_ID_IN_FILTER = "role_id in (:roleIds)";
+    private static final String ROLE_ID_IN_FILTER = " and role_id in (:roleIds)";
 
     public SecurityRoleAuthorizeResourceJdbcRepository(JdbcOperations jdbcOperations) {
         super(OnSecurityTables.SecurityRoleAuthorizeResource, jdbcOperations);

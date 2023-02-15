@@ -17,7 +17,7 @@
 
 package org.minbox.framework.on.security.core.authorization.jdbc.mapper.type.support;
 
-import org.minbox.framework.on.security.core.authorization.SessionState;
+import org.minbox.framework.on.security.core.authorization.ClientProtocol;
 import org.minbox.framework.on.security.core.authorization.jdbc.mapper.type.TypeMapper;
 import org.springframework.util.ObjectUtils;
 
@@ -25,20 +25,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * {@link SessionState}列值类型映射器
+ * {@link ClientProtocol}客户端协议列值映射器
  *
  * @author 恒宇少年
  * @since 0.0.8
  */
-public class SessionStateTypeMapper implements TypeMapper<SessionState, String> {
+public class ClientProtocolTypeMapper implements TypeMapper<ClientProtocol, String> {
     @Override
-    public String toColumn(SessionState originalValue, String columnName) {
-        return originalValue != null ? originalValue.getValue() : null;
+    public String toColumn(ClientProtocol originalValue, String columnName) {
+        return originalValue != null ? originalValue.getName() : null;
     }
 
     @Override
-    public SessionState fromColumn(ResultSet rs, String columnName) throws SQLException {
+    public ClientProtocol fromColumn(ResultSet rs, String columnName) throws SQLException {
         String columnValue = rs.getString(columnName);
-        return !ObjectUtils.isEmpty(columnValue) ? new SessionState(columnValue) : null;
+        return !ObjectUtils.isEmpty(columnValue) ? new ClientProtocol(columnValue) : null;
     }
 }

@@ -40,9 +40,6 @@ public class SecurityApplicationRedirectUri implements Serializable {
     private String redirectUri;
     private LocalDateTime createTime;
 
-    protected SecurityApplicationRedirectUri() {
-    }
-
     public String getId() {
         return id;
     }
@@ -61,6 +58,26 @@ public class SecurityApplicationRedirectUri implements Serializable {
 
     public LocalDateTime getCreateTime() {
         return createTime;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setRedirectType(ClientRedirectUriType redirectType) {
+        this.redirectType = redirectType;
+    }
+
+    public void setRedirectUri(String redirectUri) {
+        this.redirectUri = redirectUri;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
     public static Builder withId(String id) {

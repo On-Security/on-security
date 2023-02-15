@@ -35,9 +35,6 @@ public class SecurityUserAuthorizeAttribute implements Serializable {
     private String attributeId;
     private LocalDateTime authorizeTime;
 
-    private SecurityUserAuthorizeAttribute() {
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -48,6 +45,18 @@ public class SecurityUserAuthorizeAttribute implements Serializable {
 
     public LocalDateTime getAuthorizeTime() {
         return authorizeTime;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setAttributeId(String attributeId) {
+        this.attributeId = attributeId;
+    }
+
+    public void setAuthorizeTime(LocalDateTime authorizeTime) {
+        this.authorizeTime = authorizeTime;
     }
 
     public String toString() {

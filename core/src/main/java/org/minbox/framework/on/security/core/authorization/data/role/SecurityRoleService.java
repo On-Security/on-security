@@ -58,7 +58,7 @@ public class SecurityRoleService {
         // @formatter:off
         return securityUserAuthorizeRoleList.stream().map(authorizeRole -> {
                     SecurityRole role = roleRepository.selectOne(authorizeRole.getRoleId());
-                    if (role == null || role.isDeleted()) {
+                    if (role == null || role.getDeleted()) {
                         return null;
                     }
                     return UserAuthorizationRole.withRoleId(role.getId())

@@ -38,9 +38,6 @@ public class SecurityIdentityProviderScope implements Serializable {
     private boolean enabled;
     private boolean requiredAuthorization;
 
-    protected SecurityIdentityProviderScope() {
-    }
-
     public String getId() {
         return id;
     }
@@ -61,12 +58,40 @@ public class SecurityIdentityProviderScope implements Serializable {
         return describe;
     }
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
-    public boolean isRequiredAuthorization() {
+    public boolean getRequiredAuthorization() {
         return requiredAuthorization;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setIdpId(String idpId) {
+        this.idpId = idpId;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setRequiredAuthorization(boolean requiredAuthorization) {
+        this.requiredAuthorization = requiredAuthorization;
     }
 
     public String toString() {

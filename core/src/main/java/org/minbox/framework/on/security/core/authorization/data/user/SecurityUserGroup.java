@@ -35,9 +35,6 @@ public class SecurityUserGroup implements Serializable {
     private String groupId;
     private LocalDateTime bindTime;
 
-    protected SecurityUserGroup() {
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -48,6 +45,18 @@ public class SecurityUserGroup implements Serializable {
 
     public LocalDateTime getBindTime() {
         return bindTime;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public void setBindTime(LocalDateTime bindTime) {
+        this.bindTime = bindTime;
     }
 
     public static Builder withUserId(String userId) {

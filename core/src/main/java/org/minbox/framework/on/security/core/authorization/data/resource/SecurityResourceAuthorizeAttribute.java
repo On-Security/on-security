@@ -39,10 +39,6 @@ public class SecurityResourceAuthorizeAttribute implements Serializable {
     private String attributeId;
     private AuthorizeMatchMethod matchMethod;
     private LocalDateTime authorizeTime;
-
-    private SecurityResourceAuthorizeAttribute() {
-    }
-
     public String getId() {
         return id;
     }
@@ -65,6 +61,30 @@ public class SecurityResourceAuthorizeAttribute implements Serializable {
 
     public LocalDateTime getAuthorizeTime() {
         return authorizeTime;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public void setAttributeId(String attributeId) {
+        this.attributeId = attributeId;
+    }
+
+    public void setMatchMethod(AuthorizeMatchMethod matchMethod) {
+        this.matchMethod = matchMethod;
+    }
+
+    public void setAuthorizeTime(LocalDateTime authorizeTime) {
+        this.authorizeTime = authorizeTime;
     }
 
     public String toString() {

@@ -134,7 +134,7 @@ public class OnSecurityOAuth2UsernamePasswordAuthenticationProvider extends Abst
                 // @formatter:on
             }
             SecurityRegion securityRegion = regionRepository.selectOne(securityUser.getRegionId());
-            if (securityRegion == null || !securityRegion.isEnabled() || securityRegion.isDeleted()) {
+            if (securityRegion == null || !securityRegion.getEnabled() || securityRegion.getDeleted()) {
                 //@formatter:off
                 OnSecurityThrowErrorUtils.throwError(OnSecurityErrorCodes.INVALID_REGION,
                         null,

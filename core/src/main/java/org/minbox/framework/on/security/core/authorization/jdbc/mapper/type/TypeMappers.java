@@ -117,4 +117,8 @@ public class TypeMappers {
      * {@link UserGender}列值类型映射器
      */
     public static final UserGenderTypeMapper USER_GENDER = new UserGenderTypeMapper();
+    /**
+     * {@link ClientProtocol}客户端协议列值映射器
+     */
+    public static final ClientProtocolTypeMapper CLIENT_PROTOCOL = new ClientProtocolTypeMapper();
 }

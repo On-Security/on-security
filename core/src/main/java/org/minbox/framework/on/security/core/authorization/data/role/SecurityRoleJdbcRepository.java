@@ -38,7 +38,7 @@ public class SecurityRoleJdbcRepository extends OnSecurityBaseJdbcRepositorySupp
         super(OnSecurityTables.SecurityRole, jdbcOperations);
     }
 
-    private static final String ID_IN_FILTER = "id in (:ids) and application_id = :applicationId and deleted = false";
+    private static final String ID_IN_FILTER = " and id in (:ids) and application_id = :applicationId and deleted = false";
 
     @Override
     public List<SecurityRole> findByIds(String applicationId, List<String> roleIds) {

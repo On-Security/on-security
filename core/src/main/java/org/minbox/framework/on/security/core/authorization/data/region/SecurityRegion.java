@@ -51,11 +51,11 @@ public class SecurityRegion implements Serializable {
         return displayName;
     }
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
-    public boolean isDeleted() {
+    public boolean getDeleted() {
         return deleted;
     }
 
@@ -67,6 +67,34 @@ public class SecurityRegion implements Serializable {
         return describe;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
     public static Builder withId(String id) {
         Assert.hasText(id, "id cannot be empty.");
         return new Builder(id);
@@ -75,7 +103,7 @@ public class SecurityRegion implements Serializable {
     public String toString() {
         // @formatter:off
         return "SecurityRegion(id=" + this.getId() + ", regionId=" + this.getRegionId() + ", displayName=" + this.getDisplayName() +
-                ", enabled=" + this.isEnabled() + ", deleted=" + this.isDeleted() + ", createTime=" + this.getCreateTime() +
+                ", enabled=" + this.getEnabled() + ", deleted=" + this.getDeleted() + ", createTime=" + this.getCreateTime() +
                 ", describe=" + this.getDescribe() + ")";
         // @formatter:on
     }

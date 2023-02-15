@@ -34,10 +34,6 @@ public class SecurityUserAuthorizeRole implements Serializable {
     private String userId;
     private String roleId;
     private LocalDateTime authorizeTime;
-
-    protected SecurityUserAuthorizeRole() {
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -48,6 +44,18 @@ public class SecurityUserAuthorizeRole implements Serializable {
 
     public LocalDateTime getAuthorizeTime() {
         return authorizeTime;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public void setAuthorizeTime(LocalDateTime authorizeTime) {
+        this.authorizeTime = authorizeTime;
     }
 
     public String toString() {

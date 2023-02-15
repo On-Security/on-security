@@ -38,9 +38,6 @@ public class SecurityUserAuthorizeConsent implements Serializable {
     private Set<String> authorities;
     private LocalDateTime authorizeTime;
 
-    protected SecurityUserAuthorizeConsent() {
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -59,6 +56,26 @@ public class SecurityUserAuthorizeConsent implements Serializable {
 
     public LocalDateTime getAuthorizeTime() {
         return authorizeTime;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setAuthorities(Set<String> authorities) {
+        this.authorities = authorities;
+    }
+
+    public void setAuthorizeTime(LocalDateTime authorizeTime) {
+        this.authorizeTime = authorizeTime;
     }
 
     public static Builder withUserId(String userId) {

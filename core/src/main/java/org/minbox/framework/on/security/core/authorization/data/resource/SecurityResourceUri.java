@@ -36,10 +36,6 @@ public class SecurityResourceUri implements Serializable {
     private String resourceId;
     private String uri;
     private LocalDateTime createTime;
-
-    protected SecurityResourceUri() {
-    }
-
     public String getId() {
         return id;
     }
@@ -54,6 +50,22 @@ public class SecurityResourceUri implements Serializable {
 
     public LocalDateTime getCreateTime() {
         return createTime;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
     public static Builder withId(String id) {

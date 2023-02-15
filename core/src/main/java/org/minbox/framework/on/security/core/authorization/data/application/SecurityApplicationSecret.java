@@ -33,15 +33,11 @@ public class SecurityApplicationSecret implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private String id;
     private String applicationId;
-    private String clientSecret;
+    private String applicationSecret;
     private LocalDateTime secretExpiresAt;
     private LocalDateTime createTime;
     private boolean deleted;
     private LocalDateTime deleteTime;
-
-    protected SecurityApplicationSecret() {
-    }
-
     public String getId() {
         return id;
     }
@@ -51,7 +47,7 @@ public class SecurityApplicationSecret implements Serializable {
     }
 
     public String getApplicationSecret() {
-        return clientSecret;
+        return applicationSecret;
     }
 
     public LocalDateTime getSecretExpiresAt() {
@@ -68,6 +64,34 @@ public class SecurityApplicationSecret implements Serializable {
 
     public LocalDateTime getDeleteTime() {
         return deleteTime;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setApplicationSecret(String applicationSecret) {
+        this.applicationSecret = applicationSecret;
+    }
+
+    public void setSecretExpiresAt(LocalDateTime secretExpiresAt) {
+        this.secretExpiresAt = secretExpiresAt;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public void setDeleteTime(LocalDateTime deleteTime) {
+        this.deleteTime = deleteTime;
     }
 
     public static Builder withId(String id) {
@@ -141,7 +165,7 @@ public class SecurityApplicationSecret implements Serializable {
             SecurityApplicationSecret securityApplicationSecret = new SecurityApplicationSecret();
             securityApplicationSecret.id = this.id;
             securityApplicationSecret.applicationId = this.applicationId;
-            securityApplicationSecret.clientSecret = this.clientSecret;
+            securityApplicationSecret.applicationSecret = this.clientSecret;
             securityApplicationSecret.secretExpiresAt = this.secretExpiresAt;
             securityApplicationSecret.createTime = this.createTime;
             securityApplicationSecret.deleted = this.deleted;

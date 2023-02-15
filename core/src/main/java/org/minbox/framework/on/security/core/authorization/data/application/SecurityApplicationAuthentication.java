@@ -41,9 +41,9 @@ public class SecurityApplicationAuthentication implements Serializable {
     private boolean confidential;
     private String jwksUrl;
     private boolean consentRequired;
-    private SignatureAlgorithm signatureAlgorithm;
-    private Set<ClientAuthenticationMethod> authorizationMethods;
-    private Set<AuthorizationGrantType> grantTypes;
+    private SignatureAlgorithm authenticationSigningAlgorithm;
+    private Set<ClientAuthenticationMethod> authenticationMethods;
+    private Set<AuthorizationGrantType> authorizationGrantTypes;
     private SignatureAlgorithm idTokenSignatureAlgorithm;
     private int authorizationCodeExpirationTime;
     private OAuth2TokenFormat accessTokenFormat;
@@ -51,9 +51,6 @@ public class SecurityApplicationAuthentication implements Serializable {
     private int refreshTokenExpirationTime;
     private boolean reuseRefreshToken;
     private LocalDateTime createTime;
-
-    protected SecurityApplicationAuthentication() {
-    }
 
     public String getId() {
         return id;
@@ -75,16 +72,16 @@ public class SecurityApplicationAuthentication implements Serializable {
         return consentRequired;
     }
 
-    public SignatureAlgorithm getSignatureAlgorithm() {
-        return signatureAlgorithm;
+    public SignatureAlgorithm getAuthenticationSigningAlgorithm() {
+        return authenticationSigningAlgorithm;
     }
 
-    public Set<ClientAuthenticationMethod> getAuthorizationMethods() {
-        return authorizationMethods;
+    public Set<ClientAuthenticationMethod> getAuthenticationMethods() {
+        return authenticationMethods;
     }
 
-    public Set<AuthorizationGrantType> getGrantTypes() {
-        return grantTypes;
+    public Set<AuthorizationGrantType> getAuthorizationGrantTypes() {
+        return authorizationGrantTypes;
     }
 
     public SignatureAlgorithm getIdTokenSignatureAlgorithm() {
@@ -121,6 +118,66 @@ public class SecurityApplicationAuthentication implements Serializable {
         return createTime;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setConfidential(boolean confidential) {
+        this.confidential = confidential;
+    }
+
+    public void setJwksUrl(String jwksUrl) {
+        this.jwksUrl = jwksUrl;
+    }
+
+    public void setConsentRequired(boolean consentRequired) {
+        this.consentRequired = consentRequired;
+    }
+
+    public void setAuthenticationSigningAlgorithm(SignatureAlgorithm authenticationSigningAlgorithm) {
+        this.authenticationSigningAlgorithm = authenticationSigningAlgorithm;
+    }
+
+    public void setAuthenticationMethods(Set<ClientAuthenticationMethod> authenticationMethods) {
+        this.authenticationMethods = authenticationMethods;
+    }
+
+    public void setAuthorizationGrantTypes(Set<AuthorizationGrantType> authorizationGrantTypes) {
+        this.authorizationGrantTypes = authorizationGrantTypes;
+    }
+
+    public void setIdTokenSignatureAlgorithm(SignatureAlgorithm idTokenSignatureAlgorithm) {
+        this.idTokenSignatureAlgorithm = idTokenSignatureAlgorithm;
+    }
+
+    public void setAuthorizationCodeExpirationTime(int authorizationCodeExpirationTime) {
+        this.authorizationCodeExpirationTime = authorizationCodeExpirationTime;
+    }
+
+    public void setAccessTokenFormat(OAuth2TokenFormat accessTokenFormat) {
+        this.accessTokenFormat = accessTokenFormat;
+    }
+
+    public void setAccessTokenExpirationTime(int accessTokenExpirationTime) {
+        this.accessTokenExpirationTime = accessTokenExpirationTime;
+    }
+
+    public void setRefreshTokenExpirationTime(int refreshTokenExpirationTime) {
+        this.refreshTokenExpirationTime = refreshTokenExpirationTime;
+    }
+
+    public void setReuseRefreshToken(boolean reuseRefreshToken) {
+        this.reuseRefreshToken = reuseRefreshToken;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
     public static Builder withId(String id) {
         Assert.hasText(id, "id cannot be empty.");
         return new Builder(id);
@@ -130,8 +187,8 @@ public class SecurityApplicationAuthentication implements Serializable {
         // @formatter:off
         return "SecurityClientAuthentication(id=" + this.getId() + ", applicationId=" + this.getApplicationId() + ", confidential=" +
                 this.isConfidential() + ", jwksUrl=" + this.getJwksUrl() + ", consentRequired=" + this.isConsentRequired() +
-                ", signatureAlgorithm=" + this.getSignatureAlgorithm() + ", authorizationMethods=" + this.getAuthorizationMethods() +
-                ", grantTypes=" + this.getGrantTypes() + ", idTokenSignatureAlgorithm=" + this.getIdTokenSignatureAlgorithm() +
+                ", authenticationSigningAlgorithm=" + this.getAuthenticationSigningAlgorithm() + ", authenticationMethods=" + this.getAuthenticationMethods() +
+                ", authorizationGrantTypes=" + this.getAuthorizationGrantTypes() + ", idTokenSignatureAlgorithm=" + this.getIdTokenSignatureAlgorithm() +
                 ", authorizationCodeExpirationTime=" + this.getAuthorizationCodeExpirationTime() + ", accessTokenExpirationTime=" +
                 this.getAccessTokenExpirationTime() + ", accessTokenFormat=" + this.getAccessTokenFormat() +
                 ", refreshTokenExpirationTime=" + this.getRefreshTokenExpirationTime() +
@@ -251,9 +308,9 @@ public class SecurityApplicationAuthentication implements Serializable {
             clientAuthentication.applicationId = this.applicationId;
             clientAuthentication.confidential = this.confidential;
             clientAuthentication.jwksUrl = this.jwksUrl;
-            clientAuthentication.authorizationMethods = this.authorizationMethods;
-            clientAuthentication.signatureAlgorithm = this.signatureAlgorithm;
-            clientAuthentication.grantTypes = this.grantTypes;
+            clientAuthentication.authenticationMethods = this.authorizationMethods;
+            clientAuthentication.authenticationSigningAlgorithm = this.signatureAlgorithm;
+            clientAuthentication.authorizationGrantTypes = this.grantTypes;
             clientAuthentication.consentRequired = this.consentRequired;
             clientAuthentication.idTokenSignatureAlgorithm = this.idTokenSignatureAlgorithm;
             clientAuthentication.authorizationCodeExpirationTime = this.authorizationCodeExpirationTime;

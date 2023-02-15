@@ -79,7 +79,7 @@ public interface OnSecurityTables {
                     TableColumn.withColumnName(OnSecurityColumnName.Id).primaryKey(),
                     TableColumn.withColumnName(OnSecurityColumnName.ApplicationId),
                     TableColumn.withColumnName(OnSecurityColumnName.RegionId),
-                    TableColumn.withColumnName(OnSecurityColumnName.ProtocolId),
+                    TableColumn.withColumnName(OnSecurityColumnName.ProtocolId).typeMapper(TypeMappers.CLIENT_PROTOCOL),
                     TableColumn.withColumnName(OnSecurityColumnName.DisplayName),
                     TableColumn.withColumnName(OnSecurityColumnName.Describe),
                     TableColumn.withColumnName(OnSecurityColumnName.Enabled).booleanValue(),

@@ -36,6 +36,6 @@ public class IntegerTypeMapper implements TypeMapper<Integer, Integer> {
 
     @Override
     public Integer fromColumn(ResultSet rs, String columnName) throws SQLException {
-        return null;
+        return rs.getInt(columnName);
     }
 }

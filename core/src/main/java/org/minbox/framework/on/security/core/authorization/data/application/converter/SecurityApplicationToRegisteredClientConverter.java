@@ -87,20 +87,20 @@ public class SecurityApplicationToRegisteredClientConverter implements Converter
         if (!ObjectUtils.isEmpty(securityApplication.getAuthentication())) {
             SecurityApplicationAuthentication clientAuthentication = securityApplication.getAuthentication();
             // authentication methods
-            if (!ObjectUtils.isEmpty(clientAuthentication.getAuthorizationMethods())) {
+            if (!ObjectUtils.isEmpty(clientAuthentication.getAuthenticationMethods())) {
                 // @formatter:off
                 Set<ClientAuthenticationMethod> authenticationMethodSet =
-                        clientAuthentication.getAuthorizationMethods().stream()
+                        clientAuthentication.getAuthenticationMethods().stream()
                                 .map(am -> new ClientAuthenticationMethod(am.getValue()))
                                 .collect(Collectors.toSet());
                 builder.clientAuthenticationMethods((authenticationMethods) -> authenticationMethods.addAll(authenticationMethodSet));
                 // @formatter:on
             }
             // authentication grant types
-            if (!ObjectUtils.isEmpty(clientAuthentication.getGrantTypes())) {
+            if (!ObjectUtils.isEmpty(clientAuthentication.getAuthorizationGrantTypes())) {
                 // @formatter:off
                 Set<AuthorizationGrantType> authorizationGrantTypeSet =
-                        clientAuthentication.getGrantTypes().stream()
+                        clientAuthentication.getAuthorizationGrantTypes().stream()
                                 .map(am -> new AuthorizationGrantType(am.getValue()))
                                 .collect(Collectors.toSet());
                 builder.authorizationGrantTypes((authorizationGrantTypes) -> authorizationGrantTypes.addAll(authorizationGrantTypeSet));
@@ -114,9 +114,9 @@ public class SecurityApplicationToRegisteredClientConverter implements Converter
             if (!ObjectUtils.isEmpty(clientAuthentication.getJwksUrl())) {
                 clientSettingsBuilder.jwkSetUrl(clientAuthentication.getJwksUrl());
             }
-            if (!ObjectUtils.isEmpty(clientAuthentication.getSignatureAlgorithm())) {
+            if (!ObjectUtils.isEmpty(clientAuthentication.getAuthenticationSigningAlgorithm())) {
                 clientSettingsBuilder.tokenEndpointAuthenticationSigningAlgorithm(() ->
-                        clientAuthentication.getSignatureAlgorithm().getValue());
+                        clientAuthentication.getAuthenticationSigningAlgorithm().getValue());
             }
             // @formatter:on
             builder.clientSettings(clientSettingsBuilder.build());
