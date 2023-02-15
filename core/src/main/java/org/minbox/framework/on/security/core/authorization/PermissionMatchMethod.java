@@ -57,4 +57,11 @@ public class PermissionMatchMethod implements Serializable {
     public int hashCode() {
         return getValue().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "PermissionMatchMethod{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }

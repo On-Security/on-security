@@ -46,12 +46,17 @@ public class ResultRowMapper<T> implements RowMapper<T> {
      * logger instance
      */
     static Logger logger = LoggerFactory.getLogger(ResultRowMapper.class);
+    private List<Map<String, Object>> multiColumnValueMap = new ArrayList();
     private Table table;
     private Class mapEntityClass;
 
     public ResultRowMapper(Table table, Class mapEntityClass) {
         this.table = table;
         this.mapEntityClass = mapEntityClass;
+    }
+
+    public List<Map<String, Object>> getMultiColumnValueMap() {
+        return multiColumnValueMap;
     }
 
     /**
@@ -70,23 +75,23 @@ public class ResultRowMapper<T> implements RowMapper<T> {
             Object mapEntityObject = this.mapEntityClass.getConstructor().newInstance();
             if (!ObjectUtils.isEmpty(columnNameList)) {
                 Map<String, Object> columnValueMap = new HashMap();
+                Map<String, Object> setMethodValueMap = new HashMap();
                 for (String columnName : columnNameList) {
                     OnSecurityColumnName onSecurityColumn = OnSecurityColumnName.valueOfColumnName(columnName);
                     if (!this.table.containsColumn(onSecurityColumn)) {
-                        logger.warn("Table：[{}]，column：[{}] is not defined.", this.table.getTableName(), columnName);
+                        logger.warn("column: [{}] is not defined.", columnName);
                         continue;
                     }
                     TableColumn tableColumn = this.table.getColumn(onSecurityColumn);
                     // Get the converted column value
                     Object columnValue = tableColumn.fromColumnValue(rs, columnName);
                     String setMethodName = ObjectClassUtils.getSetMethodName(StringUtils.toUpperCamelName(columnName));
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Table：[{}]，column：[{}] value is [{}].", this.table.getTableName(), columnName, columnValue);
-                    }
-                    columnValueMap.put(setMethodName, columnValue);
+                    setMethodValueMap.put(setMethodName, columnValue);
+                    columnValueMap.put(columnName, columnValue);
                 }
+                this.multiColumnValueMap.add(columnValueMap);
                 // Invoke Result Object Set Methods
-                ObjectClassUtils.invokeObjectSetMethod(mapEntityObject, columnValueMap);
+                ObjectClassUtils.invokeObjectSetMethod(mapEntityObject, setMethodValueMap);
                 return (T) mapEntityObject;
             }
         } catch (Exception e) {
