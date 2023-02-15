@@ -28,7 +28,7 @@ import org.springframework.util.Assert;
  * @since 0.0.8
  */
 public final class Condition {
-    private static final String SQL_FORMAT = "%s %s ?";
+    private static final String CONDITION_SQL_FORMAT = "%s %s ?";
     private SqlComparisonOperator operator;
     private ColumnValue columnValue;
 
@@ -49,7 +49,7 @@ public final class Condition {
     }
 
     public String getSql() {
-        return String.format(SQL_FORMAT, this.getColumnName().getName(), this.operator.getValue());
+        return String.format(CONDITION_SQL_FORMAT, this.getColumnName().getName(), this.operator.getValue());
     }
 
     public static Builder withColumn(OnSecurityColumnName columnName, Object value) {
