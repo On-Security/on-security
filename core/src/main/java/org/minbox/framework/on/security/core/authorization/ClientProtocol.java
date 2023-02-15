@@ -70,4 +70,11 @@ public final class ClientProtocol implements Serializable {
     public int hashCode() {
         return getName().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "ClientProtocol{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

@@ -57,4 +57,11 @@ public final class ClientScopeType implements Serializable {
     public int hashCode() {
         return getValue().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "ClientScopeType{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }

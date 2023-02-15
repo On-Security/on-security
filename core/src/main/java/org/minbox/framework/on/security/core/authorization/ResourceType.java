@@ -58,4 +58,11 @@ public final class ResourceType implements Serializable {
     public int hashCode() {
         return getValue().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "ResourceType{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }

@@ -58,4 +58,11 @@ public class UserGender implements Serializable {
     public int hashCode() {
         return getValue().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "UserGender{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }

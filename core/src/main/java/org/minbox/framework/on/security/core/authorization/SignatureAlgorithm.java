@@ -68,4 +68,11 @@ public final class SignatureAlgorithm implements Serializable {
     public int hashCode() {
         return getValue().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "SignatureAlgorithm{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }

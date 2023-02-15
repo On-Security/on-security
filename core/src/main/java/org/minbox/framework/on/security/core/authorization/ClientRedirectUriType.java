@@ -58,4 +58,11 @@ public final class ClientRedirectUriType implements Serializable {
     public int hashCode() {
         return getValue().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "ClientRedirectUriType{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }

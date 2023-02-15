@@ -22,6 +22,8 @@ import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSec
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.Table;
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.TableColumn;
 import org.minbox.framework.on.security.core.authorization.jdbc.mapper.ResultRowMapper;
+import org.minbox.framework.on.security.core.authorization.jdbc.printer.ConsoleSqlPrinter;
+import org.minbox.framework.on.security.core.authorization.jdbc.printer.SqlPrinter;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.ColumnValue;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.ConditionGroup;
@@ -31,10 +33,7 @@ import org.minbox.framework.on.security.core.authorization.jdbc.utils.ObjectClas
 import org.minbox.framework.on.security.core.authorization.jdbc.utils.SqlParameterValueUtils;
 import org.minbox.framework.on.security.core.authorization.jdbc.utils.SqlUtils;
 import org.springframework.core.ResolvableType;
-import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
-import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.PreparedStatementSetter;
-import org.springframework.jdbc.core.SqlParameterValue;
+import org.springframework.jdbc.core.*;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
@@ -61,12 +60,14 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
     protected Table table;
     protected JdbcOperations jdbcOperations;
     private Class mapEntityClass;
+    private SqlPrinter sqlPrinter;
 
     public OnSecurityBaseJdbcRepositorySupport(Table table, JdbcOperations jdbcOperations) {
         this.table = table;
         this.jdbcOperations = jdbcOperations;
         ResolvableType resolvableType = ResolvableType.forClass(this.getClass()).getSuperType();
         this.mapEntityClass = resolvableType.getGeneric(MAP_ENTITY_GENERIC_INDEX).resolve();
+        this.sqlPrinter = new ConsoleSqlPrinter();
     }
 
     @Override
@@ -74,10 +75,12 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
         Assert.notNull(object, "目标新增对象不可以为null.");
         List<TableColumn> insertableTableColumns = this.table.getInsertableTableColumns();
         Map<String, Object> methodValueMap = ObjectClassUtils.invokeObjectGetMethod(object);
-
+        String insertSql = this.table.getInsertSql();
         SqlParameterValue[] parameterValues = SqlParameterValueUtils.getWithTableColumn(insertableTableColumns, methodValueMap);
         PreparedStatementSetter pass = new ArgumentPreparedStatementSetter(parameterValues);
-        return this.jdbcOperations.update(this.table.getInsertSql(), pass);
+        int affectedRows = this.jdbcOperations.update(insertSql, pass);
+        this.sqlPrinter.print(insertSql, parameterValues, affectedRows);
+        return affectedRows;
     }
 
     @Override
@@ -85,56 +88,55 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
         Assert.notNull(pk, "主键值不可以为null.");
         OnSecurityColumnName pkColumn = this.table.getPk().getColumnName();
         Condition idFilterCondition = Condition.withColumn(pkColumn, pk).build();
-
         StringBuffer sql = new StringBuffer();
         sql.append(this.table.getDeleteSql());
         sql.append(SqlUtils.getConditionSql(SqlLogicalOperator.AND, idFilterCondition));
-
-
         SqlParameterValue[] parameterValues = SqlParameterValueUtils.getWithCondition(this.table, idFilterCondition);
         PreparedStatementSetter pass = new ArgumentPreparedStatementSetter(parameterValues);
-        return this.jdbcOperations.update(sql.toString(), pass);
+        int affectedRows = this.jdbcOperations.update(sql.toString(), pass);
+        this.sqlPrinter.print(sql.toString(), parameterValues, affectedRows);
+        return affectedRows;
     }
 
     @Override
     public int delete(Condition... conditions) {
         Assert.notEmpty(conditions, "请至少传递一个Condition.");
-
         String conditionSql = SqlUtils.getConditionSql(SqlLogicalOperator.AND, conditions);
         StringBuffer sql = new StringBuffer();
         sql.append(this.table.getDeleteSql());
         sql.append(conditionSql);
-
         SqlParameterValue[] parameterValues = SqlParameterValueUtils.getWithCondition(this.table, conditions);
         PreparedStatementSetter pass = new ArgumentPreparedStatementSetter(parameterValues);
-        return this.jdbcOperations.update(sql.toString(), pass);
+        int affectedRows = this.jdbcOperations.update(sql.toString(), pass);
+        this.sqlPrinter.print(sql.toString(), parameterValues, affectedRows);
+        return affectedRows;
     }
 
     @Override
     public int delete(ConditionGroup... conditionGroups) {
         Assert.notEmpty(conditionGroups, "请至少传递一个ConditionGroup.");
-
         String conditionSql = SqlUtils.getConditionGroupSql(conditionGroups);
         StringBuffer sql = new StringBuffer();
         sql.append(this.table.getDeleteSql());
         sql.append(conditionSql);
-
         SqlParameterValue[] parameterValues = SqlParameterValueUtils.getWithConditionGroup(this.table, conditionGroups);
         PreparedStatementSetter pass = new ArgumentPreparedStatementSetter(parameterValues);
-        return this.jdbcOperations.update(sql.toString(), pass);
+        int affectedRows = this.jdbcOperations.update(sql.toString(), pass);
+        this.sqlPrinter.print(sql.toString(), parameterValues, affectedRows);
+        return affectedRows;
     }
 
     @Override
     public int delete(String filterSql, ColumnValue... filterColumnValues) {
         Assert.notEmpty(filterColumnValues, "请至少传递一个FilterColumnValue.");
-
         StringBuffer sql = new StringBuffer();
         sql.append(this.table.getDeleteSql());
         sql.append(filterSql);
-
         SqlParameterValue[] parameterValues = SqlParameterValueUtils.getWithColumnValue(this.table, filterColumnValues);
         PreparedStatementSetter pass = new ArgumentPreparedStatementSetter(parameterValues);
-        return this.jdbcOperations.update(sql.toString(), pass);
+        int affectedRows = this.jdbcOperations.update(sql.toString(), pass);
+        this.sqlPrinter.print(sql.toString(), parameterValues, affectedRows);
+        return affectedRows;
     }
 
     @Override
@@ -144,17 +146,16 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
         Map<String, Object> methodValueMap = ObjectClassUtils.invokeObjectGetMethod(object);
         Object pkValue = methodValueMap.get(ObjectClassUtils.getGetMethodName(pkColumn.getUpperCamelName()));
         Condition pkFilterCondition = Condition.withColumn(pkColumn, pkValue).build();
-
         StringBuffer sql = new StringBuffer();
         sql.append(this.table.getUpdateSql());
         sql.append(SqlUtils.getConditionSql(SqlLogicalOperator.AND, pkFilterCondition));
-
         List<TableColumn> updatableTableColumnList = this.table.getUpdatableTableColumns();
         updatableTableColumnList.add(this.table.getPk());
-
         SqlParameterValue[] parameterValues = SqlParameterValueUtils.getWithTableColumn(updatableTableColumnList, methodValueMap);
         PreparedStatementSetter pass = new ArgumentPreparedStatementSetter(parameterValues);
-        return this.jdbcOperations.update(sql.toString(), pass);
+        int affectedRows = this.jdbcOperations.update(sql.toString(), pass);
+        this.sqlPrinter.print(sql.toString(), parameterValues, affectedRows);
+        return affectedRows;
     }
 
     @Override
@@ -166,18 +167,18 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
                 .map(ColumnValue::getColumnName)
                 .collect(Collectors.toList());
         // @formatter:on
-
         StringBuffer updateSql = new StringBuffer();
         updateSql.append(this.table.getUpdateSql(setColumnList));
         updateSql.append(SqlUtils.getConditionSql(SqlLogicalOperator.AND, conditions));
-
         // @formatter:off
         SqlParameterValue[] parameterValues =
                 ArrayUtils.concat(SqlParameterValueUtils.getWithColumnValue(this.table, setColumnValueList),
                         SqlParameterValueUtils.getWithCondition(this.table, conditions));
         // @formatter:on
         PreparedStatementSetter pass = new ArgumentPreparedStatementSetter(parameterValues);
-        return this.jdbcOperations.update(updateSql.toString(), pass);
+        int affectedRows = this.jdbcOperations.update(updateSql.toString(), pass);
+        this.sqlPrinter.print(updateSql.toString(), parameterValues, affectedRows);
+        return affectedRows;
     }
 
     @Override
@@ -189,18 +190,18 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
                 .map(ColumnValue::getColumnName)
                 .collect(Collectors.toList());
         // @formatter:on
-
         StringBuffer updateSql = new StringBuffer();
         updateSql.append(this.table.getUpdateSql(setColumnList));
         updateSql.append(SqlUtils.getConditionGroupSql(conditionGroups));
-
         // @formatter:off
         SqlParameterValue[] parameterValues =
                 ArrayUtils.concat(SqlParameterValueUtils.getWithColumnValue(this.table, setColumnValueList),
                         SqlParameterValueUtils.getWithConditionGroup(this.table, conditionGroups));
         // @formatter:on
         PreparedStatementSetter pass = new ArgumentPreparedStatementSetter(parameterValues);
-        return this.jdbcOperations.update(updateSql.toString(), pass);
+        int affectedRows = this.jdbcOperations.update(updateSql.toString(), pass);
+        this.sqlPrinter.print(updateSql.toString(), parameterValues, affectedRows);
+        return affectedRows;
     }
 
     @Override
@@ -213,18 +214,18 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
                 .map(ColumnValue::getColumnName)
                 .collect(Collectors.toList());
         // @formatter:on
-
         StringBuffer updateSql = new StringBuffer();
         updateSql.append(this.table.getUpdateSql(setColumnList));
         updateSql.append(filterSql);
-
         // @formatter:off
         SqlParameterValue[] parameterValues =
                 ArrayUtils.concat(SqlParameterValueUtils.getWithColumnValue(this.table, setColumnValueList),
                         SqlParameterValueUtils.getWithColumnValue(this.table, filterColumnValues));
         // @formatter:on
         PreparedStatementSetter pass = new ArgumentPreparedStatementSetter(parameterValues);
-        return this.jdbcOperations.update(updateSql.toString(), pass);
+        int affectedRows = this.jdbcOperations.update(updateSql.toString(), pass);
+        this.sqlPrinter.print(updateSql.toString(), parameterValues, affectedRows);
+        return affectedRows;
     }
 
     @Override
@@ -306,7 +307,9 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
 
     private List<T> doConditionQuery(String querySql, Condition... conditions) {
         Object[] parameterValues = Arrays.stream(conditions).map(Condition::getValue).toArray(Object[]::new);
-        List<T> resultList = this.jdbcOperations.query(querySql, new ResultRowMapper(this.table, this.mapEntityClass), parameterValues);
+        ResultRowMapper resultRowMapper = new ResultRowMapper(this.table, this.mapEntityClass);
+        List<T> resultList = this.jdbcOperations.query(querySql, resultRowMapper, parameterValues);
+        this.sqlPrinter.print(querySql, parameterValues, resultRowMapper.getMultiColumnValueMap(), resultList.size());
         return !ObjectUtils.isEmpty(resultList) ? resultList : null;
     }
 }

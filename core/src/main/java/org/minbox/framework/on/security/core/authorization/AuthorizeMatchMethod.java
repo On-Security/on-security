@@ -57,4 +57,11 @@ public final class AuthorizeMatchMethod implements Serializable {
     public int hashCode() {
         return getValue().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "AuthorizeMatchMethod{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }
