@@ -39,7 +39,7 @@ public class SecurityUserAuthorizeAttributeJdbcRepository extends OnSecurityBase
 
     @Override
     public List<SecurityUserAuthorizeAttribute> findByUserId(String userId) {
-        Condition userIdCondition = Condition.withColumn(OnSecurityColumnName.UserId, userId).build();
+        Condition userIdCondition = Condition.withColumn(OnSecurityColumnName.UserId, userId);
         return this.select(userIdCondition);
     }
 }

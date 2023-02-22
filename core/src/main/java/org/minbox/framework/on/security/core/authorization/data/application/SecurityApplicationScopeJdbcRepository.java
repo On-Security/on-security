@@ -49,7 +49,7 @@ public class SecurityApplicationScopeJdbcRepository extends OnSecurityBaseJdbcRe
 
     @Override
     public List<SecurityApplicationScope> findByApplicationId(String applicationId) {
-        Condition applicationIdCondition = Condition.withColumn(OnSecurityColumnName.ApplicationId, applicationId).build();
+        Condition applicationIdCondition = Condition.withColumn(OnSecurityColumnName.ApplicationId, applicationId);
         return this.select(applicationIdCondition);
     }
 }

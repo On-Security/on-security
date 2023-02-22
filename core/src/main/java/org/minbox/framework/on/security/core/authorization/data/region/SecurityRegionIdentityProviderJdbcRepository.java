@@ -37,7 +37,7 @@ public class SecurityRegionIdentityProviderJdbcRepository extends OnSecurityBase
 
     @Override
     public SecurityRegionIdentityProvider findByRegistrationId(String registrationId) {
-        Condition registrationIdCondition = Condition.withColumn(OnSecurityColumnName.RegistrationId, registrationId).build();
+        Condition registrationIdCondition = Condition.withColumn(OnSecurityColumnName.RegistrationId, registrationId);
         return this.selectOne(registrationIdCondition);
     }
 }

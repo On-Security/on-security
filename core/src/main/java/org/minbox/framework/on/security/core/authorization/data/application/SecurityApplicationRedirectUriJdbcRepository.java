@@ -53,7 +53,7 @@ public class SecurityApplicationRedirectUriJdbcRepository extends OnSecurityBase
     @Override
     public List<SecurityApplicationRedirectUri> findByApplicationId(String applicationId) {
         Assert.hasText(applicationId, "applicationId cannot be empty");
-        Condition applicationIdCondition = Condition.withColumn(OnSecurityColumnName.ApplicationId, applicationId).build();
+        Condition applicationIdCondition = Condition.withColumn(OnSecurityColumnName.ApplicationId, applicationId);
         return this.select(applicationIdCondition);
     }
 }

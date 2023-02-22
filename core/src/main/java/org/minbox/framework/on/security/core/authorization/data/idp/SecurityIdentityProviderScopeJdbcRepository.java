@@ -39,7 +39,7 @@ public class SecurityIdentityProviderScopeJdbcRepository extends OnSecurityBaseJ
 
     @Override
     public List<SecurityIdentityProviderScope> findByIdpId(String idpId) {
-        Condition condition = Condition.withColumn(OnSecurityColumnName.IdpId, idpId).build();
+        Condition condition = Condition.withColumn(OnSecurityColumnName.IdpId, idpId);
         return this.select(condition);
     }
 }

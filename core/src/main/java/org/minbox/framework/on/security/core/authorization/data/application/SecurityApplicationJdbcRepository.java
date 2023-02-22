@@ -52,7 +52,7 @@ public class SecurityApplicationJdbcRepository extends OnSecurityBaseJdbcReposit
     @Override
     public SecurityApplication findByApplicationId(String applicationId) {
         Assert.hasText(applicationId, "applicationId cannot be empty");
-        Condition applicationIdCondition = Condition.withColumn(OnSecurityColumnName.ApplicationId, applicationId).build();
+        Condition applicationIdCondition = Condition.withColumn(OnSecurityColumnName.ApplicationId, applicationId);
         return this.selectOne(applicationIdCondition);
     }
 

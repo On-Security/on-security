@@ -20,7 +20,7 @@ package org.minbox.framework.on.security.core.authorization.jdbc.sql;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.operator.SqlLogicalOperator;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,12 +37,9 @@ public final class ConditionGroup {
     private SqlLogicalOperator operator;
     private List<Condition> conditions;
 
-    // @formatter:off
-    private ConditionGroup() { }
-    // @formatter:on
-
-    public SqlLogicalOperator getOperator() {
-        return operator;
+    private ConditionGroup(SqlLogicalOperator operator, List<Condition> conditions) {
+        this.operator = operator;
+        this.conditions = conditions;
     }
 
     public List<Condition> getConditions() {
@@ -59,41 +56,12 @@ public final class ConditionGroup {
         return sql.toString();
     }
 
-    public static Builder withCondition(Condition condition) {
-        Assert.notNull(condition, "Condition cannot be null.");
-        return new Builder(condition, SqlLogicalOperator.AND);
+    public static ConditionGroup withCondition(Condition... conditions) {
+        Assert.notEmpty(conditions, "conditions cannot be empty.");
+        return withCondition(SqlLogicalOperator.AND, conditions);
     }
 
-    /**
-     * The {@link ConditionGroup} Builder
-     */
-    public static class Builder {
-        private SqlLogicalOperator operator;
-        private List<Condition> conditions;
-
-        public Builder(Condition condition, SqlLogicalOperator operator) {
-            this.operator = operator;
-            this.conditions = new ArrayList();
-            this.conditions.add(condition);
-        }
-
-        public Builder condition(Condition condition) {
-            Assert.notNull(condition, "Condition cannot be null.");
-            this.conditions.add(condition);
-            return this;
-        }
-
-        public Builder operator(SqlLogicalOperator operator) {
-            Assert.notNull(operator, "SqlLogicalOperator cannot be null.");
-            this.operator = operator;
-            return this;
-        }
-
-        public ConditionGroup build() {
-            ConditionGroup conditionGroup = new ConditionGroup();
-            conditionGroup.operator = this.operator;
-            conditionGroup.conditions = this.conditions;
-            return conditionGroup;
-        }
+    public static ConditionGroup withCondition(SqlLogicalOperator operator, Condition... conditions) {
+        return new ConditionGroup(operator, Arrays.asList(conditions));
     }
 }

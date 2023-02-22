@@ -39,7 +39,7 @@ public class SecurityResourceUriJdbcRepository extends OnSecurityBaseJdbcReposit
 
     @Override
     public List<SecurityResourceUri> findByResourceId(String resourceId) {
-        Condition resourceIdCondition = Condition.withColumn(OnSecurityColumnName.ResourceId, resourceId).build();
+        Condition resourceIdCondition = Condition.withColumn(OnSecurityColumnName.ResourceId, resourceId);
         return this.select(resourceIdCondition);
     }
 }
