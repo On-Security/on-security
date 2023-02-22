@@ -57,9 +57,9 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      * <pre>
      *     {@code
      *      baseJdbcRepository.delete(
-     *                 Condition.withColumn(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003").build(),
-     *                 Condition.withColumn(OnSecurityColumns.Enabled, false).build(),
-     *                 Condition.withColumn(OnSecurityColumns.Deleted, false).build()
+     *                 Condition.withColumn(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003"),
+     *                 Condition.withColumn(OnSecurityColumns.Enabled, false),
+     *                 Condition.withColumn(OnSecurityColumns.Deleted, false)
      *         );
      *     }
      * </pre>
@@ -75,12 +75,12 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      *     {@code
      *      baseJdbcRepository.delete(
      *                 ConditionGroup
-     *                         .withCondition(Condition.withColumn(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003").build())
-     *                         .condition(Condition.withColumn(OnSecurityColumns.Enabled, false).build())
-     *                         .build(),
-     *                 ConditionGroup.withCondition(
-     *                         Condition.withColumn(OnSecurityColumns.Deleted, true).build()
-     *                 ).operator(SqlLogicalOperator.OR).build()
+     *                         .withCondition(Condition.withColumn(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003"),
+     *                          Condition.withColumn(OnSecurityColumns.Enabled, false)
+     *                         )
+     *                 ConditionGroup.withCondition(SqlLogicalOperator.OR,
+     *                         Condition.withColumn(OnSecurityColumns.Deleted, true)
+     *                 )
      *         );
      *     }
      * </pre>
@@ -96,7 +96,7 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      * <pre>
      *     {@code
      *      baseJdbcRepository.delete(" and region_id != ?",
-     *                 ColumnValue.with(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003").build()
+     *                 ColumnValue.with(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003")
      *         );
      *     }
      * </pre>
@@ -121,9 +121,9 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      * <pre>
      *     {@code
      *      baseJdbcRepository.update(Arrays.asList(
-     *                 ColumnValue.with(OnSecurityColumns.DeleteTime, LocalDateTime.now()).build(),
-     *                 ColumnValue.with(OnSecurityColumns.Enabled, false).build()
-     *         ), Condition.withColumn(OnSecurityColumns.Deleted, true).build());
+     *                 ColumnValue.with(OnSecurityColumns.DeleteTime, LocalDateTime.now()),
+     *                 ColumnValue.with(OnSecurityColumns.Enabled, false)
+     *         ), Condition.withColumn(OnSecurityColumns.Deleted, true));
      *     }
      * </pre>
      *
@@ -138,15 +138,13 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      *
      * <pre>
      *     {@code
-     *       baseJdbcRepository.update(Arrays.asList(ColumnValue.with(OnSecurityColumns.Enabled, false).build()),
+     *       baseJdbcRepository.update(Arrays.asList(ColumnValue.with(OnSecurityColumns.Enabled, false)),
      *                 // Deleted is true
-     *                 ConditionGroup.withCondition(Condition.withColumn(OnSecurityColumns.Deleted, true).build()).build(),
+     *                 ConditionGroup.withCondition(Condition.withColumn(OnSecurityColumns.Deleted, true)),
      *                 // CreateTime <= now()
-     *                 ConditionGroup.withCondition(Condition.withColumn(OnSecurityColumns.CreateTime, LocalDateTime.now())
-     *                                 .operator(SqlComparisonOperator.LessThanOrEqualTo)
-     *                                 .build())
-     *                         .operator(SqlLogicalOperator.OR)
-     *                         .build()
+     *                 ConditionGroup.withCondition(SqlLogicalOperator.OR,
+     *                 Condition.withColumn(SqlComparisonOperator.LessThanOrEqualTo,OnSecurityColumns.CreateTime, LocalDateTime.now()))
+     *                         
      *     }
      * </pre>
      *
@@ -160,10 +158,10 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      * 根据自定义过滤条件SQL更新数据
      * <pre>
      *      {@code
-     *          baseJdbcRepository.update(Arrays.asList(ColumnValue.with(OnSecurityColumns.Enabled, true).build()),
+     *          baseJdbcRepository.update(Arrays.asList(ColumnValue.with(OnSecurityColumns.Enabled, true)),
      *                 " and deleted = ? or create_time <= ?",
-     *                 ColumnValue.with(OnSecurityColumns.Deleted, true).build(),
-     *                 ColumnValue.with(OnSecurityColumns.CreateTime, LocalDateTime.now()).build()
+     *                 ColumnValue.with(OnSecurityColumns.Deleted, true),
+     *                 ColumnValue.with(OnSecurityColumns.CreateTime, LocalDateTime.now())
      *         );
      *      }
      *  </pre>
@@ -190,8 +188,8 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      * <pre>
      *     {@code
      *      consoleManagerJdbcRepository.selectOne(
-     *                         Condition.withColumn(OnSecurityColumns.Id_String, "083b2f2c-a2dc-11ed-8423-0242ac110002").build(),
-     *                         Condition.withColumn(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003").build()
+     *                         Condition.withColumn(OnSecurityColumns.Id_String, "083b2f2c-a2dc-11ed-8423-0242ac110002"),
+     *                         Condition.withColumn(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003")
      *                 );
      *     }
      * </pre>
@@ -207,12 +205,12 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      *     {@code
      *      consoleManagerJdbcRepository.selectOne(
      *                 ConditionGroup.withCondition(
-     *                         Condition.withColumn(OnSecurityColumnName.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003").build()
-     *                 ).build(),
-     *                 ConditionGroup.withCondition(
-     *                         Condition.withColumn(OnSecurityColumnName.Id, "083b2f2c-a2dc-11ed-8423-0242ac110002").build()
-     *                 ).operator(SqlLogicalOperator.OR)
-     *                 .build()
+     *                         Condition.withColumn(OnSecurityColumnName.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003")
+     *                 ),
+     *                 ConditionGroup.withCondition(SqlLogicalOperator.OR,
+     *                         Condition.withColumn(OnSecurityColumnName.Id, "083b2f2c-a2dc-11ed-8423-0242ac110002")
+     *                 )
+     *                 
      *         );
      *     }
      * </pre>
@@ -228,7 +226,7 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      * <pre>
      *     {@code
      *      List<SecurityConsoleManager> consoleManagerList = consoleManagerJdbcRepository.select(
-     *                 Condition.withColumn(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003").build()
+     *                 Condition.withColumn(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003")
      *         );
      *     }
      * </pre>
@@ -245,7 +243,7 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      *      consoleManagerJdbcRepository.select(
      *                 SortCondition.withSort(OnSecurityColumnName.CreateTime, SortBy.desc)
      *                         .addSort(OnSecurityColumnName.DeleteTime,SortBy.asc),
-     *                 Condition.withColumn(OnSecurityColumnName.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003").build()
+     *                 Condition.withColumn(OnSecurityColumnName.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003")
      *         );
      *     }
      * </pre>
@@ -262,12 +260,12 @@ public interface OnSecurityBaseJdbcRepository<T extends Serializable, PK> {
      *     {@code
      *      List<SecurityConsoleManager> consoleManagerList = consoleManagerJdbcRepository.select(
      *                 ConditionGroup.withCondition(
-     *                         Condition.withColumn(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003").build()
-     *                 ).build(),
-     *                 ConditionGroup.withCondition(
-     *                         Condition.withColumn(OnSecurityColumns.Id_String, "083b2f2c-a2dc-11ed-8423-0242ac110002").build()
-     *                 ).operator(SqlLogicalOperator.OR)
-     *                 .build()
+     *                         Condition.withColumn(OnSecurityColumns.RegionId, "7f776d47-6b03-11ed-b779-0242ac110003")
+     *                 ),
+     *                 ConditionGroup.withCondition(SqlLogicalOperator.OR,
+     *                         Condition.withColumn(OnSecurityColumns.Id_String, "083b2f2c-a2dc-11ed-8423-0242ac110002")
+     *                 )
+     *                 
      *         );
      *     }
      * </pre>

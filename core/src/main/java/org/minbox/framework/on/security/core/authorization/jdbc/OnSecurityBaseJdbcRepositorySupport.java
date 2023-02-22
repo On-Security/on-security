@@ -87,7 +87,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
     public int delete(PK pk) {
         Assert.notNull(pk, "主键值不可以为null.");
         OnSecurityColumnName pkColumn = this.table.getPk().getColumnName();
-        Condition idFilterCondition = Condition.withColumn(pkColumn, pk).build();
+        Condition idFilterCondition = Condition.withColumn(pkColumn, pk);
         StringBuffer sql = new StringBuffer();
         sql.append(this.table.getDeleteSql());
         sql.append(SqlUtils.getConditionSql(SqlLogicalOperator.AND, idFilterCondition));
@@ -145,7 +145,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
         OnSecurityColumnName pkColumn = this.table.getPk().getColumnName();
         Map<String, Object> methodValueMap = ObjectClassUtils.invokeObjectGetMethod(object);
         Object pkValue = methodValueMap.get(ObjectClassUtils.getGetMethodName(pkColumn.getUpperCamelName()));
-        Condition pkFilterCondition = Condition.withColumn(pkColumn, pkValue).build();
+        Condition pkFilterCondition = Condition.withColumn(pkColumn, pkValue);
         StringBuffer sql = new StringBuffer();
         sql.append(this.table.getUpdateSql());
         sql.append(SqlUtils.getConditionSql(SqlLogicalOperator.AND, pkFilterCondition));
@@ -232,7 +232,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
     public T selectOne(PK pk) {
         Assert.notNull(pk, "主键值不可以为null.");
         OnSecurityColumnName pkColumn = this.table.getPk().getColumnName();
-        Condition pkFilterCondition = Condition.withColumn(pkColumn, pk).build();
+        Condition pkFilterCondition = Condition.withColumn(pkColumn, pk);
         return this.selectOne(pkFilterCondition);
     }
 

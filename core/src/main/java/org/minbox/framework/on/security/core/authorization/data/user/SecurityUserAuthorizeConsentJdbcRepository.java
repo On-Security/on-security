@@ -48,13 +48,13 @@ public class SecurityUserAuthorizeConsentJdbcRepository extends OnSecurityBaseJd
 
     @Override
     public void remove(String securityUserId, String applicationId) {
-        this.delete(Condition.withColumn(OnSecurityColumnName.UserId, securityUserId).build(),
-                Condition.withColumn(OnSecurityColumnName.ApplicationId, applicationId).build());
+        this.delete(Condition.withColumn(OnSecurityColumnName.UserId, securityUserId),
+                Condition.withColumn(OnSecurityColumnName.ApplicationId, applicationId));
     }
 
     @Override
     public SecurityUserAuthorizeConsent findByUserIdAndClientId(String securityUserId, String applicationId) {
-        return this.selectOne(Condition.withColumn(OnSecurityColumnName.UserId, securityUserId).build(),
-                Condition.withColumn(OnSecurityColumnName.ApplicationId, applicationId).build());
+        return this.selectOne(Condition.withColumn(OnSecurityColumnName.UserId, securityUserId),
+                Condition.withColumn(OnSecurityColumnName.ApplicationId, applicationId));
     }
 }

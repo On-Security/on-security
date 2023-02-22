@@ -39,7 +39,7 @@ public class SecurityGroupAuthorizeRoleJdbcRepository extends OnSecurityBaseJdbc
 
     @Override
     public List<SecurityGroupAuthorizeRole> findByGroupId(String groupId) {
-        Condition groupIdCondition = Condition.withColumn(OnSecurityColumnName.GroupId, groupId).build();
+        Condition groupIdCondition = Condition.withColumn(OnSecurityColumnName.GroupId, groupId);
         return this.select(groupIdCondition);
     }
 }

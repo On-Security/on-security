@@ -57,9 +57,9 @@ public class SecurityAttributeJdbcRepository extends OnSecurityBaseJdbcRepositor
 
     private void assertUniqueIdentifiers(SecurityAttribute attribute) {
         SecurityAttribute checkObject = this.selectOne(
-                Condition.withColumn(OnSecurityColumnName.RegionId, attribute.getRegionId()).build(),
-                Condition.withColumn(OnSecurityColumnName.Key, attribute.getKey()).build(),
-                Condition.withColumn(OnSecurityColumnName.Value, attribute.getValue()).build()
+                Condition.withColumn(OnSecurityColumnName.RegionId, attribute.getRegionId()),
+                Condition.withColumn(OnSecurityColumnName.Key, attribute.getKey()),
+                Condition.withColumn(OnSecurityColumnName.Value, attribute.getValue())
         );
         Assert.isNull(checkObject, "Attribute must be unique，duplicate Key & Value：" + attribute.getKey() + "," + attribute.getValue());
     }
@@ -67,7 +67,7 @@ public class SecurityAttributeJdbcRepository extends OnSecurityBaseJdbcRepositor
     @Override
     public List<SecurityAttribute> findByRegionId(String regionId) {
         Assert.hasText(regionId, "regionId cannot be empty");
-        return this.select(Condition.withColumn(OnSecurityColumnName.RegionId, regionId).build());
+        return this.select(Condition.withColumn(OnSecurityColumnName.RegionId, regionId));
     }
 
     @Override

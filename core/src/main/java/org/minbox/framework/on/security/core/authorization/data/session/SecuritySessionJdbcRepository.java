@@ -73,31 +73,31 @@ public class SecuritySessionJdbcRepository extends OnSecurityBaseJdbcRepositoryS
 
     private SecuritySession findUnknownToken(String token) {
         List<SecuritySession> securitySessionList = this.select(
-                ConditionGroup.withCondition(Condition.withColumn(OnSecurityColumnName.State, token).build()).build(),
-                ConditionGroup.withCondition(Condition.withColumn(OnSecurityColumnName.AuthorizationCodeValue, token).build()).operator(SqlLogicalOperator.OR).build(),
-                ConditionGroup.withCondition(Condition.withColumn(OnSecurityColumnName.AccessTokenValue, token).build()).operator(SqlLogicalOperator.OR).build(),
-                ConditionGroup.withCondition(Condition.withColumn(OnSecurityColumnName.RefreshTokenValue, token).build()).operator(SqlLogicalOperator.OR).build()
+                ConditionGroup.withCondition(Condition.withColumn(OnSecurityColumnName.State, token)),
+                ConditionGroup.withCondition(SqlLogicalOperator.OR, Condition.withColumn(OnSecurityColumnName.AuthorizationCodeValue, token)),
+                ConditionGroup.withCondition(SqlLogicalOperator.OR, Condition.withColumn(OnSecurityColumnName.AccessTokenValue, token)),
+                ConditionGroup.withCondition(SqlLogicalOperator.OR, Condition.withColumn(OnSecurityColumnName.RefreshTokenValue, token))
         );
         return !ObjectUtils.isEmpty(securitySessionList) ? securitySessionList.get(0) : null;
     }
 
     private SecuritySession findByState(String state) {
-        Condition stateCondition = Condition.withColumn(OnSecurityColumnName.State, state).build();
+        Condition stateCondition = Condition.withColumn(OnSecurityColumnName.State, state);
         return this.selectOne(stateCondition);
     }
 
     private SecuritySession findByAuthorizationCode(String authorizationCode) {
-        Condition authorizationCodeCondition = Condition.withColumn(OnSecurityColumnName.AuthorizationCodeValue, authorizationCode).build();
+        Condition authorizationCodeCondition = Condition.withColumn(OnSecurityColumnName.AuthorizationCodeValue, authorizationCode);
         return this.selectOne(authorizationCodeCondition);
     }
 
     private SecuritySession findByAccessToken(String accessToken) {
-        Condition accessTokenCondition = Condition.withColumn(OnSecurityColumnName.AccessTokenValue, accessToken).build();
+        Condition accessTokenCondition = Condition.withColumn(OnSecurityColumnName.AccessTokenValue, accessToken);
         return this.selectOne(accessTokenCondition);
     }
 
     private SecuritySession findByRefreshToken(String refreshToken) {
-        Condition refreshTokenCondition = Condition.withColumn(OnSecurityColumnName.RefreshTokenValue, refreshToken).build();
+        Condition refreshTokenCondition = Condition.withColumn(OnSecurityColumnName.RefreshTokenValue, refreshToken);
         return this.selectOne(refreshTokenCondition);
     }
 }

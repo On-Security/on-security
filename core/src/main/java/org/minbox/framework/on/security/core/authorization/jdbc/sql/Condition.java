@@ -32,12 +32,9 @@ public final class Condition {
     private SqlComparisonOperator operator;
     private ColumnValue columnValue;
 
-    // @formatter:off
-    private Condition() { }
-    // @formatter:on
-
-    public SqlComparisonOperator getOperator() {
-        return operator;
+    private Condition(SqlComparisonOperator operator, ColumnValue columnValue) {
+        this.operator = operator;
+        this.columnValue = columnValue;
     }
 
     public OnSecurityColumnName getColumnName() {
@@ -52,36 +49,14 @@ public final class Condition {
         return String.format(CONDITION_SQL_FORMAT, this.getColumnName().getName(), this.operator.getValue());
     }
 
-    public static Builder withColumn(OnSecurityColumnName columnName, Object value) {
-        Assert.notNull(columnName, "The column cannot be null");
-        Assert.notNull(value, "value cannot be null");
-        return new Builder(columnName, value, SqlComparisonOperator.EqualTo);
+    public static Condition withColumn(OnSecurityColumnName columnName, Object value) {
+        return withColumn(SqlComparisonOperator.EqualTo, columnName, value);
     }
 
-    /**
-     * The {@link Condition} Builder
-     */
-    public static class Builder {
-        private SqlComparisonOperator operator;
-        private ColumnValue columnValue;
-
-        public Builder(OnSecurityColumnName columnName, Object value, SqlComparisonOperator operator) {
-            this.operator = operator;
-            this.columnValue = ColumnValue.with(columnName, value).build();
-        }
-
-        public Builder operator(SqlComparisonOperator operator) {
-            this.operator = operator;
-            return this;
-        }
-
-        public Condition build() {
-            Assert.notNull(this.operator, "SqlComparisonOperator cannot be null.");
-            Assert.notNull(this.columnValue, "ColumnValue cannot be null.");
-            Condition condition = new Condition();
-            condition.columnValue = this.columnValue;
-            condition.operator = this.operator;
-            return condition;
-        }
+    public static Condition withColumn(SqlComparisonOperator operator, OnSecurityColumnName columnName, Object value) {
+        Assert.notNull(operator, "The operator cannot be null");
+        Assert.notNull(columnName, "The column cannot be null");
+        Assert.notNull(value, "value cannot be null");
+        return new Condition(operator, ColumnValue.with(columnName, value).build());
     }
 }

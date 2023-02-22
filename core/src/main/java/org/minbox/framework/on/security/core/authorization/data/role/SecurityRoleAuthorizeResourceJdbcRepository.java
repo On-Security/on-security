@@ -46,7 +46,7 @@ public class SecurityRoleAuthorizeResourceJdbcRepository extends OnSecurityBaseJ
     @Override
     public List<SecurityRoleAuthorizeResource> findByRoleId(String roleId) {
         Assert.hasText(roleId, "roleId cannot be empty");
-        return this.select(Condition.withColumn(OnSecurityColumnName.RoleId, roleId).build());
+        return this.select(Condition.withColumn(OnSecurityColumnName.RoleId, roleId));
     }
 
     @Override

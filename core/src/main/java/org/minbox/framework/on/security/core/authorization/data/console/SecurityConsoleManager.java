@@ -120,4 +120,20 @@ public class SecurityConsoleManager implements Serializable {
     public void setDeleteTime(LocalDateTime deleteTime) {
         this.deleteTime = deleteTime;
     }
+
+    @Override
+    public String toString() {
+        return "SecurityConsoleManager{" +
+                "id='" + id + '\'' +
+                ", regionId='" + regionId + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", deleted=" + deleted +
+                ", lastLoginTime=" + lastLoginTime +
+                ", describe='" + describe + '\'' +
+                ", createTime=" + createTime +
+                ", deleteTime=" + deleteTime +
+                '}';
+    }
 }
