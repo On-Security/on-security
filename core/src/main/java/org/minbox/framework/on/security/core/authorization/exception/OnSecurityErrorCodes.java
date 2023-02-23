@@ -39,6 +39,10 @@ public enum OnSecurityErrorCodes {
      */
     INVALID_USER("invalid_user"),
     /**
+     * 无效的安全域密钥
+     */
+    INVALID_REGION_SECRET("invalid_region_secret"),
+    /**
      * 无效的授权方式
      */
     INVALID_GRANT_TYPE("invalid_grant_type"),
