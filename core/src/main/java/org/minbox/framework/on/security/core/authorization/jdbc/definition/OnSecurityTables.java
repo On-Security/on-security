@@ -65,6 +65,7 @@ public interface OnSecurityTables {
         String SECURITY_USER_AUTHORIZE_ROLES = "security_user_authorize_roles";
         String SECURITY_USER_GROUPS = "security_user_groups";
         String SECURITY_USER_LOGIN_LOG = "security_user_login_log";
+        String SECURITY_CONSOLE_MANAGER_SESSION = "security_console_manager_session";
     }
 
 
@@ -538,5 +539,20 @@ public interface OnSecurityTables {
                     TableColumn.withColumnName(OnSecurityColumnName.Country),
                     TableColumn.withColumnName(OnSecurityColumnName.Province),
                     TableColumn.withColumnName(OnSecurityColumnName.City)
+            );
+    /**
+     * {@link TableNames#SECURITY_CONSOLE_MANAGER_SESSION}
+     */
+    Table SecurityConsoleManagerSession = Table
+            .withTableName(TableNames.SECURITY_CONSOLE_MANAGER_SESSION)
+            .columns(
+                    TableColumn.withColumnName(OnSecurityColumnName.Id).primaryKey(),
+                    TableColumn.withColumnName(OnSecurityColumnName.RegionId),
+                    TableColumn.withColumnName(OnSecurityColumnName.AuthenticateType),
+                    TableColumn.withColumnName(OnSecurityColumnName.ManagerId),
+                    TableColumn.withColumnName(OnSecurityColumnName.RegionSecretId),
+                    TableColumn.withColumnName(OnSecurityColumnName.ManageTokenValue),
+                    TableColumn.withColumnName(OnSecurityColumnName.ManageTokenIssuedAt).localDateTimeValue(),
+                    TableColumn.withColumnName(OnSecurityColumnName.ManageTokenExpiresAt).localDateTimeValue()
             );
 }

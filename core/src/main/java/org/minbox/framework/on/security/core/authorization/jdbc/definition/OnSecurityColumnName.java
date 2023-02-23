@@ -77,6 +77,8 @@ public enum OnSecurityColumnName {
     ManageTokenIssuedAt("manage_token_issued_at"),
     ManageTokenExpiresAt("manage_token_expires_at"),
     ManageTokenMetadata("manage_token_metadata"),
+    AuthenticateType("authenticate_type"),
+    RegionSecretId("region_secret_id"),
     MenuId("menu_id"),
     BusinessCode("business_code"),
     Pid("pid"),
@@ -140,7 +142,8 @@ public enum OnSecurityColumnName {
     Browser("browser"),
     Country("country"),
     Province("province"),
-    City("city");
+    City("city")
+    ;
     private String name;
 
     OnSecurityColumnName(String name) {
