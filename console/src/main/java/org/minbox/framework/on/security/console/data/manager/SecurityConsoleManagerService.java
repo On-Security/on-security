@@ -33,4 +33,12 @@ public interface SecurityConsoleManagerService {
      * @return {@link SecurityConsoleManager}
      */
     SecurityConsoleManager findByUsername(String username);
+
+    /**
+     * 根据ID查询控制台管理员
+     *
+     * @param id {@link SecurityConsoleManager#getId()}
+     * @return {@link SecurityConsoleManager}
+     */
+    SecurityConsoleManager selectById(String id);
 }

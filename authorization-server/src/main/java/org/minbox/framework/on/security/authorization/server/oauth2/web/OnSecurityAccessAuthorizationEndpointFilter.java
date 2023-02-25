@@ -42,6 +42,8 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * 获取请求令牌所属用户的访问授权端点过滤器
+ * <p>
+ * 该过滤器拦截"/access/authorization"地址请求，需要携带"AccessToken"，返回该"AccessToken"所属用户的授权信息以及基本信息等
  *
  * @author 恒宇少年
  * @since 0.0.5

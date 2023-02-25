@@ -27,6 +27,14 @@ import org.minbox.framework.on.security.core.authorization.data.region.SecurityR
  */
 public interface SecurityRegionService {
     /**
+     * 根据ID查询信息
+     *
+     * @param id ID {@link SecurityRegion#getId()}
+     * @return {@link SecurityRegion}
+     */
+    SecurityRegion selectById(String id);
+
+    /**
      * 根据安全域ID查询信息
      *
      * @param regionId 安全域ID {@link SecurityRegion#getRegionId()}

@@ -40,6 +40,11 @@ public class SecurityRegionServiceImpl implements SecurityRegionService {
     }
 
     @Override
+    public SecurityRegion selectById(String id) {
+        return this.regionRepository.selectOne(id);
+    }
+
+    @Override
     public SecurityRegion selectByRegionId(String regionId) {
         return this.regionRepository.selectOne(Condition.withColumn(OnSecurityColumnName.RegionId, regionId));
     }

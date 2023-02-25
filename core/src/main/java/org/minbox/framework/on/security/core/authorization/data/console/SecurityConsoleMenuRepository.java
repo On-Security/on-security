@@ -15,29 +15,15 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.console.data.manager;
+package org.minbox.framework.on.security.core.authorization.data.console;
 
-import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerSession;
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
 
 /**
- * 控制台管理会话业务逻辑接口定义
+ * 控制台菜单数据接口
  *
  * @author 恒宇少年
  * @since 0.0.9
  */
-public interface SecurityConsoleManagerSessionService {
-    /**
-     * 新增管理会话
-     *
-     * @param managerSession {@link SecurityConsoleManagerSession}
-     */
-    void insert(SecurityConsoleManagerSession managerSession);
-
-    /**
-     * 根据管理令牌查询会话信息
-     *
-     * @param manageToken {@link SecurityConsoleManagerSession#getManageTokenValue()}
-     * @return 控制台管理员会话实例 {@link SecurityConsoleManagerSession}
-     */
-    SecurityConsoleManagerSession selectByToken(String manageToken);
+public interface SecurityConsoleMenuRepository extends OnSecurityBaseJdbcRepository<SecurityConsoleMenu, String> {
 }

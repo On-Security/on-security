@@ -17,33 +17,32 @@
 
 package org.minbox.framework.on.security.console.data.manager;
 
-import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
-import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerJdbcRepository;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerAuthorizeMenu;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerAuthorizeMenuJdbcRepository;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerAuthorizeMenuRepository;
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
+ * 管理员授权菜单业务逻辑实现类
+ *
  * @author 恒宇少年
  * @since 0.0.9
  */
 @Service
-public class SecurityConsoleManagerServiceImpl implements SecurityConsoleManagerService {
-    private SecurityConsoleManagerJdbcRepository consoleManagerJdbcRepository;
+public class SecurityConsoleManagerAuthorizeMenuServiceImpl implements SecurityConsoleManagerAuthorizeMenuService {
+    private SecurityConsoleManagerAuthorizeMenuRepository managerAuthorizeMenuRepository;
 
-    public SecurityConsoleManagerServiceImpl(JdbcOperations jdbcOperations) {
-        this.consoleManagerJdbcRepository = new SecurityConsoleManagerJdbcRepository(jdbcOperations);
+    public SecurityConsoleManagerAuthorizeMenuServiceImpl(JdbcOperations jdbcOperations) {
+        this.managerAuthorizeMenuRepository = new SecurityConsoleManagerAuthorizeMenuJdbcRepository(jdbcOperations);
     }
 
     @Override
-    public SecurityConsoleManager findByUsername(String username) {
-        Condition condition = Condition.withColumn(OnSecurityColumnName.Username, username);
-        return consoleManagerJdbcRepository.selectOne(condition);
-    }
-
-    @Override
-    public SecurityConsoleManager selectById(String id) {
-        return this.consoleManagerJdbcRepository.selectOne(id);
+    public List<SecurityConsoleManagerAuthorizeMenu> selectByManagerId(String managerId) {
+        return this.managerAuthorizeMenuRepository.select(Condition.withColumn(OnSecurityColumnName.ManagerId, managerId));
     }
 }

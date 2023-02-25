@@ -17,27 +17,22 @@
 
 package org.minbox.framework.on.security.console.data.manager;
 
-import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerSession;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerAuthorizeMenu;
+
+import java.util.List;
 
 /**
- * 控制台管理会话业务逻辑接口定义
+ * 管理员授权菜单业务逻辑接口定义
  *
  * @author 恒宇少年
  * @since 0.0.9
  */
-public interface SecurityConsoleManagerSessionService {
+public interface SecurityConsoleManagerAuthorizeMenuService {
     /**
-     * 新增管理会话
+     * 查询管理员授权的菜单关系
      *
-     * @param managerSession {@link SecurityConsoleManagerSession}
+     * @param managerId {@link SecurityConsoleManagerAuthorizeMenu#getManagerId()}
+     * @return {@link SecurityConsoleManagerAuthorizeMenu}
      */
-    void insert(SecurityConsoleManagerSession managerSession);
-
-    /**
-     * 根据管理令牌查询会话信息
-     *
-     * @param manageToken {@link SecurityConsoleManagerSession#getManageTokenValue()}
-     * @return 控制台管理员会话实例 {@link SecurityConsoleManagerSession}
-     */
-    SecurityConsoleManagerSession selectByToken(String manageToken);
+    List<SecurityConsoleManagerAuthorizeMenu> selectByManagerId(String managerId);
 }

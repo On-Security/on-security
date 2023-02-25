@@ -42,7 +42,6 @@ import java.io.IOException;
  * @see OnSecurityApplicationContext
  * @see ApplicationResourceRoleBasedAccessControlAuthenticationProvider
  * @see ApplicationResourceRoleBasedAccessControlAuthenticationToken
- * @see ApplicationResourceAccessAuthenticationMatcher
  * @since 0.0.7
  */
 public final class ApplicationResourceRoleBasedAccessControlFilter extends OncePerRequestFilter {

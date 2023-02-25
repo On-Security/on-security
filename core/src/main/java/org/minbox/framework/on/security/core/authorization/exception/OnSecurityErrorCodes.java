@@ -69,11 +69,19 @@ public enum OnSecurityErrorCodes {
      */
     AUTHENTICATION_FAILED("authentication_failed"),
     /**
+     * 无效的管理令牌
+     */
+    INVALID_MANAGE_TOKEN("invalid_manage_token"),
+    /**
      * 无效的安全域
      * <p>
      * 未查询到安全域或安全域状态不正常或已被删除时使用的错误码
      */
     INVALID_REGION("invalid_region"),
+    /**
+     * 无效的控制台管理员
+     */
+    INVALID_MANAGER("invalid_manager"),
     /**
      * 未授权应用
      * <p>

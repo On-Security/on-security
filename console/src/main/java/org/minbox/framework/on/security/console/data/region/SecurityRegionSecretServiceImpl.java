@@ -44,4 +44,9 @@ public class SecurityRegionSecretServiceImpl implements SecurityRegionSecretServ
         return regionSecretRepository.selectOne(Condition.withColumn(OnSecurityColumnName.RegionId, regionId),
                 Condition.withColumn(OnSecurityColumnName.RegionSecret, secret));
     }
+
+    @Override
+    public SecurityRegionSecret selectById(String id) {
+        return this.regionSecretRepository.selectOne(id);
+    }
 }

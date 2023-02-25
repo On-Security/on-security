@@ -95,9 +95,10 @@ public final class OnSecurityAccessTokenAuthorizationFilter extends OncePerReque
             authenticationManager.authenticate(resourceAuthorizationToken);
             filterChain.doFilter(request, response);
         } catch (AuthenticationException e) {
+            this.authenticationFailureHandler.onAuthenticationFailure(request, response, e);
+        } finally {
             SecurityContextHolder.clearContext();
             OnSecurityApplicationContextHolder.clearContext();
-            this.authenticationFailureHandler.onAuthenticationFailure(request, response, e);
         }
     }
 }
