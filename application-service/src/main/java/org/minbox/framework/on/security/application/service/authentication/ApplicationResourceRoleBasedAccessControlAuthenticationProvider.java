@@ -22,7 +22,6 @@ import org.minbox.framework.on.security.application.service.access.ResourceRoleB
 import org.minbox.framework.on.security.application.service.authentication.context.OnSecurityApplicationContext;
 import org.minbox.framework.on.security.application.service.exception.OnSecurityApplicationResourceAuthenticationException;
 import org.minbox.framework.on.security.application.service.exception.ResourceAuthenticationErrorCode;
-import org.minbox.framework.on.security.application.service.web.ApplicationResourceAccessAuthenticationMatcher;
 import org.minbox.framework.on.security.core.authorization.AbstractOnSecurityAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -34,7 +33,6 @@ import java.util.Map;
  *
  * @author 恒宇少年
  * @see OnSecurityApplicationContext
- * @see ApplicationResourceAccessAuthenticationMatcher
  * @see ApplicationResourceRoleBasedAccessControlAuthenticationToken
  * @since 0.0.7
  */

@@ -34,4 +34,12 @@ public interface SecurityRegionSecretService {
      * @return {@link SecurityRegionSecret}
      */
     SecurityRegionSecret selectBySecret(String regionId, String secret);
+
+    /**
+     * 根据ID查询安全域密钥
+     *
+     * @param id {@link SecurityRegionSecret#getId()}
+     * @return {@link SecurityRegionSecret}
+     */
+    SecurityRegionSecret selectById(String id);
 }

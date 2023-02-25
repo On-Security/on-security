@@ -20,6 +20,8 @@ package org.minbox.framework.on.security.console.data.manager;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerSession;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerSessionJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerSessionRepository;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
+import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,11 @@ public class SecurityConsoleManagerSessionServiceImpl implements SecurityConsole
 
     @Override
     public void insert(SecurityConsoleManagerSession managerSession) {
-        managerSessionRepository.insert(managerSession);
+        this.managerSessionRepository.insert(managerSession);
+    }
+
+    @Override
+    public SecurityConsoleManagerSession selectByToken(String manageToken) {
+        return this.managerSessionRepository.selectOne(Condition.withColumn(OnSecurityColumnName.ManageTokenValue, manageToken));
     }
 }

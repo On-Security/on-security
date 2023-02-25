@@ -18,8 +18,8 @@
 package org.minbox.framework.on.security.console.configuration;
 
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configuration.OnSecurityWebConfiguration;
+import org.minbox.framework.on.security.console.authorization.config.configurer.OnSecurityManageTokenAccessConfigurer;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -33,13 +33,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class ConsoleServiceWebSecurityConfiguration extends OnSecurityWebConfiguration {
     @Override
     public SecurityFilterChain onSecurityWebSecurityFilterChain(HttpSecurity http) throws Exception {
-        // @formatter:off
-        http.authorizeHttpRequests().anyRequest().authenticated()
-                .and()
-                .formLogin(Customizer.withDefaults())
-                .oauth2ResourceServer()
-                .jwt();
-        // @formatter:on
+        // Apply OnSecurityManageTokenAccessConfigurer
+        OnSecurityManageTokenAccessConfigurer manageTokenAccessConfigurer = new OnSecurityManageTokenAccessConfigurer();
+        http.apply(manageTokenAccessConfigurer);
         return http.build();
     }
 }

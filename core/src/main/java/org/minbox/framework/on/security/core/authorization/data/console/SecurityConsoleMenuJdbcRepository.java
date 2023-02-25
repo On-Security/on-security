@@ -15,29 +15,21 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.console.data.manager;
+package org.minbox.framework.on.security.core.authorization.data.console;
 
-import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerSession;
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
+import org.springframework.jdbc.core.JdbcOperations;
 
 /**
- * 控制台管理会话业务逻辑接口定义
+ * 控制台菜单Jdbc数据操作实现类
  *
  * @author 恒宇少年
  * @since 0.0.9
  */
-public interface SecurityConsoleManagerSessionService {
-    /**
-     * 新增管理会话
-     *
-     * @param managerSession {@link SecurityConsoleManagerSession}
-     */
-    void insert(SecurityConsoleManagerSession managerSession);
-
-    /**
-     * 根据管理令牌查询会话信息
-     *
-     * @param manageToken {@link SecurityConsoleManagerSession#getManageTokenValue()}
-     * @return 控制台管理员会话实例 {@link SecurityConsoleManagerSession}
-     */
-    SecurityConsoleManagerSession selectByToken(String manageToken);
+public class SecurityConsoleMenuJdbcRepository extends OnSecurityBaseJdbcRepositorySupport<SecurityConsoleMenu, String>
+        implements SecurityConsoleMenuRepository {
+    public SecurityConsoleMenuJdbcRepository(JdbcOperations jdbcOperations) {
+        super(OnSecurityTables.SecurityConsoleMenu, jdbcOperations);
+    }
 }
