@@ -18,19 +18,13 @@
 package org.minbox.framework.on.security.console.authorization.web;
 
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
-import org.minbox.framework.on.security.console.authorization.authentication.OnSecurityManageTokenAccessAuthorizationToken;
 import org.minbox.framework.on.security.console.authorization.authentication.OnSecurityManageTokenAccessRequestAuthorizationToken;
 import org.minbox.framework.on.security.console.authorization.web.converter.OnSecurityManageTokenAccessAuthorizationConvert;
-import org.minbox.framework.on.security.core.authorization.manage.ManageTokenAccessAuthorization;
-import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContext;
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextHolder;
-import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextImpl;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -49,13 +43,11 @@ import java.io.IOException;
  */
 public class OnSecurityManageTokenAccessAuthorizationFilter extends OncePerRequestFilter {
     private AuthenticationManager authenticationManager;
-    private AuthenticationSuccessHandler successHandler;
     private AuthenticationFailureHandler failureHandler;
     private AuthenticationConverter authenticationConverter;
 
     public OnSecurityManageTokenAccessAuthorizationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        this.successHandler = new ManageTokenAccessAuthenticationSuccessHandler();
         this.failureHandler = new OnSecurityDefaultAuthenticationFailureHandler();
         this.authenticationConverter = new OnSecurityManageTokenAccessAuthorizationConvert();
     }
@@ -66,42 +58,13 @@ public class OnSecurityManageTokenAccessAuthorizationFilter extends OncePerReque
             // @formatter:off
             OnSecurityManageTokenAccessRequestAuthorizationToken manageTokenAccessRequestAuthorizationToken =
                     (OnSecurityManageTokenAccessRequestAuthorizationToken) this.authenticationConverter.convert(request);
-            OnSecurityManageTokenAccessAuthorizationToken manageTokenAccessAuthorizationToken =
-                    (OnSecurityManageTokenAccessAuthorizationToken) this.authenticationManager.authenticate(manageTokenAccessRequestAuthorizationToken);
+            this.authenticationManager.authenticate(manageTokenAccessRequestAuthorizationToken);
             // @formatter:on
-            this.successHandler.onAuthenticationSuccess(request, response, manageTokenAccessAuthorizationToken);
             filterChain.doFilter(request, response);
         } catch (AuthenticationException e) {
             failureHandler.onAuthenticationFailure(request, response, e);
         } finally {
             OnSecurityManageContextHolder.clearContext();
-        }
-    }
-
-    /**
-     * 管理令牌认证成功处理器
-     */
-    private static class ManageTokenAccessAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-        @Override
-        public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-            OnSecurityManageTokenAccessAuthorizationToken accessAuthorizationToken =
-                    (OnSecurityManageTokenAccessAuthorizationToken) authentication;
-
-            // @formatter:off
-            ManageTokenAccessAuthorization accessAuthorization = ManageTokenAccessAuthorization
-                    .withManageSession(accessAuthorizationToken.getManagerSession())
-                    .region(accessAuthorizationToken.getRegion())
-                    .manager(accessAuthorizationToken.getManager())
-                    .regionSecret(accessAuthorizationToken.getRegionSecret())
-                    .managerAuthorizeMenus(accessAuthorizationToken.getManagerAuthorizeMenus())
-                    .build();
-
-            OnSecurityManageContextImpl.Builder manageContextBuilder = OnSecurityManageContextImpl
-                    .withManageToken(accessAuthorizationToken.getManagerSession().getManageTokenValue())
-                    .authorization(accessAuthorization);
-            // @formatter:on
-            OnSecurityManageContext manageContext = manageContextBuilder.build();
-            OnSecurityManageContextHolder.setContext(manageContext);
         }
     }
 }

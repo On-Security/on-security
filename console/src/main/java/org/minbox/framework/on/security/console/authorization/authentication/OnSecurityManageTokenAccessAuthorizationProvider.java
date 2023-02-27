@@ -31,6 +31,11 @@ import org.minbox.framework.on.security.core.authorization.data.region.SecurityR
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityError;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityOAuth2AuthenticationException;
+import org.minbox.framework.on.security.core.authorization.manage.ManageTokenAccessAuthorization;
+import org.minbox.framework.on.security.core.authorization.manage.ManageTokenAuthorizationCache;
+import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContext;
+import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextHolder;
+import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextImpl;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityThrowErrorUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;
@@ -72,33 +77,47 @@ public class OnSecurityManageTokenAccessAuthorizationProvider extends AbstractOn
         // @formatter:off
         OnSecurityManageTokenAccessRequestAuthorizationToken requestAuthorizationToken =
                 (OnSecurityManageTokenAccessRequestAuthorizationToken) authentication;
-        SecurityConsoleManagerSession managerSession =
-                this.managerSessionService.selectByToken(requestAuthorizationToken.getManageToken());
+        String manageToken = requestAuthorizationToken.getManageToken();
+        // load from cache
+        ManageTokenAccessAuthorization accessAuthorization = ManageTokenAuthorizationCache.getAccessAuthorization(manageToken);
+        // cache miss
+        if (accessAuthorization == null) {
+            SecurityConsoleManagerSession managerSession = this.managerSessionService.selectByToken(manageToken);
+            if (managerSession == null || LocalDateTime.now().isAfter(managerSession.getManageTokenExpiresAt())) {
+                OnSecurityError onSecurityError = new OnSecurityError(OnSecurityErrorCodes.INVALID_MANAGE_TOKEN.getValue(),
+                        null,
+                        "Invalid manage token，check if the manage token is expired.",
+                        OnSecurityThrowErrorUtils.DEFAULT_HELP_URI);
+                throw new OnSecurityOAuth2AuthenticationException(onSecurityError);
+            }
+            SecurityRegion region = this.regionService.selectById(managerSession.getRegionId());
+            if (region == null || region.getDeleted() || !region.getEnabled()) {
+                OnSecurityError onSecurityError = new OnSecurityError(OnSecurityErrorCodes.INVALID_REGION.getValue(),
+                        null,
+                        "Invalid Region：" + (region == null ? region.getId() : managerSession.getRegionId()) +
+                                "，Please check data validity.",
+                        OnSecurityThrowErrorUtils.DEFAULT_HELP_URI);
+                throw new OnSecurityOAuth2AuthenticationException(onSecurityError);
+            }
+            accessAuthorization = this.buildAccessAuthorization(managerSession, region);
+            ManageTokenAuthorizationCache.setAccessAuthorization(manageToken, accessAuthorization);
+        }
+
+        OnSecurityManageContextImpl.Builder manageContextBuilder = OnSecurityManageContextImpl
+                .withManageToken(manageToken)
+                .authorization(accessAuthorization);
+        OnSecurityManageContext manageContext = manageContextBuilder.build();
+        OnSecurityManageContextHolder.setContext(manageContext);
+
         // @formatter:on
-        if (managerSession == null || LocalDateTime.now().isAfter(managerSession.getManageTokenExpiresAt())) {
-            // @formatter:off
-            OnSecurityError onSecurityError = new OnSecurityError(OnSecurityErrorCodes.INVALID_MANAGE_TOKEN.getValue(),
-                    null,
-                    "Invalid manage token，check if the manage token is expired.",
-                    OnSecurityThrowErrorUtils.DEFAULT_HELP_URI);
-            // @formatter:on
-            throw new OnSecurityOAuth2AuthenticationException(onSecurityError);
-        }
-        SecurityRegion region = this.regionService.selectById(managerSession.getRegionId());
-        if (region == null || region.getDeleted() || !region.getEnabled()) {
-            // @formatter:off
-            OnSecurityError onSecurityError = new OnSecurityError(OnSecurityErrorCodes.INVALID_REGION.getValue(),
-                    null,
-                    "Invalid Region：" + (region == null ? region.getId() : managerSession.getRegionId()) +
-                            "，Please check data validity.",
-                    OnSecurityThrowErrorUtils.DEFAULT_HELP_URI);
-            // @formatter:on
-            throw new OnSecurityOAuth2AuthenticationException(onSecurityError);
-        }
+        return accessAuthorization;
+    }
+
+    private ManageTokenAccessAuthorization buildAccessAuthorization(SecurityConsoleManagerSession managerSession, SecurityRegion region) {
         // @formatter:off
-        OnSecurityManageTokenAccessAuthorizationToken.Builder builder =
-                OnSecurityManageTokenAccessAuthorizationToken
-                        .withManagerSession(managerSession)
+        ManageTokenAccessAuthorization.Builder builder =
+                ManageTokenAccessAuthorization
+                        .withManageSession(managerSession)
                         .region(region);
         // @formatter:on
         ManageTokenAuthenticateType authenticateType = ManageTokenAuthenticateType.valueOf(managerSession.getAuthenticateType());
