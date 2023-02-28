@@ -18,6 +18,7 @@
 package org.minbox.framework.on.security.console.authorization.config.configurer;
 
 import org.minbox.framework.on.security.console.authorization.config.configurer.support.OnSecurityConsoleManageTokenConfigurer;
+import org.minbox.framework.on.security.console.authorization.config.configurer.support.OnSecurityManageTokenExternalAccessConfigurer;
 import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -72,6 +73,9 @@ public class OnSecurityConsoleManageConfigurer extends AbstractHttpConfigurer<On
         // Put OnSecurityIdentityProviderBrokerEndpointConfigurer
         configurers.put(OnSecurityConsoleManageTokenConfigurer.class,
                 postProcess(new OnSecurityConsoleManageTokenConfigurer(this::postProcess)));
+        // Put OnSecurityManageTokenExternalAccessConfigurer
+        configurers.put(OnSecurityManageTokenExternalAccessConfigurer.class,
+                postProcess(new OnSecurityManageTokenExternalAccessConfigurer(this::postProcess)));
         // @formatter:on
         return configurers;
     }

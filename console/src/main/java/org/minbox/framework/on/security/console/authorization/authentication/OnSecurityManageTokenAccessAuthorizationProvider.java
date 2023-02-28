@@ -102,13 +102,12 @@ public class OnSecurityManageTokenAccessAuthorizationProvider extends AbstractOn
             accessAuthorization = this.buildAccessAuthorization(managerSession, region);
             ManageTokenAuthorizationCache.setAccessAuthorization(manageToken, accessAuthorization);
         }
-
+        accessAuthorization.setAuthenticated(true);
         OnSecurityManageContextImpl.Builder manageContextBuilder = OnSecurityManageContextImpl
                 .withManageToken(manageToken)
                 .authorization(accessAuthorization);
         OnSecurityManageContext manageContext = manageContextBuilder.build();
         OnSecurityManageContextHolder.setContext(manageContext);
-
         // @formatter:on
         return accessAuthorization;
     }

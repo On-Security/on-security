@@ -74,7 +74,7 @@ public class ManageTokenAccessAuthorization extends AbstractAuthenticationToken 
 
     @Override
     public Object getPrincipal() {
-        return managerSession;
+        return managerSession.getId();
     }
 
     @Override
