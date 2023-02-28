@@ -25,8 +25,8 @@ package org.minbox.framework.on.security.core.authorization.util;
  */
 public final class OnSecurityVersion {
     private static final int MAJOR = 0;
-    private static final int MINOR = 0;
-    private static final int PATCH = 9;
+    private static final int MINOR = 1;
+    private static final int PATCH = 0;
 
     /**
      * Global Serialization value for On Security Authorization Server classes.
