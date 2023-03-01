@@ -21,8 +21,8 @@ import org.minbox.framework.on.security.console.authorization.authentication.OnS
 import org.minbox.framework.on.security.console.authorization.web.converter.OnSecurityManageTokenAccessAuthorizationConvert;
 import org.minbox.framework.on.security.core.authorization.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
-import org.minbox.framework.on.security.core.authorization.manage.ManageTokenAccessAuthorization;
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextHolder;
+import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextImpl;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -91,8 +91,9 @@ public class OnSecurityManageTokenExternalAccessAuthorizationFilter extends Once
 
         @Override
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-            ManageTokenAccessAuthorization accessAuthorization = (ManageTokenAccessAuthorization) authentication;
-            String responseJson = jsonMapper.writeValueAsString(accessAuthorization);
+            // Get OnSecurityManageContext
+            OnSecurityManageContextImpl manageContext = (OnSecurityManageContextImpl) OnSecurityManageContextHolder.getContext();
+            String responseJson = jsonMapper.writeValueAsString(manageContext.getAuthorization());
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON.toString());
             response.getWriter().write(responseJson);

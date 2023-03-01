@@ -23,10 +23,8 @@ import org.minbox.framework.on.security.core.authorization.data.console.Security
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionSecret;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -35,17 +33,13 @@ import java.util.Set;
  * @author 恒宇少年
  * @since 0.0.9
  */
-public class ManageTokenAccessAuthorization extends AbstractAuthenticationToken implements Serializable {
+public class ManageTokenAccessAuthorization implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private SecurityRegion region;
     private SecurityConsoleManager manager;
     private Set<SecurityConsoleMenu> managerAuthorizeMenus;
     private SecurityRegionSecret regionSecret;
     private SecurityConsoleManagerSession managerSession;
-
-    private ManageTokenAccessAuthorization() {
-        super(Collections.emptyList());
-    }
 
     public SecurityRegion getRegion() {
         return region;
@@ -67,14 +61,8 @@ public class ManageTokenAccessAuthorization extends AbstractAuthenticationToken 
         return managerSession;
     }
 
-    @Override
-    public Object getCredentials() {
-        return managerSession;
-    }
-
-    @Override
-    public Object getPrincipal() {
-        return managerSession.getId();
+    public String getAuthenticateType() {
+        return this.managerSession.getAuthenticateType();
     }
 
     @Override
