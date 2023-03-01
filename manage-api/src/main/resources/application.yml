@@ -12,8 +12,8 @@ spring:
     password: 123456
     driver-class-name: org.mariadb.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:59527
+
+on-security:
+  console:
+    # 控制台服务地址
+    server-address: http://127.0.0.1:59527

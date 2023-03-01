@@ -97,7 +97,12 @@ public enum OnSecurityErrorCodes {
     /**
      * 未知的异常
      */
-    UNKNOWN_EXCEPTION("unknown_exception");
+    UNKNOWN_EXCEPTION("unknown_exception"),
+    /**
+     * 控制台服务拒绝连接
+     */
+    CONSOLE_SERVICE_CONNECTION_REFUSED("console_service_connection_refused"),
+    ;
     private String value;
 
     OnSecurityErrorCodes(java.lang.String value) {
