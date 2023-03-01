@@ -465,6 +465,7 @@ public interface OnSecurityTables {
                     TableColumn.withColumnName(OnSecurityColumnName.Enabled).booleanValue(),
                     TableColumn.withColumnName(OnSecurityColumnName.Deleted).booleanValue(),
                     TableColumn.withColumnName(OnSecurityColumnName.Describe),
+                    TableColumn.withColumnName(OnSecurityColumnName.Expand).typeMapper(TypeMappers.MAP),
                     TableColumn.withColumnName(OnSecurityColumnName.CreateTime).localDateTimeValue().notOperate()
             );
     /**
