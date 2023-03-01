@@ -17,12 +17,12 @@
 
 package org.minbox.framework.on.security.console.authorization.web;
 
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.console.authorization.authentication.ManageTokenAuthenticateType;
 import org.minbox.framework.on.security.console.authorization.authentication.OnSecurityConsoleManageTokenAuthenticationProvider;
 import org.minbox.framework.on.security.console.authorization.authentication.OnSecurityConsoleManageTokenAuthenticationToken;
 import org.minbox.framework.on.security.console.authorization.authentication.OnSecurityConsoleManageTokenRequestToken;
 import org.minbox.framework.on.security.console.authorization.web.converter.ConsoleManageTokenResponseHttpMessageConverter;
+import org.minbox.framework.on.security.core.authorization.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityError;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityOAuth2AuthenticationException;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityThrowErrorUtils;

@@ -17,9 +17,9 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.web;
 
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityPreAuthorizationCodeAuthenticationToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.converter.OnSecurityPreAuthorizationCodeAuthenticationConverter;
+import org.minbox.framework.on.security.core.authorization.OnSecurityDefaultAuthenticationFailureHandler;
 import org.springframework.core.log.LogMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;
