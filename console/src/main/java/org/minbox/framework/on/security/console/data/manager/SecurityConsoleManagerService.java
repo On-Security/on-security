@@ -41,4 +41,11 @@ public interface SecurityConsoleManagerService {
      * @return {@link SecurityConsoleManager}
      */
     SecurityConsoleManager selectById(String id);
+
+    /**
+     * 新增一个管理员
+     *
+     * @param manager {@link SecurityConsoleManager}
+     */
+    void insert(SecurityConsoleManager manager);
 }
