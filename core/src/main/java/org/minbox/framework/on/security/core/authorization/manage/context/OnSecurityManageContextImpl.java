@@ -86,6 +86,10 @@ public class OnSecurityManageContextImpl implements OnSecurityManageContext {
         return this.authorization.getManagerSession();
     }
 
+    public ManageTokenAccessAuthorization getAuthorization() {
+        return authorization;
+    }
+
     /**
      * The {@link OnSecurityManageContextImpl} Builder
      */

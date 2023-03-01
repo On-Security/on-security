@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 
 /**
  * 管理Api接口服务应用启动类
@@ -28,7 +29,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author 恒宇少年
  * @since 0.0.7
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = UserDetailsServiceAutoConfiguration.class)
 public class ManageApiServiceApplicationStartup {
     /**
      * logger instance

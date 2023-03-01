@@ -17,24 +17,29 @@
 
 package org.minbox.framework.on.security.manage.api.configuration;
 
-import org.minbox.framework.on.security.manage.api.authorization.config.configurer.OnSecurityManageApiAccessConfigurer;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
+
+import static org.minbox.framework.on.security.manage.api.configuration.ConsoleConfigProperties.MANAGE_API_CONFIG_PREFIX;
 
 /**
- * 开放接口服务安全配置
+ * 控制台配置属性类
  *
  * @author 恒宇少年
- * @since 0.0.7
+ * @since 0.1.0
  */
 @Configuration
-public class ManageApiServiceSecurityConfiguration {
-    @Bean
-    public SecurityFilterChain onSecurityWebSecurityFilterChain(HttpSecurity http) throws Exception {
-        OnSecurityManageApiAccessConfigurer accessConfigurer = new OnSecurityManageApiAccessConfigurer();
-        http.apply(accessConfigurer);
-        return http.build();
+@ConfigurationProperties(prefix = MANAGE_API_CONFIG_PREFIX)
+public class ConsoleConfigProperties {
+    public static final String MANAGE_API_CONFIG_PREFIX = "on-security.console";
+
+    private String serverAddress;
+
+    public String getServerAddress() {
+        return serverAddress;
+    }
+
+    public void setServerAddress(String serverAddress) {
+        this.serverAddress = serverAddress;
     }
 }
