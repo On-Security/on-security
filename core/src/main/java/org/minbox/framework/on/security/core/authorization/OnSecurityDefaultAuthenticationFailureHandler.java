@@ -1,25 +1,22 @@
 /*
- *     Copyright (C) 2022  恒宇少年
+ *   Copyright (C) 2022  恒宇少年
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.authorization.server.oauth2.authentication;
+package org.minbox.framework.on.security.core.authorization;
 
-import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.support.OnSecurityPreAuthorizationCodeAuthenticationConfigurer;
-import org.minbox.framework.on.security.authorization.server.oauth2.web.OnSecurityPreAuthorizationCodeAuthenticationFilter;
-import org.minbox.framework.on.security.core.authorization.AuthenticationFailureResponse;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityError;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityOAuth2AuthenticationException;
@@ -50,11 +47,9 @@ import static org.minbox.framework.on.security.core.authorization.util.OnSecurit
  * {@link OAuth2TokenEndpointConfigurer#errorResponseHandler(AuthenticationFailureHandler)}、
  * {@link OAuth2TokenIntrospectionEndpointConfigurer#errorResponseHandler(AuthenticationFailureHandler)}、
  * {@link  OAuth2TokenRevocationEndpointConfigurer#errorResponseHandler(AuthenticationFailureHandler)}、
- * {@link OnSecurityPreAuthorizationCodeAuthenticationConfigurer#authenticationFailureHandler(AuthenticationFailureHandler)}
  * 默认情况下以上全部的异常处理方法都会使用本处理器进行处理{@link AuthenticationException}异常
  *
  * @author 恒宇少年
- * @see OnSecurityPreAuthorizationCodeAuthenticationFilter
  * @since 0.0.1
  */
 public class OnSecurityDefaultAuthenticationFailureHandler implements AuthenticationFailureHandler {
