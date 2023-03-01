@@ -13,6 +13,13 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
 
+on-security:
+  console:
+    # On-Security控制台版本号
+    version: @project.version@
+    # 控制台服务地址
+    server-address: http://127.0.0.1:${server.port}
+
 logging:
   level:
     org.minbox.framework.on.security.core.authorization.jdbc: debug

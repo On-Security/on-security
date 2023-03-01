@@ -1,0 +1,15 @@
+   ____                                       _ _            _____                      _
+  / __ \                                     (_) |          / ____|                    | |
+ | |  | |_ __ ______ ___  ___  ___ _   _ _ __ _| |_ _   _  | |     ___  _ __  ___  ___ | | ___
+ | |  | | '_ \______/ __|/ _ \/ __| | | | '__| | __| | | | | |    / _ \| '_ \/ __|/ _ \| |/ _ \
+ | |__| | | | |     \__ \  __/ (__| |_| | |  | | |_| |_| | | |___| (_) | | | \__ \ (_) | |  __/
+  \____/|_| |_|     |___/\___|\___|\__,_|_|  |_|\__|\__, |  \_____\___/|_| |_|___/\___/|_|\___|
+                                                     __/ |
+                                                    |___/
+SpringBoot Version : ${spring-boot.formatted-version}
+
+Console Version : ${on-security.console.version}
+
+Console Address : ${on-security.console.server-address}
+
+HelpUri : https://github.com/On-Security/on-security/issues
