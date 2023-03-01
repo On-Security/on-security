@@ -21,6 +21,7 @@ import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersio
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * 控制台管理员
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
  * @since 0.0.8
  */
 public class SecurityConsoleManager implements Serializable {
+    public static final String ADMIN_USERNAME = "admin";
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private String id;
     private String regionId;
@@ -121,8 +123,20 @@ public class SecurityConsoleManager implements Serializable {
         this.deleteTime = deleteTime;
     }
 
+    public static SecurityConsoleManager createManager(String regionId, String username, String password) {
+        SecurityConsoleManager manager = new SecurityConsoleManager();
+        manager.setId(UUID.randomUUID().toString());
+        manager.setRegionId(regionId);
+        manager.setUsername(ADMIN_USERNAME);
+        manager.setPassword(password);
+        manager.setEnabled(true);
+        manager.setDeleted(false);
+        return manager;
+    }
+
     @Override
     public String toString() {
+        // @formatter:off
         return "SecurityConsoleManager{" +
                 "id='" + id + '\'' +
                 ", regionId='" + regionId + '\'' +
@@ -135,5 +149,6 @@ public class SecurityConsoleManager implements Serializable {
                 ", createTime=" + createTime +
                 ", deleteTime=" + deleteTime +
                 '}';
+        // @formatter:on
     }
 }

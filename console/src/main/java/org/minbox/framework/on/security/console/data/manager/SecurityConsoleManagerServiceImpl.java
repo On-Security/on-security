@@ -46,4 +46,9 @@ public class SecurityConsoleManagerServiceImpl implements SecurityConsoleManager
     public SecurityConsoleManager selectById(String id) {
         return this.consoleManagerJdbcRepository.selectOne(id);
     }
+
+    @Override
+    public void insert(SecurityConsoleManager manager) {
+        this.consoleManagerJdbcRepository.insert(manager);
+    }
 }

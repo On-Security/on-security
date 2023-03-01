@@ -41,4 +41,11 @@ public interface SecurityRegionService {
      * @return {@link SecurityRegion}
      */
     SecurityRegion selectByRegionId(String regionId);
+
+    /**
+     * 新增一个安全域
+     *
+     * @param region {@link SecurityRegion}
+     */
+    void insert(SecurityRegion region);
 }
