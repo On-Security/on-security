@@ -17,9 +17,9 @@
 
 package org.minbox.framework.on.security.console.authorization.web;
 
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.console.authorization.authentication.OnSecurityManageTokenAccessRequestAuthorizationToken;
 import org.minbox.framework.on.security.console.authorization.web.converter.OnSecurityManageTokenAccessAuthorizationConvert;
+import org.minbox.framework.on.security.core.authorization.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
 import org.minbox.framework.on.security.core.authorization.manage.ManageTokenAccessAuthorization;
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextHolder;

@@ -17,10 +17,10 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.web;
 
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
-import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityOAuth2UsernamePasswordAuthenticationToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.converter.OnSecurityOAuth2UsernamePasswordAuthenticationConverter;
+import org.minbox.framework.on.security.core.authorization.OnSecurityDefaultAuthenticationFailureHandler;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityThrowErrorUtils;
 import org.minbox.framework.on.security.core.authorization.util.RequestParameterUtils;
 import org.springframework.http.converter.HttpMessageConverter;

@@ -17,10 +17,10 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.web;
 
-import org.minbox.framework.on.security.authorization.server.oauth2.authentication.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityAccessAuthorizationAuthenticationToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.support.OnSecurityAccessAuthorizationRequestToken;
 import org.minbox.framework.on.security.authorization.server.oauth2.web.converter.OnSecurityAccessAuthorizationRequestConverter;
+import org.minbox.framework.on.security.core.authorization.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.core.authorization.endpoint.AccessTokenAuthorization;
 import org.minbox.framework.on.security.core.authorization.jackson2.OnSecurityJsonMapper;
 import org.springframework.http.MediaType;
