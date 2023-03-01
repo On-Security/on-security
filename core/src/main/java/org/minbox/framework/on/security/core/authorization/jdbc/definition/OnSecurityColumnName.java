@@ -172,7 +172,7 @@ public enum OnSecurityColumnName {
     }
 
     public String getUpperCamelName() {
-        return StringUtils.toUpperCamelName(this.name);
+        return StringUtils.toUpperCamelName(this.name.replace("`", ""));
     }
 
     public String getLowerCamelName() {

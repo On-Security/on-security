@@ -22,6 +22,7 @@ import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * 安全域基本信息
@@ -31,6 +32,7 @@ import java.time.LocalDateTime;
  */
 public class SecurityRegion implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
+    public static final String DEFAULT_REGION_ID = "default";
     private String id;
     private String regionId;
     private String displayName;
@@ -98,6 +100,17 @@ public class SecurityRegion implements Serializable {
     public static Builder withId(String id) {
         Assert.hasText(id, "id cannot be empty.");
         return new Builder(id);
+    }
+
+    public static SecurityRegion createDefaultRegion() {
+        SecurityRegion defaultRegion = new SecurityRegion();
+        defaultRegion.setId(UUID.randomUUID().toString());
+        defaultRegion.setRegionId(DEFAULT_REGION_ID);
+        defaultRegion.setDisplayName("Default Region");
+        defaultRegion.setEnabled(true);
+        defaultRegion.setDeleted(false);
+        defaultRegion.setDescribe("Default security domain, automatically created");
+        return defaultRegion;
     }
 
     public String toString() {
