@@ -61,10 +61,6 @@ public class ManageTokenAccessAuthorization implements Serializable {
         return managerSession;
     }
 
-    public String getAuthenticateType() {
-        return this.managerSession.getAuthenticateType();
-    }
-
     @Override
     public String toString() {
         return "ManageTokenAccessAuthorization{" +
