@@ -29,6 +29,7 @@ import org.minbox.framework.on.security.authorization.server.oauth2.authenticati
 import org.minbox.framework.on.security.authorization.server.oauth2.config.configurers.OnSecurityOAuth2AuthorizationServerConfigurer;
 import org.minbox.framework.on.security.core.authorization.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.core.authorization.endpoint.OnSecurityEndpoints;
+import org.minbox.framework.on.security.core.authorization.util.HttpSecuritySharedObjectUtils;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +39,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -87,6 +87,7 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
         OnSecurityOAuth2AuthorizationServerConfigurer authorizationServerConfigurer = new OnSecurityOAuth2AuthorizationServerConfigurer();
         // Configure default authentication failure handler
         AuthenticationFailureHandler onSecurityFailureHandler = new OnSecurityDefaultAuthenticationFailureHandler();
+        ApplicationContext applicationContext = HttpSecuritySharedObjectUtils.getApplicationContext(http);
         // @formatter:off
         authorizationServerConfigurer
                 .authorizationEndpoint(config -> config.errorResponseHandler(onSecurityFailureHandler))
@@ -95,7 +96,11 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
                 .tokenRevocationEndpoint(config -> config.errorResponseHandler(onSecurityFailureHandler))
                 .clientAuthentication(config->config.errorResponseHandler(onSecurityFailureHandler))
                 // Enable OpenID Connect 1.0
-                .oidc(Customizer.withDefaults());
+                .oidc(oidcConfigurer -> oidcConfigurer.userInfoEndpoint(
+                        oidcUserInfoEndpointConfigurer ->
+                            oidcUserInfoEndpointConfigurer.userInfoMapper(new OnSecurityOidcUserInfoMapper(applicationContext))
+                        )
+                );
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         http.requestMatcher(endpointsMatcher)
                 .authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())
