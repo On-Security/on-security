@@ -22,6 +22,8 @@ import org.minbox.framework.on.security.core.authorization.data.console.Security
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenu;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenuJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenuRepository;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
+import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,12 @@ public class SecurityConsoleMenuServiceImpl implements SecurityConsoleMenuServic
 
     public SecurityConsoleMenuServiceImpl(JdbcOperations jdbcOperations) {
         this.menuRepository = new SecurityConsoleMenuJdbcRepository(jdbcOperations);
+    }
+
+    @Override
+    public List<SecurityConsoleMenu> selectAllMenus() {
+        return this.menuRepository.select(Condition.withColumn(OnSecurityColumnName.Enabled, true),
+                Condition.withColumn(OnSecurityColumnName.Deleted, false));
     }
 
     @Override

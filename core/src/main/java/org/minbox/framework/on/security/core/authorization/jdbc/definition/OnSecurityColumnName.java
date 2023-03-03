@@ -142,8 +142,8 @@ public enum OnSecurityColumnName {
     Browser("browser"),
     Country("country"),
     Province("province"),
-    City("city")
-    ;
+    City("city"),
+    Expand("expand");
     private String name;
 
     OnSecurityColumnName(String name) {

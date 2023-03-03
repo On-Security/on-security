@@ -30,6 +30,13 @@ import java.util.List;
  */
 public interface SecurityConsoleMenuService {
     /**
+     * 查询全部有效的菜单
+     *
+     * @return {@link SecurityConsoleMenu}
+     */
+    List<SecurityConsoleMenu> selectAllMenus();
+
+    /**
      * 查询管理员授权的菜单列表
      *
      * @param managerId 管理员ID {@link SecurityConsoleManagerAuthorizeMenu#getManagerId()}

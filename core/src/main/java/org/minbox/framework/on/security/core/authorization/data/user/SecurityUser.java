@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -50,6 +51,7 @@ public class SecurityUser implements Serializable {
     private boolean enabled;
     private boolean deleted;
     private String describe;
+    private Map<String, Object> expand;
     private LocalDateTime createTime;
     private Set<SecurityUserAuthorizeApplication> authorizeClients;
     private Set<SecurityUserAuthorizeConsent> authorizeConsents;
@@ -116,6 +118,10 @@ public class SecurityUser implements Serializable {
         return describe;
     }
 
+    public Map<String, Object> getExpand() {
+        return expand;
+    }
+
     public LocalDateTime getCreateTime() {
         return createTime;
     }
@@ -141,15 +147,32 @@ public class SecurityUser implements Serializable {
         return new Builder(id);
     }
 
+    @Override
     public String toString() {
         // @formatter:off
-        return "SecurityUser(id=" + this.id + ", regionId=" + this.regionId + ", businessId=" + this.businessId + ", username=" +
-                this.username + ", password=" + this.password + ", email=" + this.email + ", phone=" + this.phone +
-                ", name=" + this.name + ", nickname=" + this.nickname + ", birthday=" + this.birthday + ", gender=" +
-                this.gender + ", zipCode=" + this.zipCode + ", enabled=" + this.enabled + ", deleted=" + this.deleted +
-                ", describe=" + this.describe + ", createTime=" + this.createTime + ", authorizeClients=" +
-                this.authorizeClients + ", authorizeConsents=" + this.authorizeConsents + ", authorizeRoles=" +
-                this.authorizeRoles + ", groups=" + this.groups + ")";
+        return "SecurityUser{" +
+                "id='" + id + '\'' +
+                ", regionId='" + regionId + '\'' +
+                ", businessId='" + businessId + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", name='" + name + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", birthday=" + birthday +
+                ", gender=" + gender +
+                ", zipCode='" + zipCode + '\'' +
+                ", enabled=" + enabled +
+                ", deleted=" + deleted +
+                ", describe='" + describe + '\'' +
+                ", expand='" + expand + '\'' +
+                ", createTime=" + createTime +
+                ", authorizeClients=" + authorizeClients +
+                ", authorizeConsents=" + authorizeConsents +
+                ", authorizeRoles=" + authorizeRoles +
+                ", groups=" + groups +
+                '}';
         // @formatter:on
     }
 
@@ -173,6 +196,7 @@ public class SecurityUser implements Serializable {
         private boolean enabled;
         private boolean deleted;
         private String describe;
+        private Map<String, Object> expand;
         private LocalDateTime createTime;
         private Set<SecurityUserAuthorizeApplication> authorizeClients;
         private Set<SecurityUserAuthorizeConsent> authorizeConsents;
@@ -253,6 +277,11 @@ public class SecurityUser implements Serializable {
             return this;
         }
 
+        public Builder expand(Map<String, Object> expand) {
+            this.expand = expand;
+            return this;
+        }
+
         public Builder createTime(LocalDateTime createTime) {
             this.createTime = createTime;
             return this;
@@ -303,6 +332,7 @@ public class SecurityUser implements Serializable {
             user.enabled = this.enabled;
             user.deleted = this.deleted;
             user.describe = this.describe;
+            user.expand = this.expand;
             user.createTime = this.createTime;
             user.authorizeClients = this.authorizeClients;
             user.authorizeConsents = this.authorizeConsents;
@@ -311,15 +341,32 @@ public class SecurityUser implements Serializable {
             return user;
         }
 
+        @Override
         public String toString() {
             // @formatter:off
-            return "SecurityUser.Builder(id=" + this.id + ", regionId=" + this.regionId + ", businessId=" + this.businessId +
-                    ", username=" + this.username + ", password=" + this.password + ", email=" + this.email + ", phone=" +
-                    this.phone + ", name=" + this.name + ", nickname=" + this.nickname + ", birthday=" + this.birthday +
-                    ", gender=" + this.gender + ", zipCode=" + this.zipCode + ", enabled=" + this.enabled + ", deleted=" +
-                    this.deleted + ", describe=" + this.describe + ", createTime=" + this.createTime + ", authorizeClients=" +
-                    this.authorizeClients + ", authorizeConsents=" + this.authorizeConsents + ", authorizeRoles=" +
-                    this.authorizeRoles + ", groups=" + this.groups + ")";
+            return "Builder{" +
+                    "id='" + id + '\'' +
+                    ", regionId='" + regionId + '\'' +
+                    ", businessId='" + businessId + '\'' +
+                    ", username='" + username + '\'' +
+                    ", password='" + password + '\'' +
+                    ", email='" + email + '\'' +
+                    ", phone='" + phone + '\'' +
+                    ", name='" + name + '\'' +
+                    ", nickname='" + nickname + '\'' +
+                    ", birthday=" + birthday +
+                    ", gender=" + gender +
+                    ", zipCode='" + zipCode + '\'' +
+                    ", enabled=" + enabled +
+                    ", deleted=" + deleted +
+                    ", describe='" + describe + '\'' +
+                    ", expand='" + expand + '\'' +
+                    ", createTime=" + createTime +
+                    ", authorizeClients=" + authorizeClients +
+                    ", authorizeConsents=" + authorizeConsents +
+                    ", authorizeRoles=" + authorizeRoles +
+                    ", groups=" + groups +
+                    '}';
             // @formatter:on
         }
     }

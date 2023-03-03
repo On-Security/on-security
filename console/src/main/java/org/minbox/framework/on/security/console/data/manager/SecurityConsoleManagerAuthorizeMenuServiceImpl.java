@@ -45,4 +45,9 @@ public class SecurityConsoleManagerAuthorizeMenuServiceImpl implements SecurityC
     public List<SecurityConsoleManagerAuthorizeMenu> selectByManagerId(String managerId) {
         return this.managerAuthorizeMenuRepository.select(Condition.withColumn(OnSecurityColumnName.ManagerId, managerId));
     }
+
+    @Override
+    public void insert(SecurityConsoleManagerAuthorizeMenu authorizeMenu) {
+        this.managerAuthorizeMenuRepository.insert(authorizeMenu);
+    }
 }
