@@ -37,6 +37,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.key.ZonedDateTimeKeySerializer;
 import org.minbox.framework.on.security.core.authorization.AuthorizeMatchMethod;
 import org.minbox.framework.on.security.core.authorization.ResourceType;
 import org.minbox.framework.on.security.core.authorization.SessionState;
+import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUserDetails;
 import org.minbox.framework.on.security.core.authorization.jackson2.deserializer.AuthorizeMatchMethodDeserializer;
 import org.minbox.framework.on.security.core.authorization.jackson2.deserializer.ResourceTypeDeserializer;
 import org.minbox.framework.on.security.core.authorization.jackson2.deserializer.SessionStateDeserializer;
@@ -130,6 +131,8 @@ public class OnSecuritySerializableModule extends SimpleModule {
 
     public void setupModule(Module.SetupContext context) {
         super.setupModule(context);
+        // OnSecurityUserDetails
+        context.setMixInAnnotations(OnSecurityUserDetails.class, OnSecurityUserDetailsMixin.class);
         context.addValueInstantiators(new ValueInstantiators.Base() {
             public ValueInstantiator findValueInstantiator(DeserializationConfig config, BeanDescription beanDesc, ValueInstantiator defaultInstantiator) {
                 JavaType type = beanDesc.getType();

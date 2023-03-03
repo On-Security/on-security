@@ -185,6 +185,122 @@ public class SecuritySession implements Serializable {
         return createTime;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setSessionState(SessionState sessionState) {
+        this.sessionState = sessionState;
+    }
+
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
+    }
+
+    public void setAuthorizationGrantType(AuthorizationGrantType authorizationGrantType) {
+        this.authorizationGrantType = authorizationGrantType;
+    }
+
+    public void setAuthorizationScopes(Set<String> authorizationScopes) {
+        this.authorizationScopes = authorizationScopes;
+    }
+
+    public void setAuthorizationCodeValue(String authorizationCodeValue) {
+        this.authorizationCodeValue = authorizationCodeValue;
+    }
+
+    public void setAuthorizationCodeIssuedAt(LocalDateTime authorizationCodeIssuedAt) {
+        this.authorizationCodeIssuedAt = authorizationCodeIssuedAt;
+    }
+
+    public void setAuthorizationCodeExpiresAt(LocalDateTime authorizationCodeExpiresAt) {
+        this.authorizationCodeExpiresAt = authorizationCodeExpiresAt;
+    }
+
+    public void setAuthorizationCodeMetadata(Map<String, Object> authorizationCodeMetadata) {
+        this.authorizationCodeMetadata = authorizationCodeMetadata;
+    }
+
+    public void setAccessTokenValue(String accessTokenValue) {
+        this.accessTokenValue = accessTokenValue;
+    }
+
+    public void setAccessTokenIssuedAt(LocalDateTime accessTokenIssuedAt) {
+        this.accessTokenIssuedAt = accessTokenIssuedAt;
+    }
+
+    public void setAccessTokenExpiresAt(LocalDateTime accessTokenExpiresAt) {
+        this.accessTokenExpiresAt = accessTokenExpiresAt;
+    }
+
+    public void setAccessTokenMetadata(Map<String, Object> accessTokenMetadata) {
+        this.accessTokenMetadata = accessTokenMetadata;
+    }
+
+    public void setAccessTokenType(AccessTokenType accessTokenType) {
+        this.accessTokenType = accessTokenType;
+    }
+
+    public void setAccessTokenScopes(Set<String> accessTokenScopes) {
+        this.accessTokenScopes = accessTokenScopes;
+    }
+
+    public void setOidcIdTokenValue(String oidcIdTokenValue) {
+        this.oidcIdTokenValue = oidcIdTokenValue;
+    }
+
+    public void setOidcIdTokenIssuedAt(LocalDateTime oidcIdTokenIssuedAt) {
+        this.oidcIdTokenIssuedAt = oidcIdTokenIssuedAt;
+    }
+
+    public void setOidcIdTokenExpiresAt(LocalDateTime oidcIdTokenExpiresAt) {
+        this.oidcIdTokenExpiresAt = oidcIdTokenExpiresAt;
+    }
+
+    public void setOidcIdTokenMetadata(Map<String, Object> oidcIdTokenMetadata) {
+        this.oidcIdTokenMetadata = oidcIdTokenMetadata;
+    }
+
+    public void setRefreshTokenValue(String refreshTokenValue) {
+        this.refreshTokenValue = refreshTokenValue;
+    }
+
+    public void setRefreshTokenIssuedAt(LocalDateTime refreshTokenIssuedAt) {
+        this.refreshTokenIssuedAt = refreshTokenIssuedAt;
+    }
+
+    public void setRefreshTokenExpiresAt(LocalDateTime refreshTokenExpiresAt) {
+        this.refreshTokenExpiresAt = refreshTokenExpiresAt;
+    }
+
+    public void setRefreshTokenMetadata(Map<String, Object> refreshTokenMetadata) {
+        this.refreshTokenMetadata = refreshTokenMetadata;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
     public static Builder withId(String id) {
         Assert.hasText(id, "id cannot be empty");
         return new Builder(id);

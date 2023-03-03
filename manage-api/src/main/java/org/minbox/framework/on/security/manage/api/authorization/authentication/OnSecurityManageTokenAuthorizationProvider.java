@@ -19,6 +19,7 @@ package org.minbox.framework.on.security.manage.api.authorization.authentication
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.minbox.framework.on.security.core.authorization.AbstractOnSecurityAuthenticationProvider;
+import org.minbox.framework.on.security.core.authorization.endpoint.OnSecurityEndpoints;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityError;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityOAuth2AuthenticationException;
@@ -58,7 +59,6 @@ public class OnSecurityManageTokenAuthorizationProvider extends AbstractOnSecuri
      * logger instance
      */
     static Logger logger = LoggerFactory.getLogger(OnSecurityManageTokenAuthorizationProvider.class);
-    private static final String MANAGE_ACCESS_AUTHORIZATION_URI = "/on-security/manage/access/authorization";
     private static final String ERROR_CODE_RESPONSE_PARAM = "errorCode";
     private String consoleServerAddress;
     private RestTemplate restTemplate;
@@ -106,7 +106,7 @@ public class OnSecurityManageTokenAuthorizationProvider extends AbstractOnSecuri
             headers.set(HttpHeaders.AUTHORIZATION, manageToken);
             // @formatter:off
             HttpEntity<String> response = restTemplate
-                    .exchange(this.consoleServerAddress + MANAGE_ACCESS_AUTHORIZATION_URI,
+                    .exchange(this.consoleServerAddress + OnSecurityEndpoints.MANAGE_TOKEN_ACCESS_AUTHORIZATION_ENDPOINT,
                             HttpMethod.POST,
                             new HttpEntity<>(null, headers),
                             String.class);
