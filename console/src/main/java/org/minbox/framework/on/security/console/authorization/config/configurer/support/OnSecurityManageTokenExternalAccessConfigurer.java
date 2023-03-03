@@ -20,6 +20,7 @@ package org.minbox.framework.on.security.console.authorization.config.configurer
 import org.minbox.framework.on.security.console.authorization.authentication.OnSecurityManageTokenAccessAuthorizationProvider;
 import org.minbox.framework.on.security.console.authorization.web.OnSecurityManageTokenExternalAccessAuthorizationFilter;
 import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
+import org.minbox.framework.on.security.core.authorization.endpoint.OnSecurityEndpoints;
 import org.minbox.framework.on.security.core.authorization.util.HttpSecuritySharedObjectUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,9 +37,10 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * @since 0.0.9
  */
 public class OnSecurityManageTokenExternalAccessConfigurer extends AbstractOnSecurityOAuth2Configurer {
-    private static final String MANAGE_TOKEN_ACCESS_URI = "/on-security/manage/access/authorization";
-    private RequestMatcher MANAGE_TOKEN_ACCESS_REQUEST_MATCHER = new AntPathRequestMatcher(MANAGE_TOKEN_ACCESS_URI, HttpMethod.POST.name());
-
+    // @formatter:off
+    private RequestMatcher MANAGE_TOKEN_ACCESS_REQUEST_MATCHER =
+            new AntPathRequestMatcher(OnSecurityEndpoints.MANAGE_TOKEN_ACCESS_AUTHORIZATION_ENDPOINT, HttpMethod.POST.name());
+    // @formatter:on
     public OnSecurityManageTokenExternalAccessConfigurer(ObjectPostProcessor<Object> objectPostProcessor) {
         super(objectPostProcessor);
     }
