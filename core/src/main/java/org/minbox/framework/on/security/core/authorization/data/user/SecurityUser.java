@@ -142,6 +142,90 @@ public class SecurityUser implements Serializable {
         return groups;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setGender(UserGender gender) {
+        this.gender = gender;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public void setExpand(Map<String, Object> expand) {
+        this.expand = expand;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setAuthorizeClients(Set<SecurityUserAuthorizeApplication> authorizeClients) {
+        this.authorizeClients = authorizeClients;
+    }
+
+    public void setAuthorizeConsents(Set<SecurityUserAuthorizeConsent> authorizeConsents) {
+        this.authorizeConsents = authorizeConsents;
+    }
+
+    public void setAuthorizeRoles(Set<SecurityUserAuthorizeRole> authorizeRoles) {
+        this.authorizeRoles = authorizeRoles;
+    }
+
+    public void setGroups(Set<SecurityUserGroup> groups) {
+        this.groups = groups;
+    }
+
     public static Builder withId(String id) {
         Assert.hasText(id, "id cannot be empty.");
         return new Builder(id);
