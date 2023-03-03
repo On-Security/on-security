@@ -20,6 +20,7 @@ package org.minbox.framework.on.security.console.authorization.config.configurer
 import org.minbox.framework.on.security.console.authorization.authentication.OnSecurityConsoleManageTokenAuthenticationProvider;
 import org.minbox.framework.on.security.console.authorization.web.OnSecurityConsoleManageTokenFilter;
 import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
+import org.minbox.framework.on.security.core.authorization.endpoint.OnSecurityEndpoints;
 import org.minbox.framework.on.security.core.authorization.util.HttpSecuritySharedObjectUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,8 +39,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * @since 0.0.9
  */
 public class OnSecurityConsoleManageTokenConfigurer extends AbstractOnSecurityOAuth2Configurer {
-    private static final String MANAGE_TOKEN_URI = "/on-security/manage/token";
-    private static final RequestMatcher MANAGE_TOKEN_REQUEST_MATCHER = new AntPathRequestMatcher(MANAGE_TOKEN_URI, HttpMethod.POST.name());
+    private static final RequestMatcher MANAGE_TOKEN_REQUEST_MATCHER = new AntPathRequestMatcher(OnSecurityEndpoints.MANAGE_TOKEN_ENDPOINT, HttpMethod.POST.name());
 
     public OnSecurityConsoleManageTokenConfigurer(ObjectPostProcessor<Object> objectPostProcessor) {
         super(objectPostProcessor);
