@@ -127,7 +127,7 @@ public class SecurityConsoleManager implements Serializable {
         SecurityConsoleManager manager = new SecurityConsoleManager();
         manager.setId(UUID.randomUUID().toString());
         manager.setRegionId(regionId);
-        manager.setUsername(ADMIN_USERNAME);
+        manager.setUsername(username);
         manager.setPassword(password);
         manager.setEnabled(true);
         manager.setDeleted(false);

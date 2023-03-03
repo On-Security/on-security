@@ -35,4 +35,11 @@ public interface SecurityConsoleManagerAuthorizeMenuService {
      * @return {@link SecurityConsoleManagerAuthorizeMenu}
      */
     List<SecurityConsoleManagerAuthorizeMenu> selectByManagerId(String managerId);
+
+    /**
+     * 新增一条授权信息
+     *
+     * @param authorizeMenu {@link SecurityConsoleManagerAuthorizeMenu}
+     */
+    void insert(SecurityConsoleManagerAuthorizeMenu authorizeMenu);
 }

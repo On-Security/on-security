@@ -18,9 +18,13 @@
 package org.minbox.framework.on.security.console.configuration.startup;
 
 import org.minbox.framework.on.security.console.configuration.startup.event.ConsoleServiceStartupEvent;
+import org.minbox.framework.on.security.console.data.manager.SecurityConsoleManagerAuthorizeMenuService;
 import org.minbox.framework.on.security.console.data.manager.SecurityConsoleManagerService;
+import org.minbox.framework.on.security.console.data.menu.SecurityConsoleMenuService;
 import org.minbox.framework.on.security.console.data.region.SecurityRegionService;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerAuthorizeMenu;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenu;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +33,13 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.SmartApplicationListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.ObjectUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager.ADMIN_USERNAME;
@@ -60,6 +67,10 @@ public class InitializationAdminManagerListener implements SmartApplicationListe
     private SecurityConsoleManagerService consoleManagerService;
     @Autowired
     private SecurityRegionService regionService;
+    @Autowired
+    private SecurityConsoleMenuService consoleMenuService;
+    @Autowired
+    private SecurityConsoleManagerAuthorizeMenuService managerAuthorizeMenuService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -89,6 +100,18 @@ public class InitializationAdminManagerListener implements SmartApplicationListe
         SecurityConsoleManager adminManger = SecurityConsoleManager.createManager(region.getId(), ADMIN_USERNAME, this.passwordEncoder.encode(password));
         adminManger.setDescribe("Admin manager, automatically created");
         this.consoleManagerService.insert(adminManger);
+        List<SecurityConsoleMenu> consoleMenuList = consoleMenuService.selectAllMenus();
+        if (!ObjectUtils.isEmpty(consoleMenuList)) {
+            consoleMenuList.stream().forEach(menu -> {
+                SecurityConsoleManagerAuthorizeMenu authorizeMenu = new SecurityConsoleManagerAuthorizeMenu();
+                authorizeMenu.setId(UUID.randomUUID().toString());
+                authorizeMenu.setRegionId(region.getId());
+                authorizeMenu.setManagerId(adminManger.getId());
+                authorizeMenu.setMenuId(menu.getId());
+                authorizeMenu.setAuthorizeTime(LocalDateTime.now());
+                managerAuthorizeMenuService.insert(authorizeMenu);
+            });
+        }
     }
 
     private void savePasswordToFile(String password) {
