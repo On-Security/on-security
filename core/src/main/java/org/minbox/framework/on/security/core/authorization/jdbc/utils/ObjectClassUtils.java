@@ -109,6 +109,9 @@ public class ObjectClassUtils {
      */
     public static void invokeObjectSetMethod(Object object, Map<String, Object> setMethodParameterMap) {
         Method[] setMethods = getClassSetMethod(object.getClass());
+        if (ObjectUtils.isEmpty(setMethods)) {
+            logger.warn("Class: {}, does not define setter methods.", object.getClass().getName());
+        }
         Map<String, Method> setMethodMap = Arrays.stream(setMethods).collect(Collectors.toMap(Method::getName, v -> v));
         setMethodParameterMap.forEach((setMethodName, value) -> {
             if (!setMethodMap.containsKey(setMethodName)) {
