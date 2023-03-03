@@ -106,7 +106,7 @@ public final class OnSecurityAccessAuthorizationAuthenticationProvider extends A
             // @formatter:on
             throw new OnSecurityOAuth2AuthenticationException(onSecurityError);
         }
-        SecurityUser user = this.userRepository.findById(session.getUserId());
+        SecurityUser user = this.userRepository.selectOne(session.getUserId());
         if (user == null || user.isDeleted() || !user.isEnabled()) {
             // @formatter:off
             OnSecurityError onSecurityError = new OnSecurityError(OnSecurityErrorCodes.INVALID_USER.getValue(),

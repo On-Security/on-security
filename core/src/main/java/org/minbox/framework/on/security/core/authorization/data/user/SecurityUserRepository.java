@@ -17,21 +17,15 @@
 
 package org.minbox.framework.on.security.core.authorization.data.user;
 
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
+
 /**
  * 用户数据存储库
  *
  * @author 恒宇少年
  * @since 0.0.1
  */
-public interface SecurityUserRepository {
-    /**
-     * 根据用户ID查询用户基本信息
-     *
-     * @param id {@link SecurityUser#getId()} 用户ID
-     * @return {@link SecurityUser}
-     */
-    SecurityUser findById(String id);
-
+public interface SecurityUserRepository extends OnSecurityBaseJdbcRepository<SecurityUser, String> {
     /**
      * 根据用户名查询用户基本信息
      *
