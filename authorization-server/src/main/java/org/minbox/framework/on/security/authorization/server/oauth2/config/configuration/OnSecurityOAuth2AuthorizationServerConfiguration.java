@@ -21,7 +21,6 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import org.minbox.framework.on.security.authorization.server.jose.Jwks;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.OnSecurityDelegatingOAuth2TokenGenerator;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.customizer.OnSecurityIdentityProviderIdTokenCustomizer;
 import org.minbox.framework.on.security.authorization.server.oauth2.authentication.token.customizer.OnSecurityUserAuthorizeAttributeJwtClaimsCustomizer;
@@ -30,6 +29,7 @@ import org.minbox.framework.on.security.authorization.server.oauth2.config.confi
 import org.minbox.framework.on.security.core.authorization.OnSecurityDefaultAuthenticationFailureHandler;
 import org.minbox.framework.on.security.core.authorization.endpoint.OnSecurityEndpoints;
 import org.minbox.framework.on.security.core.authorization.util.HttpSecuritySharedObjectUtils;
+import org.minbox.framework.on.security.core.authorization.util.RSAKeyUtils;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -52,7 +52,11 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import java.security.KeyPair;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * OnSecurity授权认证服务器默认配置类
@@ -150,7 +154,15 @@ public class OnSecurityOAuth2AuthorizationServerConfiguration {
      * @return {@link JWKSource}
      */
     protected JWKSource<SecurityContext> defaultJwkSource() {
-        RSAKey rsaKey = Jwks.generateRsa();
+        KeyPair keyPair = RSAKeyUtils.generateRandomRSAKeyPair();
+        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+        // @formatter:off
+        RSAKey rsaKey = new RSAKey.Builder(publicKey)
+                .privateKey(privateKey)
+                .keyID(UUID.randomUUID().toString())
+                .build();
+        // @formatter:on
         JWKSet jwkSet = new JWKSet(rsaKey);
         return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
     }
