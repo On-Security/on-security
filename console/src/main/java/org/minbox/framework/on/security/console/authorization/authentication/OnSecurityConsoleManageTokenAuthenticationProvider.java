@@ -17,10 +17,12 @@
 
 package org.minbox.framework.on.security.console.authorization.authentication;
 
+import com.nimbusds.jose.jwk.RSAKey;
 import org.minbox.framework.on.security.console.authorization.token.Base64StringConsoleManageTokenGenerator;
 import org.minbox.framework.on.security.console.authorization.token.ConsoleManageToken;
 import org.minbox.framework.on.security.console.authorization.token.ConsoleManageTokenContext;
 import org.minbox.framework.on.security.console.authorization.token.ConsoleManageTokenGenerator;
+import org.minbox.framework.on.security.console.configuration.OnSecurityConsoleServiceJwkSource;
 import org.minbox.framework.on.security.console.data.manager.SecurityConsoleManagerService;
 import org.minbox.framework.on.security.console.data.manager.SecurityConsoleManagerSessionService;
 import org.minbox.framework.on.security.console.data.region.SecurityRegionSecretService;
@@ -74,8 +76,10 @@ public class OnSecurityConsoleManageTokenAuthenticationProvider extends Abstract
         this.consoleManagerService = applicationContext.getBean(SecurityConsoleManagerService.class);
         this.regionSecretService = applicationContext.getBean(SecurityRegionSecretService.class);
         this.consoleManagerSessionService = applicationContext.getBean(SecurityConsoleManagerSessionService.class);
+        OnSecurityConsoleServiceJwkSource consoleServiceJwkSource = applicationContext.getBean(OnSecurityConsoleServiceJwkSource.class);
+        RSAKey rsaKey = consoleServiceJwkSource.getRsaKey();
         ConsoleManageTokenGenerator consoleManageTokenGenerator = BeanUtils.getOptionalBean(applicationContext, ConsoleManageTokenGenerator.class);
-        this.tokenGenerator = consoleManageTokenGenerator != null ? consoleManageTokenGenerator : new Base64StringConsoleManageTokenGenerator();
+        this.tokenGenerator = consoleManageTokenGenerator != null ? consoleManageTokenGenerator : new Base64StringConsoleManageTokenGenerator(rsaKey);
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -125,7 +129,7 @@ public class OnSecurityConsoleManageTokenAuthenticationProvider extends Abstract
             managerSession.setManagerId(manageTokenContext.getManagerId());
             managerSession.setRegionSecretId(manageTokenContext.getSecretId());
             managerSession.setAuthenticateType(manageTokenContext.getAuthenticateType().toString());
-            managerSession.setManageTokenValue(manageToken.getTokenValue());
+            managerSession.setManageTokenValue(manageToken.getOriginal());
             managerSession.setManageTokenIssuedAt(LocalDateTime.ofInstant(manageToken.getIssuedAt(), ZoneId.systemDefault()));
             managerSession.setManageTokenExpiresAt(LocalDateTime.ofInstant(manageToken.getExpiresAt(), ZoneId.systemDefault()));
             consoleManagerSessionService.insert(managerSession);

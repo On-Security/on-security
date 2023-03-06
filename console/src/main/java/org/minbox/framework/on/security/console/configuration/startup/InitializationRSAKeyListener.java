@@ -28,8 +28,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 
-import static org.minbox.framework.on.security.console.configuration.AuthorizationServerConfiguration.OnSecurityConsoleServiceJwkSource.RSA_PRIVATE_PEM_FILE_PATH;
-import static org.minbox.framework.on.security.console.configuration.AuthorizationServerConfiguration.OnSecurityConsoleServiceJwkSource.RSA_PUBLIC_PEM_FILE_PATH;
+import static org.minbox.framework.on.security.console.configuration.OnSecurityConsoleServiceJwkSource.RSA_PRIVATE_PEM_FILE_PATH;
+import static org.minbox.framework.on.security.console.configuration.OnSecurityConsoleServiceJwkSource.RSA_PUBLIC_PEM_FILE_PATH;
+
 
 /**
  * 初始化RSA格式的密钥对，用于授权服务器的授权、鉴权等操作
