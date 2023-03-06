@@ -17,9 +17,18 @@
 
 package org.minbox.framework.on.security.console.authorization.token;
 
+import com.nimbusds.jose.jwk.RSAKey;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityError;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
+import org.minbox.framework.on.security.core.authorization.exception.OnSecurityOAuth2AuthenticationException;
+import org.minbox.framework.on.security.core.authorization.util.OnSecurityThrowErrorUtils;
+import org.minbox.framework.on.security.core.authorization.util.RSAKeyUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.keygen.Base64StringKeyGenerator;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 
+import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
 import java.util.Base64;
 
@@ -30,12 +39,40 @@ import java.util.Base64;
  * @since 0.0.9
  */
 public final class Base64StringConsoleManageTokenGenerator implements ConsoleManageTokenGenerator {
-    private final StringKeyGenerator manageTokenGenerator =
-            new Base64StringKeyGenerator(Base64.getUrlEncoder().withoutPadding(), 256);
+    /**
+     * logger instance
+     */
+    static Logger logger = LoggerFactory.getLogger(Base64StringConsoleManageTokenGenerator.class);
+    private final StringKeyGenerator base64StringKeyGenerator =
+            new Base64StringKeyGenerator(Base64.getUrlEncoder().withoutPadding(), 128);
+    private RSAKey rsaKey;
+
+    public Base64StringConsoleManageTokenGenerator(RSAKey rsaKey) {
+        this.rsaKey = rsaKey;
+    }
+
     @Override
     public ConsoleManageToken generator(ConsoleManageTokenContext context) {
         Instant issuedAt = Instant.now();
         Instant expiresAt = issuedAt.plus(context.getManageTokenTimeToLive());
-        return new ConsoleManageToken(this.manageTokenGenerator.generateKey(), issuedAt, expiresAt);
+        String original = this.base64StringKeyGenerator.generateKey();
+        String encryption = this.encryption(original);
+        return new ConsoleManageToken(encryption, original, issuedAt, expiresAt);
+    }
+
+    private String encryption(String base64StringKey) {
+        try {
+            RSAPublicKey publicKey = this.rsaKey.toRSAPublicKey();
+            return RSAKeyUtils.encryptionByPublicKey(publicKey, base64StringKey);
+        } catch (Exception e) {
+            logger.error("An exception was encountered while generating encrypted manageToken.", e);
+        }
+        // @formatter:off
+        OnSecurityError onSecurityError = new OnSecurityError(OnSecurityErrorCodes.UNKNOWN_EXCEPTION.getValue(),
+                null,
+                "An exception was encountered while generating encrypted manageToken.",
+                OnSecurityThrowErrorUtils.DEFAULT_HELP_URI);
+        // @formatter:on
+        throw new OnSecurityOAuth2AuthenticationException(onSecurityError);
     }
 }

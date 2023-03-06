@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.console.authorization.authentication;
 
+import com.nimbusds.jose.jwk.RSAKey;
+import org.minbox.framework.on.security.console.configuration.OnSecurityConsoleServiceJwkSource;
 import org.minbox.framework.on.security.console.data.manager.SecurityConsoleManagerService;
 import org.minbox.framework.on.security.console.data.manager.SecurityConsoleManagerSessionService;
 import org.minbox.framework.on.security.console.data.menu.SecurityConsoleMenuService;
@@ -37,11 +39,15 @@ import org.minbox.framework.on.security.core.authorization.manage.context.OnSecu
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextHolder;
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextImpl;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityThrowErrorUtils;
+import org.minbox.framework.on.security.core.authorization.util.RSAKeyUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.util.ObjectUtils;
 
+import java.security.interfaces.RSAPrivateKey;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -56,11 +62,16 @@ import java.util.stream.Collectors;
  * @since 0.0.9
  */
 public class OnSecurityManageTokenAccessAuthorizationProvider extends AbstractOnSecurityAuthenticationProvider {
+    /**
+     * logger instance
+     */
+    static Logger logger = LoggerFactory.getLogger(OnSecurityManageTokenAccessAuthorizationProvider.class);
     private SecurityConsoleManagerSessionService managerSessionService;
     private SecurityConsoleManagerService managerService;
     private SecurityConsoleMenuService menuService;
     private SecurityRegionService regionService;
     private SecurityRegionSecretService regionSecretService;
+    private RSAKey rsaKey;
 
     public OnSecurityManageTokenAccessAuthorizationProvider(Map<Class<?>, Object> sharedObjects) {
         super(sharedObjects);
@@ -70,6 +81,8 @@ public class OnSecurityManageTokenAccessAuthorizationProvider extends AbstractOn
         this.menuService = applicationContext.getBean(SecurityConsoleMenuService.class);
         this.regionService = applicationContext.getBean(SecurityRegionService.class);
         this.regionSecretService = applicationContext.getBean(SecurityRegionSecretService.class);
+        OnSecurityConsoleServiceJwkSource consoleServiceJwkSource = applicationContext.getBean(OnSecurityConsoleServiceJwkSource.class);
+        this.rsaKey = consoleServiceJwkSource.getRsaKey();
     }
 
     @Override
@@ -82,7 +95,8 @@ public class OnSecurityManageTokenAccessAuthorizationProvider extends AbstractOn
         ManageTokenAccessAuthorization accessAuthorization = ManageTokenAuthorizationCache.getAccessAuthorization(manageToken);
         // cache miss
         if (accessAuthorization == null) {
-            SecurityConsoleManagerSession managerSession = this.managerSessionService.selectByToken(manageToken);
+            String originalToken = this.decryptManageToken(manageToken);
+            SecurityConsoleManagerSession managerSession = this.managerSessionService.selectByToken(originalToken);
             if (managerSession == null || LocalDateTime.now().isAfter(managerSession.getManageTokenExpiresAt())) {
                 OnSecurityError onSecurityError = new OnSecurityError(OnSecurityErrorCodes.INVALID_MANAGE_TOKEN.getValue(),
                         null,
@@ -151,6 +165,20 @@ public class OnSecurityManageTokenAccessAuthorizationProvider extends AbstractOn
             builder.regionSecret(regionSecret);
         }
         return builder.build();
+    }
+
+    private String decryptManageToken(String manageToken) {
+        try {
+            RSAPrivateKey privateKey = this.rsaKey.toRSAPrivateKey();
+            return RSAKeyUtils.decryptByPrivateKey(privateKey, manageToken);
+        } catch (Exception e) {
+            logger.error("An exception was encountered when decrypting the manageToken.", e);
+        }
+        OnSecurityError onSecurityError = new OnSecurityError(OnSecurityErrorCodes.INVALID_MANAGE_TOKEN.getValue(),
+                null,
+                "manageToken decryption failed, please check validity.",
+                OnSecurityThrowErrorUtils.DEFAULT_HELP_URI);
+        throw new OnSecurityOAuth2AuthenticationException(onSecurityError);
     }
 
     @Override

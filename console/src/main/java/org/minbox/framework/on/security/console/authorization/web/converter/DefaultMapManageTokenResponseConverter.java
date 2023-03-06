@@ -50,7 +50,7 @@ public class DefaultMapManageTokenResponseConverter implements Converter<Map<Str
         String expiresInValue = getParameterValue(source, ManageTokenParameterNames.EXPIRES_IN);
         Instant issuedAt = Instant.now();
         Instant expiresAt = Instant.now().plus(Duration.ofSeconds(Long.valueOf(expiresInValue)));
-        return new ConsoleManageToken(tokenValue, issuedAt, expiresAt);
+        return new ConsoleManageToken(tokenValue, null, issuedAt, expiresAt);
     }
 
     private ManageTokenAuthenticateType getAuthenticateType(Map<String, Object> source) {

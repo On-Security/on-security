@@ -17,12 +17,15 @@
 
 package org.minbox.framework.on.security.core.authorization.util;
 
+import javax.crypto.Cipher;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.*;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -141,5 +144,34 @@ public final class RSAKeyUtils {
         KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encoded);
         return keyFactory.generatePublic(keySpec);
+    }
+
+    /**
+     * 使用公钥加密字符串
+     *
+     * @param publicKey 公钥
+     * @param original  原文
+     * @return 加密后字符串
+     * @throws Exception
+     */
+    public static String encryptionByPublicKey(RSAPublicKey publicKey, String original) throws Exception {
+        Cipher publicCipher = Cipher.getInstance(ALGORITHM);
+        publicCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+        return Base64.getEncoder().encodeToString(publicCipher.doFinal(original.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    /**
+     * 使用私钥解密
+     *
+     * @param privateKey 私钥
+     * @param encryption 加密字符串
+     * @return 解密后的原文
+     * @throws Exception
+     */
+    public static String decryptByPrivateKey(RSAPrivateKey privateKey, String encryption) throws Exception {
+        Cipher privateCipher = Cipher.getInstance(ALGORITHM);
+        privateCipher.init(Cipher.DECRYPT_MODE, privateKey);
+        byte[] encryptionByte = Base64.getDecoder().decode(encryption.getBytes(StandardCharsets.UTF_8));
+        return new String(privateCipher.doFinal(encryptionByte));
     }
 }

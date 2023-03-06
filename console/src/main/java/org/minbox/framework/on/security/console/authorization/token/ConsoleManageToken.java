@@ -28,7 +28,14 @@ import java.time.Instant;
  * @since 0.0.9
  */
 public class ConsoleManageToken extends AbstractOAuth2Token {
-    public ConsoleManageToken(String tokenValue, Instant issuedAt, Instant expiresAt) {
+    private String original;
+
+    public ConsoleManageToken(String tokenValue, String original, Instant issuedAt, Instant expiresAt) {
         super(tokenValue, issuedAt, expiresAt);
+        this.original = original;
+    }
+
+    public String getOriginal() {
+        return original;
     }
 }
