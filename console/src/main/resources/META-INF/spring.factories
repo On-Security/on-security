@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  org.minbox.framework.on.security.console.configuration.AuthorizationServerConfiguration,\
+  org.minbox.framework.on.security.console.configuration.ConsoleManageAuthorizationConfiguration,\
+  org.minbox.framework.on.security.console.configuration.ConsoleServiceWebSecurityConfiguration

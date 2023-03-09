@@ -18,6 +18,7 @@
 package org.minbox.framework.on.security.console.configuration;
 
 import org.minbox.framework.on.security.console.authorization.config.configurer.OnSecurityConsoleManageConfigurer;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -34,6 +35,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * @since 0.0.9
  */
 @Configuration
+@AutoConfigureAfter(AuthorizationServerConfiguration.class)
 public class ConsoleManageAuthorizationConfiguration {
     @Bean
     @Order(Ordered.LOWEST_PRECEDENCE + 1)
