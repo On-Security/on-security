@@ -143,7 +143,8 @@ public enum OnSecurityColumnName {
     Country("country"),
     Province("province"),
     City("city"),
-    Expand("expand");
+    Expand("expand"),
+    Avatar("avatar");
     private String name;
 
     OnSecurityColumnName(String name) {
