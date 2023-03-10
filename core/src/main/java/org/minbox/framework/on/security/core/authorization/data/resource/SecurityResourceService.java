@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.core.authorization.data.resource;
 
+import org.minbox.framework.on.security.core.authorization.data.attribute.ResourceAuthorizeAttribute;
+import org.minbox.framework.on.security.core.authorization.data.attribute.SecurityAttributeService;
 import org.minbox.framework.on.security.core.authorization.data.role.SecurityRoleAuthorizeResource;
 import org.minbox.framework.on.security.core.authorization.data.role.SecurityRoleAuthorizeResourceJdbcRepository;
 import org.minbox.framework.on.security.core.authorization.data.role.SecurityRoleAuthorizeResourceRepository;
@@ -44,6 +46,8 @@ public class SecurityResourceService {
     private SecurityRoleAuthorizeResourceRepository roleAuthorizeResourceRepository;
     private SecurityResourceRepository resourceRepository;
     private SecurityResourceUriRepository resourceUriRepository;
+    private SecurityResourceAuthorizeAttributeRepository resourceAuthorizeAttributeRepository;
+    private SecurityAttributeService attributeService;
 
     public SecurityResourceService(JdbcOperations jdbcOperations) {
         Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
@@ -51,6 +55,28 @@ public class SecurityResourceService {
         this.roleAuthorizeResourceRepository = new SecurityRoleAuthorizeResourceJdbcRepository(jdbcOperations);
         this.resourceRepository = new SecurityResourceJdbcRepository(jdbcOperations);
         this.resourceUriRepository = new SecurityResourceUriJdbcRepository(jdbcOperations);
+        this.resourceAuthorizeAttributeRepository = new SecurityResourceAuthorizeAttributeJdbcRepository(jdbcOperations);
+        this.attributeService = new SecurityAttributeService(jdbcOperations);
+    }
+
+    public List<ApplicationResource> findByApplicationId(String applicationId) {
+        List<SecurityResource> resourceList = this.resourceRepository.findByApplicationId(applicationId);
+        if (!ObjectUtils.isEmpty(resourceList)) {
+            // @formatter:off
+            return resourceList.stream()
+                    .map(resource -> {
+                        List<SecurityResourceUri> resourceUriList = this.resourceUriRepository.findByResourceId(resource.getId());
+                        List<ResourceAuthorizeAttribute> resourceAuthorizeAttributeList = this.attributeService.findByResourceId(resource.getId());
+                        ApplicationResource applicationResource = ApplicationResource
+                                .withResource(resource)
+                                .resourceUriList(resourceUriList.stream().collect(Collectors.toSet()))
+                                .resourceAuthorizeAttributeList(resourceAuthorizeAttributeList)
+                                .build();
+                        return applicationResource;
+                    }).collect(Collectors.toList());
+            // @formatter:on
+        }
+        return null;
     }
 
     public List<UserAuthorizationResource> findByUserId(String userId) {

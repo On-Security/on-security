@@ -17,6 +17,7 @@
 
 package org.minbox.framework.on.security.authorization.server.oauth2.authentication.support;
 
+import org.minbox.framework.on.security.core.authorization.data.application.UserAuthorizationApplication;
 import org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute;
 import org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource;
 import org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole;
@@ -57,6 +58,10 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
      * AccessToken所属用户授权的角色列表
      */
     private List<UserAuthorizationRole> userAuthorizationRoleList;
+    /**
+     * AccessToken所属用户授权的应用列表
+     */
+    private List<UserAuthorizationApplication> userAuthorizationApplicationList;
 
     private OnSecurityAccessAuthorizationAuthenticationToken() {
         super(Collections.emptyList());
@@ -92,6 +97,10 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
         return userAuthorizationRoleList;
     }
 
+    public List<UserAuthorizationApplication> getUserAuthorizationApplicationList() {
+        return userAuthorizationApplicationList;
+    }
+
     /**
      * 转换成令牌授权端点响应实体
      *
@@ -110,7 +119,8 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
                         .session(accessTokenSession)
                         .userAuthorizationResource(this.userAuthorizationResourceList)
                         .userAuthorizationAttribute(this.userAuthorizationAttributeList)
-                        .userAuthorizationRole(this.userAuthorizationRoleList);
+                        .userAuthorizationRole(this.userAuthorizationRoleList)
+                        .userAuthorizationApplication(this.userAuthorizationApplicationList);
         // @formatter:on
         return builder.build();
     }
@@ -132,12 +142,14 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
         private List<UserAuthorizationResource> userAuthorizationResourceList;
         private List<UserAuthorizationAttribute> userAuthorizationAttributeList;
         private List<UserAuthorizationRole> userAuthorizationRoleList;
+        private List<UserAuthorizationApplication> userAuthorizationApplicationList;
 
         public Builder(SecurityUser user, SecuritySession session) {
             this.user = user;
             this.session = session;
             this.userAuthorizationResourceList = Collections.emptyList();
             this.userAuthorizationAttributeList = Collections.emptyList();
+            this.userAuthorizationApplicationList = Collections.emptyList();
         }
 
         public Builder userAuthorizationResourceList(List<UserAuthorizationResource> roleAuthorizationResourceList) {
@@ -155,6 +167,11 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
             return this;
         }
 
+        public Builder userAuthorizationApplicationList(List<UserAuthorizationApplication> userAuthorizationApplicationList) {
+            this.userAuthorizationApplicationList = userAuthorizationApplicationList;
+            return this;
+        }
+
         public OnSecurityAccessAuthorizationAuthenticationToken build() {
             OnSecurityAccessAuthorizationAuthenticationToken token = new OnSecurityAccessAuthorizationAuthenticationToken();
             token.user = this.user;
@@ -162,6 +179,7 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
             token.userAuthorizationResourceList = this.userAuthorizationResourceList;
             token.userAuthorizationAttributeList = this.userAuthorizationAttributeList;
             token.userAuthorizationRoleList = this.userAuthorizationRoleList;
+            token.userAuthorizationApplicationList = this.userAuthorizationApplicationList;
             return token;
         }
     }

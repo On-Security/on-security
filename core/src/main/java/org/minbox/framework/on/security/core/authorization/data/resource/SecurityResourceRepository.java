@@ -19,6 +19,8 @@ package org.minbox.framework.on.security.core.authorization.data.resource;
 
 import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepository;
 
+import java.util.List;
+
 /**
  * 资源数据存储库
  *
@@ -26,5 +28,11 @@ import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJd
  * @since 0.0.5
  */
 public interface SecurityResourceRepository extends OnSecurityBaseJdbcRepository<SecurityResource, String> {
-    
+    /**
+     * 查询应用的资源列表
+     *
+     * @param applicationId 应用ID {@link SecurityResource#getApplicationId()}
+     * @return {@link SecurityResource}
+     */
+    List<SecurityResource> findByApplicationId(String applicationId);
 }

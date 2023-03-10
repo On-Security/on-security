@@ -41,6 +41,7 @@ public class SecurityUser implements Serializable {
     private String businessId;
     private String username;
     private String password;
+    private String avatar;
     private String email;
     private String phone;
     private String name;
@@ -76,6 +77,10 @@ public class SecurityUser implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 
     public String getEmail() {
@@ -162,6 +167,10 @@ public class SecurityUser implements Serializable {
         this.password = password;
     }
 
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -240,6 +249,7 @@ public class SecurityUser implements Serializable {
                 ", businessId='" + businessId + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", avatar='" + avatar + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", name='" + name + '\'' +
@@ -270,6 +280,7 @@ public class SecurityUser implements Serializable {
         private String businessId;
         private String username;
         private String password;
+        private String avatar;
         private String email;
         private String phone;
         private String name;
@@ -308,6 +319,11 @@ public class SecurityUser implements Serializable {
 
         public Builder password(String password) {
             this.password = password;
+            return this;
+        }
+
+        public Builder avatar(String avatar) {
+            this.avatar = avatar;
             return this;
         }
 
@@ -406,6 +422,7 @@ public class SecurityUser implements Serializable {
             user.businessId = this.businessId;
             user.username = this.username;
             user.password = this.password;
+            user.avatar = this.avatar;
             user.email = this.email;
             user.phone = this.phone;
             user.name = this.name;
@@ -434,6 +451,7 @@ public class SecurityUser implements Serializable {
                     ", businessId='" + businessId + '\'' +
                     ", username='" + username + '\'' +
                     ", password='" + password + '\'' +
+                    ", avatar='" + avatar + '\'' +
                     ", email='" + email + '\'' +
                     ", phone='" + phone + '\'' +
                     ", name='" + name + '\'' +

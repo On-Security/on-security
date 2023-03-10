@@ -19,8 +19,11 @@ package org.minbox.framework.on.security.authorization.server.oauth2.authenticat
 
 import org.minbox.framework.on.security.core.authorization.AbstractOnSecurityAuthenticationProvider;
 import org.minbox.framework.on.security.core.authorization.data.application.SecurityApplication;
+import org.minbox.framework.on.security.core.authorization.data.application.SecurityApplicationService;
+import org.minbox.framework.on.security.core.authorization.data.application.UserAuthorizationApplication;
 import org.minbox.framework.on.security.core.authorization.data.attribute.SecurityAttributeService;
 import org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute;
+import org.minbox.framework.on.security.core.authorization.data.resource.ApplicationResource;
 import org.minbox.framework.on.security.core.authorization.data.resource.SecurityResourceService;
 import org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource;
 import org.minbox.framework.on.security.core.authorization.data.role.SecurityRoleService;
@@ -46,6 +49,7 @@ import org.springframework.util.ObjectUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 访问授权信息认证提供者
@@ -62,6 +66,8 @@ public final class OnSecurityAccessAuthorizationAuthenticationProvider extends A
     private SecurityResourceService resourceService;
     private SecurityAttributeService attributeService;
     private SecurityRoleService roleService;
+    private SecurityApplicationService applicationService;
+
 
     public OnSecurityAccessAuthorizationAuthenticationProvider(Map<Class<?>, Object> sharedObjects) {
         super(sharedObjects);
@@ -72,6 +78,7 @@ public final class OnSecurityAccessAuthorizationAuthenticationProvider extends A
         this.resourceService = new SecurityResourceService(jdbcOperations);
         this.attributeService = new SecurityAttributeService(jdbcOperations);
         this.roleService = new SecurityRoleService(jdbcOperations);
+        this.applicationService = new SecurityApplicationService(jdbcOperations);
     }
 
     @Override
@@ -132,6 +139,22 @@ public final class OnSecurityAccessAuthorizationAuthenticationProvider extends A
         List<UserAuthorizationRole> authorizationRoleList = roleService.findByUserId(user.getId());
         if (!ObjectUtils.isEmpty(authorizationRoleList)) {
             builder.userAuthorizationRoleList(authorizationRoleList);
+        }
+        // Authorization Application
+        List<SecurityApplication> authorizeApplicationList = this.applicationService.findByUserAuthorize(session.getUserId());
+        if (!ObjectUtils.isEmpty(authorizeApplicationList)) {
+            // @formatter:off
+            List<UserAuthorizationApplication> userAuthorizationApplicationList = authorizeApplicationList.stream()
+                    .map(uaa -> {
+                        List<ApplicationResource> applicationResourceList = this.resourceService.findByApplicationId(session.getApplicationId());
+                        UserAuthorizationApplication userAuthorizationApplication = UserAuthorizationApplication
+                                .withApplication(uaa)
+                                .resourceList(applicationResourceList)
+                                .build();
+                        return userAuthorizationApplication;
+                    }).collect(Collectors.toList());
+            // @formatter:on
+            builder.userAuthorizationApplicationList(userAuthorizationApplicationList);
         }
         return builder.build();
     }

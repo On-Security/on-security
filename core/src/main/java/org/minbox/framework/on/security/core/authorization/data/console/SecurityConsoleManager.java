@@ -36,6 +36,7 @@ public class SecurityConsoleManager implements Serializable {
     private String regionId;
     private String username;
     private String password;
+    private String avatar;
     private boolean enabled;
     private boolean deleted;
     private LocalDateTime lastLoginTime;
@@ -73,6 +74,14 @@ public class SecurityConsoleManager implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public boolean getEnabled() {
@@ -142,6 +151,7 @@ public class SecurityConsoleManager implements Serializable {
                 ", regionId='" + regionId + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", avatar='" + avatar + '\'' +
                 ", enabled=" + enabled +
                 ", deleted=" + deleted +
                 ", lastLoginTime=" + lastLoginTime +

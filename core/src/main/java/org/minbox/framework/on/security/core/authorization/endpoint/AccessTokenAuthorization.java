@@ -17,6 +17,7 @@
 
 package org.minbox.framework.on.security.core.authorization.endpoint;
 
+import org.minbox.framework.on.security.core.authorization.data.application.UserAuthorizationApplication;
 import org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute;
 import org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource;
 import org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole;
@@ -46,6 +47,7 @@ public final class AccessTokenAuthorization implements Serializable {
     private List<UserAuthorizationResource> userAuthorizationResource;
     private List<UserAuthorizationAttribute> userAuthorizationAttribute;
     private List<UserAuthorizationRole> userAuthorizationRole;
+    private List<UserAuthorizationApplication> userAuthorizationApplication;
 
     private AccessTokenAuthorization() {
     }
@@ -68,6 +70,10 @@ public final class AccessTokenAuthorization implements Serializable {
 
     public List<UserAuthorizationRole> getUserAuthorizationRole() {
         return userAuthorizationRole;
+    }
+
+    public List<UserAuthorizationApplication> getUserAuthorizationApplication() {
+        return userAuthorizationApplication;
     }
 
     public static Builder withUser(SecurityUser user) {
@@ -95,6 +101,7 @@ public final class AccessTokenAuthorization implements Serializable {
         private List<UserAuthorizationResource> userAuthorizationResource;
         private List<UserAuthorizationAttribute> userAuthorizationAttribute;
         private List<UserAuthorizationRole> userAuthorizationRole;
+        private List<UserAuthorizationApplication> userAuthorizationApplication;
 
         public Builder(SecurityUser user) {
             this.securityUser = user;
@@ -120,6 +127,11 @@ public final class AccessTokenAuthorization implements Serializable {
             return this;
         }
 
+        public Builder userAuthorizationApplication(List<UserAuthorizationApplication> userAuthorizationApplication) {
+            this.userAuthorizationApplication = userAuthorizationApplication;
+            return this;
+        }
+
         public AccessTokenAuthorization build() {
             AccessTokenAuthorization endpointResponse = new AccessTokenAuthorization();
             endpointResponse.user = this.toUserMap();
@@ -127,6 +139,7 @@ public final class AccessTokenAuthorization implements Serializable {
             endpointResponse.userAuthorizationResource = this.userAuthorizationResource;
             endpointResponse.userAuthorizationAttribute = this.userAuthorizationAttribute;
             endpointResponse.userAuthorizationRole = this.userAuthorizationRole;
+            endpointResponse.userAuthorizationApplication = this.userAuthorizationApplication;
             return endpointResponse;
         }
 
