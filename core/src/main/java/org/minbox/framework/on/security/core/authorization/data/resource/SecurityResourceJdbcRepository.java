@@ -18,8 +18,12 @@
 package org.minbox.framework.on.security.core.authorization.data.resource;
 
 import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
+import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
 import org.springframework.jdbc.core.JdbcOperations;
+
+import java.util.List;
 
 /**
  * 资源数据存储库JDBC实现类
@@ -31,5 +35,11 @@ public class SecurityResourceJdbcRepository extends OnSecurityBaseJdbcRepository
         implements SecurityResourceRepository {
     public SecurityResourceJdbcRepository(JdbcOperations jdbcOperations) {
         super(OnSecurityTables.SecurityResource, jdbcOperations);
+    }
+
+    @Override
+    public List<SecurityResource> findByApplicationId(String applicationId) {
+        Condition condition = Condition.withColumn(OnSecurityColumnName.ApplicationId, applicationId);
+        return this.select(condition);
     }
 }

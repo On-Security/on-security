@@ -29,7 +29,7 @@ import java.io.Serializable;
  * @author 恒宇少年
  * @since 0.0.7
  */
-public class ResourceAuthorizationAttribute implements Serializable {
+public class ResourceAuthorizeAttribute implements Serializable {
     private static final long serialVersionUID = OnSecurityVersion.SERIAL_VERSION_UID;
     private String attributeId;
     private String attributeKey;
@@ -103,8 +103,8 @@ public class ResourceAuthorizationAttribute implements Serializable {
             return this;
         }
 
-        public ResourceAuthorizationAttribute build() {
-            ResourceAuthorizationAttribute authorizationAttribute = new ResourceAuthorizationAttribute();
+        public ResourceAuthorizeAttribute build() {
+            ResourceAuthorizeAttribute authorizationAttribute = new ResourceAuthorizeAttribute();
             authorizationAttribute.attributeId = this.attributeId;
             authorizationAttribute.attributeKey = this.attributeKey;
             authorizationAttribute.attributeValue = this.attributeValue;

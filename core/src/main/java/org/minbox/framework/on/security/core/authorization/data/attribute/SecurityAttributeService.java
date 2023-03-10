@@ -83,10 +83,10 @@ public class SecurityAttributeService {
      * 查询资源授权的属性列表
      *
      * @param resourceId 资源ID {@link SecurityResource#getId()}
-     * @return 资源授权的属性实例 {@link ResourceAuthorizationAttribute}
+     * @return 资源授权的属性实例 {@link ResourceAuthorizeAttribute}
      * @since 0.0.7
      */
-    public List<ResourceAuthorizationAttribute> findByResourceId(String resourceId) {
+    public List<ResourceAuthorizeAttribute> findByResourceId(String resourceId) {
         List<SecurityResourceAuthorizeAttribute> resourceAuthorizeAttributeList = resourceAuthorizeAttributeRepository.findByResourceId(resourceId);
         // @formatter:off
         Map<String, SecurityResourceAuthorizeAttribute> resourceAuthorizeAttributeMap =
@@ -99,10 +99,10 @@ public class SecurityAttributeService {
                     .map(SecurityResourceAuthorizeAttribute::getAttributeId)
                     .collect(Collectors.toList());
             List<SecurityAttribute> attributeList = this.attributeRepository.findByIds(attributeIds);
-            List<ResourceAuthorizationAttribute> resourceAuthorizationAttributeList =
+            List<ResourceAuthorizeAttribute> resourceAuthorizationAttributeList =
                     attributeList.stream()
                             .map(attribute -> {
-                                ResourceAuthorizationAttribute.Builder builder = ResourceAuthorizationAttribute
+                                ResourceAuthorizeAttribute.Builder builder = ResourceAuthorizeAttribute
                                         .withAttributeId(attribute.getId())
                                         .attributeKey(attribute.getKey())
                                         .attributeValue(attribute.getValue());
