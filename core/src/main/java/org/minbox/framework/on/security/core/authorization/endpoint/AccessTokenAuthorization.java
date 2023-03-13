@@ -47,7 +47,7 @@ public final class AccessTokenAuthorization implements Serializable {
     private List<UserAuthorizationResource> userAuthorizationResource;
     private List<UserAuthorizationAttribute> userAuthorizationAttribute;
     private List<UserAuthorizationRole> userAuthorizationRole;
-    private List<UserAuthorizationApplication> userAuthorizationApplication;
+    private UserAuthorizationApplication userAuthorizationApplication;
 
     private AccessTokenAuthorization() {
     }
@@ -72,7 +72,7 @@ public final class AccessTokenAuthorization implements Serializable {
         return userAuthorizationRole;
     }
 
-    public List<UserAuthorizationApplication> getUserAuthorizationApplication() {
+    public UserAuthorizationApplication getUserAuthorizationApplication() {
         return userAuthorizationApplication;
     }
 
@@ -101,7 +101,7 @@ public final class AccessTokenAuthorization implements Serializable {
         private List<UserAuthorizationResource> userAuthorizationResource;
         private List<UserAuthorizationAttribute> userAuthorizationAttribute;
         private List<UserAuthorizationRole> userAuthorizationRole;
-        private List<UserAuthorizationApplication> userAuthorizationApplication;
+        private UserAuthorizationApplication userAuthorizationApplication;
 
         public Builder(SecurityUser user) {
             this.securityUser = user;
@@ -127,7 +127,7 @@ public final class AccessTokenAuthorization implements Serializable {
             return this;
         }
 
-        public Builder userAuthorizationApplication(List<UserAuthorizationApplication> userAuthorizationApplication) {
+        public Builder userAuthorizationApplication(UserAuthorizationApplication userAuthorizationApplication) {
             this.userAuthorizationApplication = userAuthorizationApplication;
             return this;
         }

@@ -29,10 +29,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -79,7 +76,7 @@ public class SecurityResourceService {
         return null;
     }
 
-    public List<UserAuthorizationResource> findByUserId(String userId) {
+    public List<UserAuthorizationResource> findByUserIdAndApplicationId(String userId, String applicationId) {
         List<SecurityUserAuthorizeRole> userAuthorizeRoleList = userAuthorizeRoleRepository.findByUserId(userId);
         if (ObjectUtils.isEmpty(userAuthorizeRoleList)) {
             return Collections.emptyList();
@@ -90,11 +87,15 @@ public class SecurityResourceService {
                 .map(SecurityUserAuthorizeRole::getRoleId)
                 .collect(Collectors.toList());
         List<SecurityRoleAuthorizeResource> userRoleAuthorizeResourceList = roleAuthorizeResourceRepository.findByRoleIds(userAuthorizeRoleIds);
-
+        List<SecurityResource> applicationResourceList = this.resourceRepository.findByApplicationId(applicationId);
+        if (ObjectUtils.isEmpty(applicationResourceList)) {
+            return null;
+        }
+        Map<String,SecurityResource> applicationResourceMap = applicationResourceList.stream().collect(Collectors.toMap(SecurityResource::getId,v -> v));
         List<UserAuthorizationResource> userAuthorizationResourceList = userRoleAuthorizeResourceList
                 .stream()
                 .map(authorizeResource -> {
-                    SecurityResource resource = resourceRepository.selectOne(authorizeResource.getResourceId());
+                    SecurityResource resource = applicationResourceMap.get(authorizeResource.getResourceId());
                     if (resource == null || resource.getDeleted()) {
                         return null;
                     }
