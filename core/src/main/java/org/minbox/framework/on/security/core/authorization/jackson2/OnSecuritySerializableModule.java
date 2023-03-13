@@ -35,13 +35,16 @@ import com.fasterxml.jackson.datatype.jsr310.deser.key.*;
 import com.fasterxml.jackson.datatype.jsr310.ser.*;
 import com.fasterxml.jackson.datatype.jsr310.ser.key.ZonedDateTimeKeySerializer;
 import org.minbox.framework.on.security.core.authorization.AuthorizeMatchMethod;
+import org.minbox.framework.on.security.core.authorization.ClientProtocol;
 import org.minbox.framework.on.security.core.authorization.ResourceType;
 import org.minbox.framework.on.security.core.authorization.SessionState;
 import org.minbox.framework.on.security.core.authorization.adapter.OnSecurityUserDetails;
 import org.minbox.framework.on.security.core.authorization.jackson2.deserializer.AuthorizeMatchMethodDeserializer;
+import org.minbox.framework.on.security.core.authorization.jackson2.deserializer.ClientProtocolDeserializer;
 import org.minbox.framework.on.security.core.authorization.jackson2.deserializer.ResourceTypeDeserializer;
 import org.minbox.framework.on.security.core.authorization.jackson2.deserializer.SessionStateDeserializer;
 import org.minbox.framework.on.security.core.authorization.jackson2.serializer.AuthorizeMatchMethodSerializer;
+import org.minbox.framework.on.security.core.authorization.jackson2.serializer.ClientProtocolSerializer;
 import org.minbox.framework.on.security.core.authorization.jackson2.serializer.ResourceTypeSerializer;
 import org.minbox.framework.on.security.core.authorization.jackson2.serializer.SessionStateSerializer;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
@@ -127,6 +130,8 @@ public class OnSecuritySerializableModule extends SimpleModule {
         this.addDeserializer(AuthorizeMatchMethod.class, new AuthorizeMatchMethodDeserializer());
         this.addSerializer(AuthorizeMatchMethod.class, new AuthorizeMatchMethodSerializer());
 
+        this.addSerializer(ClientProtocol.class, new ClientProtocolSerializer());
+        this.addDeserializer(ClientProtocol.class, new ClientProtocolDeserializer());
     }
 
     public void setupModule(Module.SetupContext context) {

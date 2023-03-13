@@ -42,6 +42,10 @@ public class SecurityApplicationService {
         this.userAuthorizeApplicationRepository = new SecurityUserAuthorizeApplicationJdbcRepository(jdbcOperations);
     }
 
+    public SecurityApplication findById(String id) {
+        return this.applicationRepository.selectOne(id);
+    }
+
     /**
      * 查询用户授权的应用列表
      *
