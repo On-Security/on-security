@@ -49,7 +49,6 @@ import org.springframework.util.ObjectUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 访问授权信息认证提供者
@@ -126,7 +125,7 @@ public final class OnSecurityAccessAuthorizationAuthenticationProvider extends A
         OnSecurityAccessAuthorizationAuthenticationToken.Builder builder =
                 OnSecurityAccessAuthorizationAuthenticationToken.withUserAndSession(user, session);
         // Authorization Resource
-        List<UserAuthorizationResource> authorizeResourceList = resourceService.findByUserId(session.getUserId());
+        List<UserAuthorizationResource> authorizeResourceList = resourceService.findByUserIdAndApplicationId(session.getUserId(), session.getApplicationId());
         if (!ObjectUtils.isEmpty(authorizeResourceList)) {
             builder.userAuthorizationResourceList(authorizeResourceList);
         }
@@ -141,20 +140,16 @@ public final class OnSecurityAccessAuthorizationAuthenticationProvider extends A
             builder.userAuthorizationRoleList(authorizationRoleList);
         }
         // Authorization Application
-        List<SecurityApplication> authorizeApplicationList = this.applicationService.findByUserAuthorize(session.getUserId());
-        if (!ObjectUtils.isEmpty(authorizeApplicationList)) {
+        SecurityApplication application = this.applicationService.findById(session.getApplicationId());
+        if (!ObjectUtils.isEmpty(application)) {
+            List<ApplicationResource> applicationResourceList = this.resourceService.findByApplicationId(session.getApplicationId());
             // @formatter:off
-            List<UserAuthorizationApplication> userAuthorizationApplicationList = authorizeApplicationList.stream()
-                    .map(uaa -> {
-                        List<ApplicationResource> applicationResourceList = this.resourceService.findByApplicationId(session.getApplicationId());
-                        UserAuthorizationApplication userAuthorizationApplication = UserAuthorizationApplication
-                                .withApplication(uaa)
-                                .resourceList(applicationResourceList)
-                                .build();
-                        return userAuthorizationApplication;
-                    }).collect(Collectors.toList());
+            UserAuthorizationApplication userAuthorizationApplication = UserAuthorizationApplication
+                    .withApplication(application)
+                    .resourceList(applicationResourceList)
+                    .build();
             // @formatter:on
-            builder.userAuthorizationApplicationList(userAuthorizationApplicationList);
+            builder.userAuthorizationApplication(userAuthorizationApplication);
         }
         return builder.build();
     }

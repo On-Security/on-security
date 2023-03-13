@@ -47,7 +47,7 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
      */
     private SecuritySession session;
     /**
-     * AccessToken所属用户授权全部角色的全部授权的资源列表
+     * AccessToken所属用户授权全部角色的全部授权的当前会话所属应用的资源列表
      */
     private List<UserAuthorizationResource> userAuthorizationResourceList;
     /**
@@ -59,9 +59,9 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
      */
     private List<UserAuthorizationRole> userAuthorizationRoleList;
     /**
-     * AccessToken所属用户授权的应用列表
+     * AccessToken所属用户授权的应用
      */
-    private List<UserAuthorizationApplication> userAuthorizationApplicationList;
+    private UserAuthorizationApplication userAuthorizationApplication;
 
     private OnSecurityAccessAuthorizationAuthenticationToken() {
         super(Collections.emptyList());
@@ -97,8 +97,8 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
         return userAuthorizationRoleList;
     }
 
-    public List<UserAuthorizationApplication> getUserAuthorizationApplicationList() {
-        return userAuthorizationApplicationList;
+    public UserAuthorizationApplication getUserAuthorizationApplication() {
+        return userAuthorizationApplication;
     }
 
     /**
@@ -120,7 +120,7 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
                         .userAuthorizationResource(this.userAuthorizationResourceList)
                         .userAuthorizationAttribute(this.userAuthorizationAttributeList)
                         .userAuthorizationRole(this.userAuthorizationRoleList)
-                        .userAuthorizationApplication(this.userAuthorizationApplicationList);
+                        .userAuthorizationApplication(this.userAuthorizationApplication);
         // @formatter:on
         return builder.build();
     }
@@ -142,14 +142,13 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
         private List<UserAuthorizationResource> userAuthorizationResourceList;
         private List<UserAuthorizationAttribute> userAuthorizationAttributeList;
         private List<UserAuthorizationRole> userAuthorizationRoleList;
-        private List<UserAuthorizationApplication> userAuthorizationApplicationList;
+        private UserAuthorizationApplication userAuthorizationApplication;
 
         public Builder(SecurityUser user, SecuritySession session) {
             this.user = user;
             this.session = session;
             this.userAuthorizationResourceList = Collections.emptyList();
             this.userAuthorizationAttributeList = Collections.emptyList();
-            this.userAuthorizationApplicationList = Collections.emptyList();
         }
 
         public Builder userAuthorizationResourceList(List<UserAuthorizationResource> roleAuthorizationResourceList) {
@@ -167,8 +166,8 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
             return this;
         }
 
-        public Builder userAuthorizationApplicationList(List<UserAuthorizationApplication> userAuthorizationApplicationList) {
-            this.userAuthorizationApplicationList = userAuthorizationApplicationList;
+        public Builder userAuthorizationApplication(UserAuthorizationApplication userAuthorizationApplication) {
+            this.userAuthorizationApplication = userAuthorizationApplication;
             return this;
         }
 
@@ -179,7 +178,7 @@ public class OnSecurityAccessAuthorizationAuthenticationToken extends AbstractAu
             token.userAuthorizationResourceList = this.userAuthorizationResourceList;
             token.userAuthorizationAttributeList = this.userAuthorizationAttributeList;
             token.userAuthorizationRoleList = this.userAuthorizationRoleList;
-            token.userAuthorizationApplicationList = this.userAuthorizationApplicationList;
+            token.userAuthorizationApplication = this.userAuthorizationApplication;
             return token;
         }
     }
