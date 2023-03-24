@@ -17,7 +17,9 @@
 
 package org.minbox.framework.on.security.application.service.config.configurers.support;
 
+import org.minbox.framework.on.security.application.service.authentication.ApplicationResourceAttributeBasedAccessControlAuthenticationProvider;
 import org.minbox.framework.on.security.application.service.authentication.ApplicationResourceRoleBasedAccessControlAuthenticationProvider;
+import org.minbox.framework.on.security.application.service.web.ApplicationResourceAttributeBasedAccessControlFilter;
 import org.minbox.framework.on.security.application.service.web.ApplicationResourceRoleBasedAccessControlFilter;
 import org.minbox.framework.on.security.application.service.web.OnSecurityAccessTokenAuthorizationFilter;
 import org.minbox.framework.on.security.core.authorization.configurer.AbstractOnSecurityOAuth2Configurer;
@@ -44,18 +46,28 @@ public final class ApplicationResourceAccessAuthenticationConfigurer extends Abs
 
     @Override
     public void init(HttpSecurity httpSecurity) {
-        // @formatter:off
-        ApplicationResourceRoleBasedAccessControlAuthenticationProvider resourceAccessAuthenticationProvider =
+        // Register ApplicationResourceRoleBasedAccessControlAuthenticationProvider
+        ApplicationResourceRoleBasedAccessControlAuthenticationProvider roleBasedAccessControlAuthenticationProvider =
                 new ApplicationResourceRoleBasedAccessControlAuthenticationProvider(httpSecurity.getSharedObjects());
-        // @formatter:on
-        httpSecurity.authenticationProvider(resourceAccessAuthenticationProvider);
+        httpSecurity.authenticationProvider(roleBasedAccessControlAuthenticationProvider);
+        
+        // Register ApplicationResourceAttributeBasedAccessControlAuthenticationProvider
+        ApplicationResourceAttributeBasedAccessControlAuthenticationProvider attributeBasedAccessControlAuthenticationProvider =
+                new ApplicationResourceAttributeBasedAccessControlAuthenticationProvider(httpSecurity.getSharedObjects());
+        httpSecurity.authenticationProvider(attributeBasedAccessControlAuthenticationProvider);
     }
 
     @Override
     public void configure(HttpSecurity httpSecurity) {
         AuthenticationManager authenticationManager = HttpSecuritySharedObjectUtils.getAuthenticationManager(httpSecurity);
-        ApplicationResourceRoleBasedAccessControlFilter resourceAccessAuthenticationFilter =
+        // Register ApplicationResourceRoleBasedAccessControlFilter
+        ApplicationResourceRoleBasedAccessControlFilter roleBasedAccessControlFilter =
                 new ApplicationResourceRoleBasedAccessControlFilter(authenticationManager);
-        httpSecurity.addFilterAfter(resourceAccessAuthenticationFilter, OnSecurityAccessTokenAuthorizationFilter.class);
+        httpSecurity.addFilterAfter(roleBasedAccessControlFilter, OnSecurityAccessTokenAuthorizationFilter.class);
+
+        // Register ApplicationResourceRoleBasedAccessControlFilter
+        ApplicationResourceAttributeBasedAccessControlFilter attributeBasedAccessControlFilter =
+                new ApplicationResourceAttributeBasedAccessControlFilter(authenticationManager);
+        httpSecurity.addFilterAfter(attributeBasedAccessControlFilter, ApplicationResourceRoleBasedAccessControlFilter.class);
     }
 }

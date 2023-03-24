@@ -49,7 +49,7 @@ public final class ApplicationResourceRoleBasedAccessControlAuthenticationProvid
         ResourceAccessMatcher resourceAccessMatcher =
                 new ResourceRoleBasedAccessControlMatcher(authenticationToken.getUserAuthorizationResourceList());
         if (!resourceAccessMatcher.match(authenticationToken.getRequest())) {
-            throw new OnSecurityApplicationResourceAuthenticationException("access denied",
+            throw new OnSecurityApplicationResourceAuthenticationException("access denied, unauthorized resource.",
                     ResourceAuthenticationErrorCode.UNAUTHORIZED_ACCESS,
                     authenticationToken.getRequest().getRequestURI());
         }
