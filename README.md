@@ -32,10 +32,10 @@
   - [x] FaceBook
   - [x] Google
   - [ ] ...
-- [ ] 应用服务依赖（Application Service）
-- [ ] 资源访问控制（Resource Access Control）
-  - [ ] 基于角色（RBAC）
-  - [ ] 基于属性（ABAC）
+- [x] 应用服务依赖（Application Service）
+- [x] 资源访问控制（Resource Access Control）
+  - [x] 基于角色（RBAC）
+  - [x] 基于属性（ABAC）
 - [ ] 支持SAML2.0认证协议
 - [ ] 支持CSA协议
 - [ ] 支持单点登录（Single Sign On）
