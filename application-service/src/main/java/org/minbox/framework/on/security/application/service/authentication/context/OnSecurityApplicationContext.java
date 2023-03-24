@@ -17,6 +17,7 @@
 
 package org.minbox.framework.on.security.application.service.authentication.context;
 
+import org.minbox.framework.on.security.core.authorization.data.application.UserAuthorizationApplication;
 import org.minbox.framework.on.security.core.authorization.data.attribute.UserAuthorizationAttribute;
 import org.minbox.framework.on.security.core.authorization.data.resource.UserAuthorizationResource;
 import org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole;
@@ -78,4 +79,11 @@ public interface OnSecurityApplicationContext {
      * @return 用户授权角色 {@link org.minbox.framework.on.security.core.authorization.data.role.UserAuthorizationRole}
      */
     List<UserAuthorizationRole> getUserAuthorizationRole();
+
+    /**
+     * 获取用户授权的当前应用信息
+     *
+     * @return {@link UserAuthorizationApplication}
+     */
+    UserAuthorizationApplication getCurrentApplication();
 }
