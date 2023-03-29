@@ -71,7 +71,7 @@ public class OnSecurityManageTokenAccessAuthorizationProvider extends AbstractOn
     private SecurityConsoleMenuService menuService;
     private SecurityRegionService regionService;
     private SecurityRegionSecretService regionSecretService;
-    private RSAKey rsaKey;
+    private OnSecurityConsoleServiceJwkSource consoleServiceJwkSource;
 
     public OnSecurityManageTokenAccessAuthorizationProvider(Map<Class<?>, Object> sharedObjects) {
         super(sharedObjects);
@@ -81,8 +81,7 @@ public class OnSecurityManageTokenAccessAuthorizationProvider extends AbstractOn
         this.menuService = applicationContext.getBean(SecurityConsoleMenuService.class);
         this.regionService = applicationContext.getBean(SecurityRegionService.class);
         this.regionSecretService = applicationContext.getBean(SecurityRegionSecretService.class);
-        OnSecurityConsoleServiceJwkSource consoleServiceJwkSource = applicationContext.getBean(OnSecurityConsoleServiceJwkSource.class);
-        this.rsaKey = consoleServiceJwkSource.getRsaKey();
+        this.consoleServiceJwkSource = applicationContext.getBean(OnSecurityConsoleServiceJwkSource.class);
     }
 
     @Override
@@ -169,7 +168,8 @@ public class OnSecurityManageTokenAccessAuthorizationProvider extends AbstractOn
 
     private String decryptManageToken(String manageToken) {
         try {
-            RSAPrivateKey privateKey = this.rsaKey.toRSAPrivateKey();
+            RSAKey rsaKey = this.consoleServiceJwkSource.getRsaKey();
+            RSAPrivateKey privateKey = rsaKey.toRSAPrivateKey();
             return RSAKeyUtils.decryptByPrivateKey(privateKey, manageToken);
         } catch (Exception e) {
             logger.error("An exception was encountered when decrypting the manageToken.", e);
