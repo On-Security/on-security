@@ -18,6 +18,7 @@
 package org.minbox.framework.on.security.console.authorization.token;
 
 import com.nimbusds.jose.jwk.RSAKey;
+import org.minbox.framework.on.security.console.configuration.OnSecurityConsoleServiceJwkSource;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityError;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityErrorCodes;
 import org.minbox.framework.on.security.core.authorization.exception.OnSecurityOAuth2AuthenticationException;
@@ -45,10 +46,10 @@ public final class Base64StringConsoleManageTokenGenerator implements ConsoleMan
     static Logger logger = LoggerFactory.getLogger(Base64StringConsoleManageTokenGenerator.class);
     private final StringKeyGenerator base64StringKeyGenerator =
             new Base64StringKeyGenerator(Base64.getUrlEncoder().withoutPadding(), 128);
-    private RSAKey rsaKey;
+    private OnSecurityConsoleServiceJwkSource jwkSource;
 
-    public Base64StringConsoleManageTokenGenerator(RSAKey rsaKey) {
-        this.rsaKey = rsaKey;
+    public Base64StringConsoleManageTokenGenerator(OnSecurityConsoleServiceJwkSource jwkSource) {
+        this.jwkSource = jwkSource;
     }
 
     @Override
@@ -62,7 +63,8 @@ public final class Base64StringConsoleManageTokenGenerator implements ConsoleMan
 
     private String encryption(String base64StringKey) {
         try {
-            RSAPublicKey publicKey = this.rsaKey.toRSAPublicKey();
+            RSAKey rsaKey = this.jwkSource.getRsaKey();
+            RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
             return RSAKeyUtils.encryptionByPublicKey(publicKey, base64StringKey);
         } catch (Exception e) {
             logger.error("An exception was encountered while generating encrypted manageToken.", e);
