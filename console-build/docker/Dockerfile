@@ -19,7 +19,7 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends wget
 RUN wget --no-check-certificate https://github.com/On-Security/on-security/releases/download/v${CONSOLE_VERSION}/on-security-console-${CONSOLE_VERSION}.tar.gz -P /home
 RUN tar -xzvf /home/on-security-console-${CONSOLE_VERSION}.tar.gz -C /home \
-    && rm -rf /home/on-security-console-${CONSOLE_VERSION}.tar.gz /home/on-security-console/conf/application.yml /home/on-security-console/conf/on-security-schema.sql
+    && rm -rf /home/on-security-console-${CONSOLE_VERSION}.tar.gz /home/on-security-console/config
 
 
 ADD bin/startup.sh bin/docker-startup.sh
