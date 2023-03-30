@@ -17,7 +17,6 @@
 
 package org.minbox.framework.on.security.console.authorization.authentication;
 
-import com.nimbusds.jose.jwk.RSAKey;
 import org.minbox.framework.on.security.console.authorization.token.Base64StringConsoleManageTokenGenerator;
 import org.minbox.framework.on.security.console.authorization.token.ConsoleManageToken;
 import org.minbox.framework.on.security.console.authorization.token.ConsoleManageTokenContext;
@@ -77,9 +76,8 @@ public class OnSecurityConsoleManageTokenAuthenticationProvider extends Abstract
         this.regionSecretService = applicationContext.getBean(SecurityRegionSecretService.class);
         this.consoleManagerSessionService = applicationContext.getBean(SecurityConsoleManagerSessionService.class);
         OnSecurityConsoleServiceJwkSource consoleServiceJwkSource = applicationContext.getBean(OnSecurityConsoleServiceJwkSource.class);
-        RSAKey rsaKey = consoleServiceJwkSource.getRsaKey();
         ConsoleManageTokenGenerator consoleManageTokenGenerator = BeanUtils.getOptionalBean(applicationContext, ConsoleManageTokenGenerator.class);
-        this.tokenGenerator = consoleManageTokenGenerator != null ? consoleManageTokenGenerator : new Base64StringConsoleManageTokenGenerator(rsaKey);
+        this.tokenGenerator = consoleManageTokenGenerator != null ? consoleManageTokenGenerator : new Base64StringConsoleManageTokenGenerator(consoleServiceJwkSource);
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 

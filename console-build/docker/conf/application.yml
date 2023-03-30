@@ -1,0 +1,25 @@
+# 服务启动端口号
+server:
+  port: ${CONSOLE_APPLICATION_PORT:59527}
+spring:
+  # 服务名
+  application:
+    name: on-security-console-service
+  # 数据源配置
+  datasource:
+    url: jdbc:mariadb://${MARIADB_SERVICE_HOST:127.0.0.1}:${MARIADB_SERVICE_PORT:3306}/${MARIADB_SERVICE_DB_NAME:on_security}?${MARIADB_SERVICE_DB_PARAM:characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false}
+    username: ${MARIADB_SERVICE_USER}
+    password: ${MARIADB_SERVICE_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+
+on-security:
+  console:
+    # On-Security控制台版本号
+    version: ${CONSOLE_VERSION}
+    # 控制台服务地址
+    server-address: http://127.0.0.1:${server.port}
+
+logging:
+  level:
+    org.minbox.framework.on.security.core.authorization.jdbc: debug
