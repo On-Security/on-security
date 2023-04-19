@@ -36,11 +36,11 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-boot.version>2.7.8</spring-boot.version>
+        <spring-boot.version>2.7.10</spring-boot.version>
         <api-boot.version>2.3.8</api-boot.version>
-        <spring-framework.version>5.3.25</spring-framework.version>
-        <spring-security.version>5.7.6</spring-security.version>
-        <spring-security-authorization-server.version>0.4.1</spring-security-authorization-server.version>
+        <spring-framework.version>5.3.26</spring-framework.version>
+        <spring-security.version>5.7.7</spring-security.version>
+        <spring-security-authorization-server.version>0.4.2</spring-security-authorization-server.version>
         <xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
         <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
     </properties>
