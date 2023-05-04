@@ -44,8 +44,8 @@ export default {
     res.send({
       success: true,
       data: {
-        name: 'Serati Ma',
-        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+        name: '恒宇少年',
+        avatar: 'https://blog.minbox.org/images/avatar.png',
         userid: '00000001',
         email: 'antdesign@alipay.com',
         signature: '海纳百川，有容乃大',
@@ -119,8 +119,8 @@ export default {
   ],
   'POST /api/login/account': async (req: Request, res: Response) => {
     const { password, username, type } = req.body;
-    await waitTime(2000);
-    if (password === 'ant.design' && username === 'admin') {
+    await waitTime(1000);
+    if (password === '123456' && username === 'admin') {
       res.send({
         status: 'ok',
         type,
@@ -129,7 +129,7 @@ export default {
       access = 'admin';
       return;
     }
-    if (password === 'ant.design' && username === 'user') {
+    if (password === '123456' && username === 'user') {
       res.send({
         status: 'ok',
         type,

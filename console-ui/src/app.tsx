@@ -55,7 +55,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
-      content: initialState?.currentUser?.name,
+      content: isDev ? initialState?.currentUser?.name : null,
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
@@ -73,7 +73,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
           </Link>,
           <Link to="/~docs" key="docs">
             <BookOutlined />
-            <span>业务组件文档</span>
+            <span>ManageAPI 文档</span>
           </Link>,
         ]
       : [],

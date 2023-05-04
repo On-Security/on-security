@@ -88,13 +88,13 @@ const Login: React.FC = () => {
       </div>
       <div className={styles.content}>
         <LoginForm
-          logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
-          subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
-          initialValues={{
+          logo={<img alt="logo" src="/logo-color.png" />}
+          title="On-Security Console"
+          /*subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}*/
+          /*initialValues={{
             autoLogin: true,
-          }}
-          actions={[
+          }}*/
+          /*actions={[
             <FormattedMessage
               key="loginWith"
               id="pages.login.loginWith"
@@ -103,7 +103,7 @@ const Login: React.FC = () => {
             <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
             <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
             <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
-          ]}
+          ]}*/
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
@@ -118,6 +118,7 @@ const Login: React.FC = () => {
             />
             <Tabs.TabPane
               key="mobile"
+              disabled
               tab={intl.formatMessage({
                 id: 'pages.login.phoneLogin.tab',
                 defaultMessage: '手机号登录',
@@ -129,7 +130,7 @@ const Login: React.FC = () => {
             <LoginMessage
               content={intl.formatMessage({
                 id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误(admin/ant.design)',
+                defaultMessage: '账户或密码错误(admin/123456)',
               })}
             />
           )}
@@ -165,7 +166,7 @@ const Login: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
+                  defaultMessage: '密码: 123456',
                 })}
                 rules={[
                   {
@@ -264,7 +265,7 @@ const Login: React.FC = () => {
               />
             </>
           )}
-          <div
+          {/*<div
             style={{
               marginBottom: 24,
             }}
@@ -279,7 +280,7 @@ const Login: React.FC = () => {
             >
               <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
             </a>
-          </div>
+          </div>*/}
         </LoginForm>
       </div>
       <Footer />
