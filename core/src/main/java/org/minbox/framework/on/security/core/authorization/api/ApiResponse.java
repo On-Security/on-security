@@ -27,19 +27,19 @@ public class ApiResponse {
     /**
      * 错误码
      */
-    private String errorCode;
+    private final String errorCode;
     /**
      * 描述信息
      */
-    private String description;
+    private final String description;
     /**
      * 接口响应数据
      */
-    private Object data;
+    private final Object data;
     /**
      * 接口是否执行成功
      */
-    private boolean success;
+    private final boolean success;
 
     private ApiResponse(String errorCode, String description, Object data, boolean success) {
         this.errorCode = errorCode;
