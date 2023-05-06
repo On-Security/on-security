@@ -72,6 +72,11 @@ public class OnSecurityManageContextImpl implements OnSecurityManageContext {
     }
 
     @Override
+    public String getManagerId() {
+        return this.getManager().getId();
+    }
+
+    @Override
     public SecurityRegionSecret getRegionSecret() {
         return this.authorization.getRegionSecret();
     }

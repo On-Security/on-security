@@ -20,6 +20,8 @@ package org.minbox.framework.on.security.manage.api.configuration;
 import org.minbox.framework.on.security.core.authorization.api.ApiErrorCode;
 import org.minbox.framework.on.security.core.authorization.api.ApiException;
 import org.minbox.framework.on.security.core.authorization.api.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +36,11 @@ import org.springframework.web.bind.annotation.*;
 @ResponseStatus(HttpStatus.OK)
 public class ApiExceptionAdvice {
     /**
+     * logger instance
+     */
+    static Logger logger = LoggerFactory.getLogger(ApiExceptionAdvice.class);
+
+    /**
      * 统一处理{@link ApiException}异常
      *
      * @param exception 系统中遇到的{@link ApiException}异常实例
@@ -41,8 +48,9 @@ public class ApiExceptionAdvice {
      */
     @ExceptionHandler(ApiException.class)
     public ApiResponse apiException(ApiException exception) {
-        exception.printStackTrace();
         ApiErrorCode errorCode = exception.getErrorCode();
-        return ApiResponse.error(errorCode.getCode(), errorCode.formatErrorDescription(exception.getArgs()));
+        String formattedMsg = errorCode.formatErrorDescription(exception.getArgs());
+        logger.error("[" + errorCode.getCode() + "]" + formattedMsg, exception);
+        return ApiResponse.error(errorCode.getCode(), formattedMsg);
     }
 }
