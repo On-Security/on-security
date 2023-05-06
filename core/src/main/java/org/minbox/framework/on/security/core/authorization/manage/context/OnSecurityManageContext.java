@@ -59,6 +59,13 @@ public interface OnSecurityManageContext {
     SecurityConsoleManager getManager();
 
     /**
+     * 获取管理员ID
+     *
+     * @return {@link SecurityConsoleManager#getId()}
+     */
+    String getManagerId();
+
+    /**
      * 获取"id_secret"方式获取"ManageToken"的安全域密钥
      *
      * @return {@link SecurityRegionSecret}

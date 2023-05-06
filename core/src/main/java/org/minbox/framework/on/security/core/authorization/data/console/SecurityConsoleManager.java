@@ -17,6 +17,7 @@
 
 package org.minbox.framework.on.security.core.authorization.data.console;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.minbox.framework.on.security.core.authorization.util.OnSecurityVersion;
 
 import java.io.Serializable;
@@ -35,6 +36,7 @@ public class SecurityConsoleManager implements Serializable {
     private String id;
     private String regionId;
     private String username;
+    @JsonIgnore
     private String password;
     private String avatar;
     private boolean enabled;
@@ -161,4 +163,5 @@ public class SecurityConsoleManager implements Serializable {
                 '}';
         // @formatter:on
     }
+
 }
