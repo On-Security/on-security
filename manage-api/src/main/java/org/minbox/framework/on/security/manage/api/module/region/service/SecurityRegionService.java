@@ -19,6 +19,7 @@ package org.minbox.framework.on.security.manage.api.module.region.service;
 
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
+import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContext;
 
 import java.util.List;
 
@@ -41,8 +42,8 @@ public interface SecurityRegionService {
      * <p>
      * 如果管理员{@link SecurityConsoleManager#getInternal()}为"true"时返回全部的安全域，如果为"false"时仅返回管理员授权的安全域
      *
-     * @param managerId 管理员ID {@link SecurityRegion#getId()}
+     * @param manageContext 管理上下文 {@link OnSecurityManageContext}
      * @return {@link SecurityRegion}
      */
-    List<SecurityRegion> getManagerAuthorization(String managerId);
+    List<SecurityRegion> getManagerAuthorization(OnSecurityManageContext manageContext);
 }

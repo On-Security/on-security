@@ -23,6 +23,7 @@ import org.minbox.framework.on.security.core.authorization.data.region.SecurityR
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionRepository;
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
+import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContext;
 import org.minbox.framework.on.security.manage.api.module.manager.service.SecurityManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -55,8 +56,8 @@ public class SecurityRegionServiceImpl implements SecurityRegionService {
     }
 
     @Override
-    public List<SecurityRegion> getManagerAuthorization(String managerId) {
-        SecurityConsoleManager manager = this.managerService.selectById(managerId);
+    public List<SecurityRegion> getManagerAuthorization(OnSecurityManageContext manageContext) {
+        SecurityConsoleManager manager = manageContext.getManager();
         if (manager != null) {
             if (manager.getInternal()) {
                 return this.selectAllAvailable();

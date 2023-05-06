@@ -49,7 +49,7 @@ public class SecurityRegionApi {
     @GetMapping(value = "/authorization")
     public ApiResponse getAuthorizationRegions() {
         OnSecurityManageContext manageContext = OnSecurityManageContextHolder.getContext();
-        List<SecurityRegion> securityRegionList = this.regionService.getManagerAuthorization(manageContext.getManagerId());
+        List<SecurityRegion> securityRegionList = this.regionService.getManagerAuthorization(manageContext);
         return ApiResponse.success(securityRegionList);
     }
 }
