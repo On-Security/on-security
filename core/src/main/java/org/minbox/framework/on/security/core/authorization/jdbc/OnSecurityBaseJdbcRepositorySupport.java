@@ -88,7 +88,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
         Assert.notNull(pk, "主键值不可以为null.");
         OnSecurityColumnName pkColumn = this.table.getPk().getColumnName();
         Condition idFilterCondition = Condition.withColumn(pkColumn, pk);
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append(this.table.getDeleteSql());
         sql.append(SqlUtils.getConditionSql(SqlLogicalOperator.AND, idFilterCondition));
         SqlParameterValue[] parameterValues = SqlParameterValueUtils.getWithCondition(this.table, idFilterCondition);
@@ -102,7 +102,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
     public int delete(Condition... conditions) {
         Assert.notEmpty(conditions, "请至少传递一个Condition.");
         String conditionSql = SqlUtils.getConditionSql(SqlLogicalOperator.AND, conditions);
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append(this.table.getDeleteSql());
         sql.append(conditionSql);
         SqlParameterValue[] parameterValues = SqlParameterValueUtils.getWithCondition(this.table, conditions);
@@ -116,7 +116,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
     public int delete(ConditionGroup... conditionGroups) {
         Assert.notEmpty(conditionGroups, "请至少传递一个ConditionGroup.");
         String conditionSql = SqlUtils.getConditionGroupSql(conditionGroups);
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append(this.table.getDeleteSql());
         sql.append(conditionSql);
         SqlParameterValue[] parameterValues = SqlParameterValueUtils.getWithConditionGroup(this.table, conditionGroups);
@@ -129,7 +129,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
     @Override
     public int delete(String filterSql, ColumnValue... filterColumnValues) {
         Assert.notEmpty(filterColumnValues, "请至少传递一个FilterColumnValue.");
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append(this.table.getDeleteSql());
         sql.append(filterSql);
         SqlParameterValue[] parameterValues = SqlParameterValueUtils.getWithColumnValue(this.table, filterColumnValues);
@@ -146,7 +146,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
         Map<String, Object> methodValueMap = ObjectClassUtils.invokeObjectGetMethod(object);
         Object pkValue = methodValueMap.get(ObjectClassUtils.getGetMethodName(pkColumn.getUpperCamelName()));
         Condition pkFilterCondition = Condition.withColumn(pkColumn, pkValue);
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append(this.table.getUpdateSql());
         sql.append(SqlUtils.getConditionSql(SqlLogicalOperator.AND, pkFilterCondition));
         List<TableColumn> updatableTableColumnList = this.table.getUpdatableTableColumns();
@@ -167,7 +167,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
                 .map(ColumnValue::getColumnName)
                 .collect(Collectors.toList());
         // @formatter:on
-        StringBuffer updateSql = new StringBuffer();
+        StringBuilder updateSql = new StringBuilder();
         updateSql.append(this.table.getUpdateSql(setColumnList));
         updateSql.append(SqlUtils.getConditionSql(SqlLogicalOperator.AND, conditions));
         // @formatter:off
@@ -190,7 +190,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
                 .map(ColumnValue::getColumnName)
                 .collect(Collectors.toList());
         // @formatter:on
-        StringBuffer updateSql = new StringBuffer();
+        StringBuilder updateSql = new StringBuilder();
         updateSql.append(this.table.getUpdateSql(setColumnList));
         updateSql.append(SqlUtils.getConditionGroupSql(conditionGroups));
         // @formatter:off
@@ -214,7 +214,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
                 .map(ColumnValue::getColumnName)
                 .collect(Collectors.toList());
         // @formatter:on
-        StringBuffer updateSql = new StringBuffer();
+        StringBuilder updateSql = new StringBuilder();
         updateSql.append(this.table.getUpdateSql(setColumnList));
         updateSql.append(filterSql);
         // @formatter:off
@@ -253,7 +253,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
     @Override
     public List<T> select(Condition... conditions) {
         Assert.notEmpty(conditions, "请至少传递一个Condition.");
-        StringBuffer querySql = new StringBuffer();
+        StringBuilder querySql = new StringBuilder();
         querySql.append(this.table.getQuerySql());
         querySql.append(SqlUtils.getConditionSql(SqlLogicalOperator.AND, conditions));
         return this.doConditionQuery(querySql.toString(), conditions);
@@ -263,7 +263,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
     public List<T> select(SortCondition sort, Condition... conditions) {
         Assert.notNull(sort, "SortCondition不可以为null.");
         Assert.notEmpty(conditions, "请至少传递一个Condition.");
-        StringBuffer querySql = new StringBuffer();
+        StringBuilder querySql = new StringBuilder();
         querySql.append(this.table.getQuerySql());
         querySql.append(SqlUtils.getConditionSql(SqlLogicalOperator.AND, conditions));
         String sortSql = sort.getSortSql();
@@ -276,7 +276,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
     @Override
     public List<T> select(ConditionGroup... conditionGroups) {
         Assert.notEmpty(conditionGroups, "请至少传递一个ConditionGroup.");
-        StringBuffer querySql = new StringBuffer();
+        StringBuilder querySql = new StringBuilder();
         querySql.append(this.table.getQuerySql());
         querySql.append(SqlUtils.getConditionGroupSql(conditionGroups));
         return this.doConditionGroupQuery(querySql.toString(), conditionGroups);
@@ -286,7 +286,7 @@ public class OnSecurityBaseJdbcRepositorySupport<T extends Serializable, PK> imp
     public List<T> select(SortCondition sort, ConditionGroup... conditionGroups) {
         Assert.notNull(sort, "SortCondition不可以为null.");
         Assert.notEmpty(conditionGroups, "请至少传递一个ConditionGroup.");
-        StringBuffer querySql = new StringBuffer();
+        StringBuilder querySql = new StringBuilder();
         querySql.append(this.table.getQuerySql());
         querySql.append(SqlUtils.getConditionGroupSql(conditionGroups));
         String sortSql = sort.getSortSql();
