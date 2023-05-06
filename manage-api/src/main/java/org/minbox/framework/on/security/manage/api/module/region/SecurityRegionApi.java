@@ -17,8 +17,17 @@
 
 package org.minbox.framework.on.security.manage.api.module.region;
 
+import org.minbox.framework.on.security.core.authorization.api.ApiResponse;
+import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
+import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContext;
+import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextHolder;
+import org.minbox.framework.on.security.manage.api.module.region.service.SecurityRegionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 安全域相关接口
@@ -29,5 +38,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/region")
 public class SecurityRegionApi {
-    //...
+    @Autowired
+    private SecurityRegionService regionService;
+
+    /**
+     * 获取授权的安全域列表
+     *
+     * @return {@link SecurityRegion}
+     */
+    @GetMapping(value = "/authorization")
+    public ApiResponse getAuthorizationRegions() {
+        OnSecurityManageContext manageContext = OnSecurityManageContextHolder.getContext();
+        List<SecurityRegion> securityRegionList = this.regionService.getManagerAuthorization(manageContext.getManagerId());
+        return ApiResponse.success(securityRegionList);
+    }
 }
