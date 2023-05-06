@@ -188,6 +188,7 @@ public interface OnSecurityTables {
                     TableColumn.withColumnName(OnSecurityColumnName.Username),
                     TableColumn.withColumnName(OnSecurityColumnName.Password),
                     TableColumn.withColumnName(OnSecurityColumnName.Avatar),
+                    TableColumn.withColumnName(OnSecurityColumnName.Internal).booleanValue(),
                     TableColumn.withColumnName(OnSecurityColumnName.Enabled).booleanValue(),
                     TableColumn.withColumnName(OnSecurityColumnName.Deleted).booleanValue(),
                     TableColumn.withColumnName(OnSecurityColumnName.LastLoginTime).localDateTimeValue().insertable(false),

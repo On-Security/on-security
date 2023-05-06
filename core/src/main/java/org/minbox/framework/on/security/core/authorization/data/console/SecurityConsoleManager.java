@@ -39,6 +39,7 @@ public class SecurityConsoleManager implements Serializable {
     @JsonIgnore
     private String password;
     private String avatar;
+    private boolean internal;
     private boolean enabled;
     private boolean deleted;
     private LocalDateTime lastLoginTime;
@@ -84,6 +85,14 @@ public class SecurityConsoleManager implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public boolean getInternal() {
+        return internal;
+    }
+
+    public void setInternal(boolean internal) {
+        this.internal = internal;
     }
 
     public boolean getEnabled() {
@@ -154,6 +163,7 @@ public class SecurityConsoleManager implements Serializable {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", internal=" + internal +
                 ", enabled=" + enabled +
                 ", deleted=" + deleted +
                 ", lastLoginTime=" + lastLoginTime +
