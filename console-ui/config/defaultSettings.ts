@@ -9,6 +9,8 @@ const Settings: LayoutSettings & {
   primaryColor: '#1890ff',
   layout: 'mix',
   contentWidth: 'Fluid',
+  // 左侧菜单宽度
+  siderWidth: 256,
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
