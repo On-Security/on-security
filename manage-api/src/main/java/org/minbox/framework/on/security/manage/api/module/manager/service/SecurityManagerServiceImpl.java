@@ -20,12 +20,16 @@ package org.minbox.framework.on.security.manage.api.module.manager.service;
 import org.minbox.framework.on.security.core.authorization.api.ApiException;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
+import org.minbox.framework.on.security.core.authorization.jdbc.sql.ColumnValue;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
 import org.minbox.framework.on.security.manage.api.convert.ConsoleManagerConvert;
 import org.minbox.framework.on.security.manage.api.module.ApiErrorCodes;
 import org.minbox.framework.on.security.manage.api.module.manager.dao.SecurityManagerDAO;
 import org.minbox.framework.on.security.manage.api.module.manager.model.AddManagerVO;
+import org.minbox.framework.on.security.manage.api.module.manager.model.DeleteManagerVO;
+import org.minbox.framework.on.security.manage.api.module.manager.model.UpdateManagerVO;
 import org.minbox.framework.on.security.manage.api.module.menu.service.SecurityConsoleManagerAuthorizeMenuService;
+import org.minbox.framework.on.security.manage.api.module.session.service.SecurityConsoleManagerSessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -55,6 +60,8 @@ public class SecurityManagerServiceImpl implements SecurityManagerService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private SecurityConsoleManagerAuthorizeMenuService managerAuthorizeMenuService;
+    @Autowired
+    private SecurityConsoleManagerSessionService managerSessionService;
 
     @Override
     public SecurityConsoleManager selectById(String managerId) {
@@ -67,7 +74,7 @@ public class SecurityManagerServiceImpl implements SecurityManagerService {
     }
 
     @Override
-    public void addManager(AddManagerVO addManagerVO) {
+    public void addManager(AddManagerVO addManagerVO) throws ApiException {
         SecurityConsoleManager storedManager = selectByUsername(addManagerVO.getUsername());
         if (storedManager != null) {
             throw new ApiException(ApiErrorCodes.MANAGER_ALREADY_EXIST, addManagerVO.getUsername());
@@ -77,5 +84,29 @@ public class SecurityManagerServiceImpl implements SecurityManagerService {
         storedManager.setPassword(passwordEncoder.encode(addManagerVO.getPassword()));
         this.managerDAO.insert(storedManager);
         managerAuthorizeMenuService.authorize(storedManager.getRegionId(), storedManager.getId(), addManagerVO.getAuthorizeMenuIds());
+    }
+
+    @Override
+    public void updateManager(UpdateManagerVO updateManagerVO) throws ApiException {
+        SecurityConsoleManager storedManager = selectById(updateManagerVO.getManagerId());
+        if (storedManager == null) {
+            throw new ApiException(ApiErrorCodes.MANAGER_NOT_FOUND, updateManagerVO.getManagerId());
+        }
+        ConsoleManagerConvert.INSTANCE.fromUpdateManagerVO(updateManagerVO, storedManager);
+        this.managerDAO.update(storedManager);
+        managerAuthorizeMenuService.reauthorize(storedManager.getRegionId(), storedManager.getId(), updateManagerVO.getAuthorizeMenuIds());
+    }
+
+    @Override
+    public void deleteManager(DeleteManagerVO deleteManagerVO) throws ApiException {
+        // @formatter:off
+        this.managerDAO.update(
+                Arrays.asList(
+                        ColumnValue.with(OnSecurityColumnName.Enabled, false),
+                        ColumnValue.with(OnSecurityColumnName.Deleted, true)
+                ),
+                Condition.withColumn(OnSecurityColumnName.Id, deleteManagerVO.getManagerId()));
+        // @formatter:on
+        managerSessionService.setAllExpiration(deleteManagerVO.getManagerId());
     }
 }

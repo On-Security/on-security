@@ -38,4 +38,15 @@ public interface SecurityConsoleManagerAuthorizeMenuService {
      * @param menuIds   菜单ID集合 {@link SecurityConsoleMenu#getId()}
      */
     void authorize(String regionId, String managerId, List<String> menuIds);
+
+    /**
+     * 给管理员重新授权菜单
+     * <p>
+     * 删除管理员原授权的菜单列表，重新授权新的菜单列表
+     *
+     * @param regionId  安全域ID {@link SecurityRegion#getId()}
+     * @param managerId 管理员ID {@link SecurityConsoleManager#getId()}
+     * @param menuIds   菜单ID集合 {@link SecurityConsoleMenu#getId()}
+     */
+    void reauthorize(String regionId, String managerId, List<String> menuIds);
 }

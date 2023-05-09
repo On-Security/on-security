@@ -17,8 +17,11 @@
 
 package org.minbox.framework.on.security.manage.api.module.manager.service;
 
+import org.minbox.framework.on.security.core.authorization.api.ApiException;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
 import org.minbox.framework.on.security.manage.api.module.manager.model.AddManagerVO;
+import org.minbox.framework.on.security.manage.api.module.manager.model.DeleteManagerVO;
+import org.minbox.framework.on.security.manage.api.module.manager.model.UpdateManagerVO;
 
 /**
  * 管理员业务逻辑接口定义
@@ -48,5 +51,19 @@ public interface SecurityManagerService {
      *
      * @param addManagerVO 添加管理员数据实体 {@link AddManagerVO}
      */
-    void addManager(AddManagerVO addManagerVO);
+    void addManager(AddManagerVO addManagerVO) throws ApiException;
+
+    /**
+     * 更新管理员
+     *
+     * @param updateManagerVO 更新管理员数据实体 {@link UpdateManagerVO}
+     */
+    void updateManager(UpdateManagerVO updateManagerVO) throws ApiException;
+
+    /**
+     * 删除管理员
+     *
+     * @param deleteManagerVO 删除管理员数据实体 {@link DeleteManagerVO}
+     */
+    void deleteManager(DeleteManagerVO deleteManagerVO) throws ApiException;
 }

@@ -24,6 +24,8 @@ import org.minbox.framework.on.security.core.authorization.manage.context.OnSecu
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextHolder;
 import org.minbox.framework.on.security.manage.api.module.ApiErrorCodes;
 import org.minbox.framework.on.security.manage.api.module.manager.model.AddManagerVO;
+import org.minbox.framework.on.security.manage.api.module.manager.model.DeleteManagerVO;
+import org.minbox.framework.on.security.manage.api.module.manager.model.UpdateManagerVO;
 import org.minbox.framework.on.security.manage.api.module.manager.service.SecurityManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -72,6 +74,32 @@ public class SecurityManagerApi {
         OnSecurityManageContext manageContext = OnSecurityManageContextHolder.getContext();
         addManagerVO.setRegionId(manageContext.getRegion().getId());
         managerService.addManager(addManagerVO);
+        return ApiResponse.success();
+    }
+
+    /**
+     * 更新管理员
+     *
+     * @param updateManagerVO 更新管理员的请求实体 {@link UpdateManagerVO}
+     * @return {@link ApiResponse}
+     * @throws ApiException
+     */
+    @PostMapping(value = "/update")
+    public ApiResponse updateManager(@RequestBody @Valid UpdateManagerVO updateManagerVO) throws ApiException {
+        managerService.updateManager(updateManagerVO);
+        return ApiResponse.success();
+    }
+
+    /**
+     * 删除管理员
+     *
+     * @param deleteManagerVO 删除管理员的请求实体 {@link DeleteManagerVO}
+     * @return {@link ApiResponse}
+     * @throws ApiException
+     */
+    @PostMapping(value = "/delete")
+    public ApiResponse deleteManager(@RequestBody @Valid DeleteManagerVO deleteManagerVO) throws ApiException {
+        managerService.deleteManager(deleteManagerVO);
         return ApiResponse.success();
     }
 }

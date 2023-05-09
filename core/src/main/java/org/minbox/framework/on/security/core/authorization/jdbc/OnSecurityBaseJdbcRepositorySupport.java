@@ -17,7 +17,6 @@
 
 package org.minbox.framework.on.security.core.authorization.jdbc;
 
-import com.nimbusds.jose.util.ArrayUtils;
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.Table;
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.TableColumn;
@@ -32,8 +31,12 @@ import org.minbox.framework.on.security.core.authorization.jdbc.sql.operator.Sql
 import org.minbox.framework.on.security.core.authorization.jdbc.utils.ObjectClassUtils;
 import org.minbox.framework.on.security.core.authorization.jdbc.utils.SqlParameterValueUtils;
 import org.minbox.framework.on.security.core.authorization.jdbc.utils.SqlUtils;
+import org.minbox.framework.on.security.core.authorization.util.ArrayUtils;
 import org.springframework.core.ResolvableType;
-import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.SqlParameterValue;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 

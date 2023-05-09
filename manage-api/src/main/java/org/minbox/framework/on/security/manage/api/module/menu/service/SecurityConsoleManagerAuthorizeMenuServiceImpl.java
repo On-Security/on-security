@@ -63,4 +63,12 @@ public class SecurityConsoleManagerAuthorizeMenuServiceImpl implements SecurityC
             });
         }
     }
+
+    @Override
+    public void reauthorize(String regionId, String managerId, List<String> menuIds) {
+        if (!ObjectUtils.isEmpty(menuIds)) {
+            consoleManagerAuthorizeMenuDAO.deleteByManagerId(managerId);
+            authorize(regionId, managerId, menuIds);
+        }
+    }
 }

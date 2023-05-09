@@ -18,9 +18,11 @@
 package org.minbox.framework.on.security.manage.api.convert;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
 import org.minbox.framework.on.security.manage.api.module.manager.model.AddManagerVO;
+import org.minbox.framework.on.security.manage.api.module.manager.model.UpdateManagerVO;
 
 /**
  * 管理员对象转换类
@@ -42,4 +44,12 @@ public interface ConsoleManagerConvert {
      * @return {@link SecurityConsoleManager}
      */
     SecurityConsoleManager fromAddManagerVO(AddManagerVO addManagerVO);
+
+    /**
+     * convert {@link UpdateManagerVO} to {@link SecurityConsoleManager}
+     *
+     * @param updateManagerVO {@link UpdateManagerVO}
+     * @return {@link SecurityConsoleManager}
+     */
+    void fromUpdateManagerVO(UpdateManagerVO updateManagerVO, @MappingTarget SecurityConsoleManager manager);
 }
