@@ -17,20 +17,22 @@
 
 package org.minbox.framework.on.security.manage.api.module.region.service;
 
+import org.minbox.framework.on.security.core.authorization.api.ApiException;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
-import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionJdbcRepository;
-import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegionRepository;
 import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
 import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContext;
-import org.minbox.framework.on.security.manage.api.module.manager.service.SecurityManagerService;
+import org.minbox.framework.on.security.manage.api.convert.RegionConvert;
+import org.minbox.framework.on.security.manage.api.module.ApiErrorCodes;
+import org.minbox.framework.on.security.manage.api.module.region.dao.SecurityRegionDAO;
+import org.minbox.framework.on.security.manage.api.module.region.model.AddSecurityRegionVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 安全域业务逻辑实现类
@@ -41,18 +43,13 @@ import java.util.List;
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
 public class SecurityRegionServiceImpl implements SecurityRegionService {
-    private SecurityRegionRepository repository;
     @Autowired
-    private SecurityManagerService managerService;
-
-    public SecurityRegionServiceImpl(JdbcOperations jdbcOperations) {
-        this.repository = new SecurityRegionJdbcRepository(jdbcOperations);
-    }
+    private SecurityRegionDAO securityRegionDAO;
 
     @Override
     public List<SecurityRegion> selectAllAvailable() {
         // @formatter:off
-        return this.repository.select(Condition.withColumn(OnSecurityColumnName.Enabled, true),
+        return this.securityRegionDAO.select(Condition.withColumn(OnSecurityColumnName.Enabled, true),
                 Condition.withColumn(OnSecurityColumnName.Deleted, false));
         // @formatter:on
     }
@@ -65,12 +62,29 @@ public class SecurityRegionServiceImpl implements SecurityRegionService {
                 return this.selectAllAvailable();
             } else {
                 // @formatter:off
-                return this.repository.select(Condition.withColumn(OnSecurityColumnName.Id, manager.getRegionId()),
+                return this.securityRegionDAO.select(Condition.withColumn(OnSecurityColumnName.Id, manager.getRegionId()),
                         Condition.withColumn(OnSecurityColumnName.Enabled, true),
                         Condition.withColumn(OnSecurityColumnName.Deleted, false));
                 // @formatter:on
             }
         }
         return null;
+    }
+
+    @Override
+    public SecurityRegion selectByRegionId(String regionId) {
+        return this.securityRegionDAO.selectOne(Condition.withColumn(OnSecurityColumnName.RegionId, regionId));
+    }
+
+    @Override
+    public void addRegion(AddSecurityRegionVO addSecurityRegionVO) throws ApiException {
+        SecurityRegion storedRegion = this.selectByRegionId(addSecurityRegionVO.getRegionId());
+        if (storedRegion != null) {
+            throw new ApiException(ApiErrorCodes.REGION_ALREADY_EXIST, addSecurityRegionVO.getRegionId());
+        }
+        storedRegion = RegionConvert.INSTANCE.fromAddSecurityRegionVO(addSecurityRegionVO);
+        storedRegion.setId(UUID.randomUUID().toString());
+        storedRegion.setEnabled(true);
+        this.securityRegionDAO.insert(storedRegion);
     }
 }

@@ -17,16 +17,19 @@
 
 package org.minbox.framework.on.security.manage.api.module.region;
 
+import org.minbox.framework.on.security.core.authorization.api.ApiException;
 import org.minbox.framework.on.security.core.authorization.api.ApiResponse;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContext;
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextHolder;
+import org.minbox.framework.on.security.manage.api.module.ApiErrorCodes;
+import org.minbox.framework.on.security.manage.api.module.region.model.AddSecurityRegionVO;
 import org.minbox.framework.on.security.manage.api.module.region.service.SecurityRegionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -51,5 +54,22 @@ public class SecurityRegionApi {
         OnSecurityManageContext manageContext = OnSecurityManageContextHolder.getContext();
         List<SecurityRegion> securityRegionList = this.regionService.getManagerAuthorization(manageContext);
         return ApiResponse.success(securityRegionList);
+    }
+
+    /**
+     * 添加安全域
+     *
+     * @param addSecurityRegionVO {@link AddSecurityRegionVO}
+     * @return {@link ApiResponse}
+     */
+    @PostMapping(value = "/add")
+    public ApiResponse addRegion(@RequestBody @Valid AddSecurityRegionVO addSecurityRegionVO) {
+        OnSecurityManageContext manageContext = OnSecurityManageContextHolder.getContext();
+        SecurityConsoleManager manager = manageContext.getManager();
+        if (!manager.getInternal()) {
+            throw new ApiException(ApiErrorCodes.OPERATION_NOT_ALLOWED);
+        }
+        this.regionService.addRegion(addSecurityRegionVO);
+        return ApiResponse.success();
     }
 }

@@ -17,9 +17,11 @@
 
 package org.minbox.framework.on.security.manage.api.module.region.service;
 
+import org.minbox.framework.on.security.core.authorization.api.ApiException;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
 import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContext;
+import org.minbox.framework.on.security.manage.api.module.region.model.AddSecurityRegionVO;
 
 import java.util.List;
 
@@ -46,4 +48,19 @@ public interface SecurityRegionService {
      * @return {@link SecurityRegion}
      */
     List<SecurityRegion> getManagerAuthorization(OnSecurityManageContext manageContext);
+
+    /**
+     * 根据安全域ID查询安全域信息
+     *
+     * @param regionId 安全域ID
+     * @return {@link SecurityRegion}
+     */
+    SecurityRegion selectByRegionId(String regionId);
+    /**
+     * 添加安全域
+     *
+     * @param addSecurityRegionVO {@link AddSecurityRegionVO}
+     * @throws ApiException Api异常
+     */
+    void addRegion(AddSecurityRegionVO addSecurityRegionVO) throws ApiException;
 }
