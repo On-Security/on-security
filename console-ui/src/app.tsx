@@ -7,6 +7,7 @@ import type { RunTimeLayoutConfig } from 'umi';
 import { history, Link } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import { Select } from 'antd';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -78,6 +79,26 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         ]
       : [],
     menuHeaderRender: undefined,
+    menuExtraRender: () => {
+      // 下拉框
+      return (
+        <Select
+          style={{ width: 220,fontSize: 14 }}
+          placeholder="请选择安全域"
+          defaultValue="1"
+          options={[
+            {
+              value: '1',
+              label: 'Default Region',
+            },
+            {
+              value: '2',
+              label: '其他安全域测试测试测试',
+            }
+          ]}
+        />
+      )
+    },
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
     // 增加一个 loading 的状态

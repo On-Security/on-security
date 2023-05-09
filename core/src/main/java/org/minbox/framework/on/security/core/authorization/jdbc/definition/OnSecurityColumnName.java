@@ -35,6 +35,7 @@ public enum OnSecurityColumnName {
     RegionId("region_id"),
     Username("username"),
     Password("password"),
+    Internal("internal"),
     Enabled("enabled"),
     Deleted("deleted"),
     LastLoginTime("last_login_time"),

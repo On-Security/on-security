@@ -98,6 +98,7 @@ public class InitializationAdminManagerListener implements SmartApplicationListe
     private void saveAdminManager(String password) {
         SecurityRegion region = this.regionService.selectByRegionId(SecurityRegion.DEFAULT_REGION_ID);
         SecurityConsoleManager adminManger = SecurityConsoleManager.createManager(region.getId(), ADMIN_USERNAME, this.passwordEncoder.encode(password));
+        adminManger.setInternal(true);
         adminManger.setDescribe("Admin manager, automatically created");
         this.consoleManagerService.insert(adminManger);
         List<SecurityConsoleMenu> consoleMenuList = consoleMenuService.selectAllMenus();

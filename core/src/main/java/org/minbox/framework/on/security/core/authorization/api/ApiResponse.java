@@ -40,12 +40,17 @@ public class ApiResponse {
      * 接口是否执行成功
      */
     private final boolean success;
+    /**
+     * 接口响应时间戳
+     */
+    private final long timestamp;
 
     private ApiResponse(String errorCode, String description, Object data, boolean success) {
         this.errorCode = errorCode;
         this.description = description;
         this.data = data;
         this.success = success;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public static ApiResponse success(Object data) {
@@ -70,5 +75,9 @@ public class ApiResponse {
 
     public boolean isSuccess() {
         return success;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 }

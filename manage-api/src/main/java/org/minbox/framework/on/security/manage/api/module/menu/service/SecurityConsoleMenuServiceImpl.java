@@ -15,18 +15,24 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.manage.api.module;
+package org.minbox.framework.on.security.manage.api.module.menu.service;
 
-import org.minbox.framework.on.security.core.authorization.api.ApiErrorCode;
-import org.minbox.framework.on.security.core.authorization.api.CommonApiErrorCodes;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenuJdbcRepository;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenuRepository;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.stereotype.Service;
 
 /**
- * 接口异常码定义
+ * 控制台菜单业务逻辑实现类
  *
  * @author 恒宇少年
  * @since 0.1.2
  */
-public interface ApiErrorCodes extends CommonApiErrorCodes {
-    ApiErrorCode MANAGER_DISABLED = new ApiErrorCode("MANAGER_DISABLED", "管理员已被禁用");
-    ApiErrorCode MANAGER_DELETED = new ApiErrorCode("MANAGER_DELETED", "管理员已被删除");
+@Service
+public class SecurityConsoleMenuServiceImpl implements SecurityConsoleMenuService {
+    private SecurityConsoleMenuRepository repository;
+
+    public SecurityConsoleMenuServiceImpl(JdbcOperations jdbcOperations) {
+        this.repository = new SecurityConsoleMenuJdbcRepository(jdbcOperations);
+    }
 }

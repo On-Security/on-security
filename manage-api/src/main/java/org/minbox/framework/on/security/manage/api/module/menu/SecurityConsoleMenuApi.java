@@ -15,41 +15,41 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.manage.api.module.region;
+package org.minbox.framework.on.security.manage.api.module.menu;
 
 import org.minbox.framework.on.security.core.authorization.api.ApiResponse;
-import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenu;
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContext;
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextHolder;
-import org.minbox.framework.on.security.manage.api.module.region.service.SecurityRegionService;
+import org.minbox.framework.on.security.manage.api.module.menu.service.SecurityConsoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Set;
 
 /**
- * 安全域相关接口
+ * 控制台菜单接口
  *
  * @author 恒宇少年
- * @since 0.1.0
+ * @since 0.1.2
  */
 @RestController
-@RequestMapping(value = "/region")
-public class SecurityRegionApi {
+@RequestMapping(value = "/menu")
+public class SecurityConsoleMenuApi {
     @Autowired
-    private SecurityRegionService regionService;
+    private SecurityConsoleMenuService consoleMenuService;
 
     /**
-     * 获取授权的安全域列表
+     * 获取管理员授权的菜单列表
      *
-     * @return {@link SecurityRegion}
+     * @return {@link SecurityConsoleMenu}
      */
     @GetMapping(value = "/authorized")
-    public ApiResponse getAuthorizationRegions() {
+    public ApiResponse selectAuthorized() {
         OnSecurityManageContext manageContext = OnSecurityManageContextHolder.getContext();
-        List<SecurityRegion> securityRegionList = this.regionService.getManagerAuthorization(manageContext);
-        return ApiResponse.success(securityRegionList);
+        Set<SecurityConsoleMenu> consoleMenuList = manageContext.getManagerAuthorizeMenu();
+        return ApiResponse.success(consoleMenuList);
     }
 }

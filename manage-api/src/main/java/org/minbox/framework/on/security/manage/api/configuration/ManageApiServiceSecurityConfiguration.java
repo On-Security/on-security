@@ -35,6 +35,10 @@ public class ManageApiServiceSecurityConfiguration {
     public SecurityFilterChain onSecurityWebSecurityFilterChain(HttpSecurity http) throws Exception {
         OnSecurityManageApiAccessConfigurer accessConfigurer = new OnSecurityManageApiAccessConfigurer();
         http.apply(accessConfigurer);
-        return http.build();
+        // @formatter:off
+        return http
+                .csrf().disable()
+                .build();
+        // @formatter:on
     }
 }
