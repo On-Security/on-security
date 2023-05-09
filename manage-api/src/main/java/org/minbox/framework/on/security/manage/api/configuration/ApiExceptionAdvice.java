@@ -108,7 +108,7 @@ public class ApiExceptionAdvice {
             FieldError fieldError = fieldErrors.get(i);
             Locale currentLocale = LocaleContextHolder.getLocale();
             String fieldErrorMsg = messageSource.getMessage(fieldError, currentLocale);
-            errorMsg.append(fieldErrorMsg).append(i == fieldErrors.size() - 1 ? "" : " ; ");
+            errorMsg.append("[" + fieldError.getField() + "]").append(fieldErrorMsg).append(i == fieldErrors.size() - 1 ? "" : " ; ");
         }
         return errorMsg.toString();
     }
