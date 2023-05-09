@@ -17,34 +17,65 @@
 
 package org.minbox.framework.on.security.manage.api.module.manager.service;
 
+import org.minbox.framework.on.security.core.authorization.api.ApiException;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
-import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerJdbcRepository;
-import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManagerRepository;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityColumnName;
+import org.minbox.framework.on.security.core.authorization.jdbc.sql.Condition;
+import org.minbox.framework.on.security.manage.api.convert.ConsoleManagerConvert;
+import org.minbox.framework.on.security.manage.api.module.ApiErrorCodes;
+import org.minbox.framework.on.security.manage.api.module.manager.dao.SecurityManagerDAO;
+import org.minbox.framework.on.security.manage.api.module.manager.model.AddManagerVO;
+import org.minbox.framework.on.security.manage.api.module.menu.service.SecurityConsoleManagerAuthorizeMenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 /**
- * 管理员业务逻辑实现类
+ * 管理员业务逻辑实现层
  *
  * @author 恒宇少年
  * @since 0.1.2
  */
 @Service
+@Transactional(rollbackFor = RuntimeException.class)
 public class SecurityManagerServiceImpl implements SecurityManagerService {
     /**
      * logger instance
      */
     static Logger logger = LoggerFactory.getLogger(SecurityManagerServiceImpl.class);
-    private SecurityConsoleManagerRepository repository;
 
-    public SecurityManagerServiceImpl(JdbcOperations jdbcOperations) {
-        this.repository = new SecurityConsoleManagerJdbcRepository(jdbcOperations);
-    }
+    @Autowired
+    private SecurityManagerDAO managerDAO;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private SecurityConsoleManagerAuthorizeMenuService managerAuthorizeMenuService;
 
     @Override
     public SecurityConsoleManager selectById(String managerId) {
-        return repository.selectOne(managerId);
+        return managerDAO.selectOne(managerId);
+    }
+
+    @Override
+    public SecurityConsoleManager selectByUsername(String username) {
+        return managerDAO.selectOne(Condition.withColumn(OnSecurityColumnName.Username, username));
+    }
+
+    @Override
+    public void addManager(AddManagerVO addManagerVO) {
+        SecurityConsoleManager storedManager = selectByUsername(addManagerVO.getUsername());
+        if (storedManager != null) {
+            throw new ApiException(ApiErrorCodes.MANAGER_ALREADY_EXIST, addManagerVO.getUsername());
+        }
+        storedManager = ConsoleManagerConvert.INSTANCE.fromAddManagerVO(addManagerVO);
+        storedManager.setId(UUID.randomUUID().toString());
+        storedManager.setPassword(passwordEncoder.encode(addManagerVO.getPassword()));
+        this.managerDAO.insert(storedManager);
+        managerAuthorizeMenuService.authorize(storedManager.getRegionId(), storedManager.getId(), addManagerVO.getAuthorizeMenuIds());
     }
 }

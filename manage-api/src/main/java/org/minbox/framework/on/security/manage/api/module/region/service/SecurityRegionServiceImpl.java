@@ -28,6 +28,7 @@ import org.minbox.framework.on.security.manage.api.module.manager.service.Securi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ import java.util.List;
  * @since 0.1.2
  */
 @Service
+@Transactional(rollbackFor = RuntimeException.class)
 public class SecurityRegionServiceImpl implements SecurityRegionService {
     private SecurityRegionRepository repository;
     @Autowired

@@ -43,6 +43,7 @@
         <spring-security-authorization-server.version>0.4.2</spring-security-authorization-server.version>
         <xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
         <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
     </properties>
     <dependencyManagement>
         <dependencies>

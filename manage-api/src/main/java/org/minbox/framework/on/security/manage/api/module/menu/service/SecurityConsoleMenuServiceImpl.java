@@ -17,10 +17,11 @@
 
 package org.minbox.framework.on.security.manage.api.module.menu.service;
 
-import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenuJdbcRepository;
-import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenuRepository;
-import org.springframework.jdbc.core.JdbcOperations;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenu;
+import org.minbox.framework.on.security.manage.api.module.menu.dao.SecurityConsoleMenuDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 控制台菜单业务逻辑实现类
@@ -29,10 +30,13 @@ import org.springframework.stereotype.Service;
  * @since 0.1.2
  */
 @Service
+@Transactional(rollbackFor = RuntimeException.class)
 public class SecurityConsoleMenuServiceImpl implements SecurityConsoleMenuService {
-    private SecurityConsoleMenuRepository repository;
+    @Autowired
+    private SecurityConsoleMenuDAO consoleMenuDAO;
 
-    public SecurityConsoleMenuServiceImpl(JdbcOperations jdbcOperations) {
-        this.repository = new SecurityConsoleMenuJdbcRepository(jdbcOperations);
+    @Override
+    public SecurityConsoleMenu selectById(String menuId) {
+        return consoleMenuDAO.selectOne(menuId);
     }
 }

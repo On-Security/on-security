@@ -15,38 +15,27 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.manage.api.module.manager.service;
+package org.minbox.framework.on.security.manage.api.module.menu.service;
 
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
-import org.minbox.framework.on.security.manage.api.module.manager.model.AddManagerVO;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenu;
+import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
+
+import java.util.List;
 
 /**
- * 管理员业务逻辑接口定义
+ * 控制台管理员授权菜单业务逻辑接口
  *
  * @author 恒宇少年
  * @since 0.1.2
  */
-public interface SecurityManagerService {
+public interface SecurityConsoleManagerAuthorizeMenuService {
     /**
-     * 根据ID查询管理员信息
+     * 给管理员授权菜单
      *
-     * @param managerId {@link SecurityConsoleManager#getId()}
-     * @return {@link SecurityConsoleManager}
+     * @param regionId  安全域ID {@link SecurityRegion#getId()}
+     * @param managerId 管理员ID {@link SecurityConsoleManager#getId()}
+     * @param menuIds   菜单ID集合 {@link SecurityConsoleMenu#getId()}
      */
-    SecurityConsoleManager selectById(String managerId);
-
-    /**
-     * 根据用户名查询管理员信息
-     *
-     * @param username {@link SecurityConsoleManager#getUsername()}
-     * @return {@link SecurityConsoleManager}
-     */
-    SecurityConsoleManager selectByUsername(String username);
-
-    /**
-     * 添加管理员
-     *
-     * @param addManagerVO 添加管理员数据实体 {@link AddManagerVO}
-     */
-    void addManager(AddManagerVO addManagerVO);
+    void authorize(String regionId, String managerId, List<String> menuIds);
 }

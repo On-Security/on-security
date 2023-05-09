@@ -15,38 +15,31 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.manage.api.module.manager.service;
+package org.minbox.framework.on.security.manage.api.convert;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
 import org.minbox.framework.on.security.manage.api.module.manager.model.AddManagerVO;
 
 /**
- * 管理员业务逻辑接口定义
+ * 管理员对象转换类
  *
  * @author 恒宇少年
  * @since 0.1.2
  */
-public interface SecurityManagerService {
+@Mapper
+public interface ConsoleManagerConvert {
     /**
-     * 根据ID查询管理员信息
-     *
-     * @param managerId {@link SecurityConsoleManager#getId()}
-     * @return {@link SecurityConsoleManager}
+     * get new mapStruct instance
      */
-    SecurityConsoleManager selectById(String managerId);
+    ConsoleManagerConvert INSTANCE = Mappers.getMapper(ConsoleManagerConvert.class);
 
     /**
-     * 根据用户名查询管理员信息
+     * convert {@link AddManagerVO} to {@link SecurityConsoleManager}
      *
-     * @param username {@link SecurityConsoleManager#getUsername()}
+     * @param addManagerVO {@link AddManagerVO}
      * @return {@link SecurityConsoleManager}
      */
-    SecurityConsoleManager selectByUsername(String username);
-
-    /**
-     * 添加管理员
-     *
-     * @param addManagerVO 添加管理员数据实体 {@link AddManagerVO}
-     */
-    void addManager(AddManagerVO addManagerVO);
+    SecurityConsoleManager fromAddManagerVO(AddManagerVO addManagerVO);
 }

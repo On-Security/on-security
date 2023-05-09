@@ -17,6 +17,8 @@
 
 package org.minbox.framework.on.security.manage.api.module.menu.service;
 
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenu;
+
 /**
  * 控制台菜单业务逻辑定义
  *
@@ -24,4 +26,11 @@ package org.minbox.framework.on.security.manage.api.module.menu.service;
  * @since 0.1.2
  */
 public interface SecurityConsoleMenuService {
+    /**
+     * 根据菜单ID查询菜单信息
+     *
+     * @param menuId 菜单ID {@link SecurityConsoleMenu#getId()}
+     * @return {@link SecurityConsoleMenu}
+     */
+    SecurityConsoleMenu selectById(String menuId);
 }

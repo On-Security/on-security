@@ -15,20 +15,23 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.manage.api.module;
+package org.minbox.framework.on.security.manage.api.module.menu.dao;
 
-import org.minbox.framework.on.security.core.authorization.api.ApiErrorCode;
-import org.minbox.framework.on.security.core.authorization.api.CommonApiErrorCodes;
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenu;
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.stereotype.Component;
 
 /**
- * 接口异常码定义
+ * 控制台菜单数据访问接口实现
  *
  * @author 恒宇少年
  * @since 0.1.2
  */
-public interface ApiErrorCodes extends CommonApiErrorCodes {
-    ApiErrorCode MANAGER_DISABLED = new ApiErrorCode("MANAGER_DISABLED", "管理员已被禁用");
-    ApiErrorCode MANAGER_DELETED = new ApiErrorCode("MANAGER_DELETED", "管理员已被删除");
-    ApiErrorCode MANAGER_ALREADY_EXIST = new ApiErrorCode("MANAGER_ALREADY_EXIST", "管理员：[%s]，已存在");
-    ApiErrorCode MENU_NOT_FOUND = new ApiErrorCode("MENU_NOT_FOUND", "菜单：[%s]，不存在");
+@Component
+public class SecurityConsoleMenuDAO extends OnSecurityBaseJdbcRepositorySupport<SecurityConsoleMenu, String> {
+    public SecurityConsoleMenuDAO(JdbcOperations jdbcOperations) {
+        super(OnSecurityTables.SecurityConsoleMenu, jdbcOperations);
+    }
 }
