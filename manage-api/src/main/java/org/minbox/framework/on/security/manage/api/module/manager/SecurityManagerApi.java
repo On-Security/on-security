@@ -67,7 +67,6 @@ public class SecurityManagerApi {
      *
      * @param addManagerVO 添加管理员的请求实体 {@link AddManagerVO}
      * @return {@link ApiResponse}
-     * @throws ApiException
      */
     @PostMapping(value = "/add")
     public ApiResponse addManager(@RequestBody @Valid AddManagerVO addManagerVO) throws ApiException {
@@ -82,10 +81,9 @@ public class SecurityManagerApi {
      *
      * @param updateManagerVO 更新管理员的请求实体 {@link UpdateManagerVO}
      * @return {@link ApiResponse}
-     * @throws ApiException
      */
     @PostMapping(value = "/update")
-    public ApiResponse updateManager(@RequestBody @Valid UpdateManagerVO updateManagerVO) throws ApiException {
+    public ApiResponse updateManager(@RequestBody @Valid UpdateManagerVO updateManagerVO) {
         managerService.updateManager(updateManagerVO);
         return ApiResponse.success();
     }
@@ -95,10 +93,9 @@ public class SecurityManagerApi {
      *
      * @param deleteManagerVO 删除管理员的请求实体 {@link DeleteManagerVO}
      * @return {@link ApiResponse}
-     * @throws ApiException
      */
     @PostMapping(value = "/delete")
-    public ApiResponse deleteManager(@RequestBody @Valid DeleteManagerVO deleteManagerVO) throws ApiException {
+    public ApiResponse deleteManager(@RequestBody @Valid DeleteManagerVO deleteManagerVO) {
         managerService.deleteManager(deleteManagerVO);
         return ApiResponse.success();
     }

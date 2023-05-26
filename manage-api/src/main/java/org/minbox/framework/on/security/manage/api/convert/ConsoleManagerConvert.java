@@ -49,7 +49,6 @@ public interface ConsoleManagerConvert {
      * convert {@link UpdateManagerVO} to {@link SecurityConsoleManager}
      *
      * @param updateManagerVO {@link UpdateManagerVO}
-     * @return {@link SecurityConsoleManager}
      */
     void fromUpdateManagerVO(UpdateManagerVO updateManagerVO, @MappingTarget SecurityConsoleManager manager);
 }
