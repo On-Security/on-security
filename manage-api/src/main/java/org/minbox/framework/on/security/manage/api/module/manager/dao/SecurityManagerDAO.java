@@ -15,16 +15,23 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.api;
+package org.minbox.framework.on.security.manage.api.module.manager.dao;
+
+import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleManager;
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.stereotype.Component;
 
 /**
- * 通用的接口异常码定义
+ * 管理员数据访问层
  *
  * @author 恒宇少年
  * @since 0.1.2
  */
-public interface CommonApiErrorCodes {
-    ApiErrorCode SYSTEM_EXCEPTION = new ApiErrorCode("SYSTEM_EXCEPTION", "系统异常，请联系管理员");
-    ApiErrorCode PARAMETER_VERIFICATION_FAILED = new ApiErrorCode("PARAMETER_VERIFICATION_FAILED", "参数校验失败，原因：%s");
-    ApiErrorCode OPERATION_NOT_ALLOWED = new ApiErrorCode("OPERATION_NOT_ALLOWED", "不允许操作");
+@Component
+public class SecurityManagerDAO extends OnSecurityBaseJdbcRepositorySupport<SecurityConsoleManager, String> {
+    public SecurityManagerDAO(JdbcOperations jdbcOperations) {
+        super(OnSecurityTables.SecurityConsoleManager, jdbcOperations);
+    }
 }

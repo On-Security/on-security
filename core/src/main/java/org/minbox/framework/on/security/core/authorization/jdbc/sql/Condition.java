@@ -57,6 +57,6 @@ public final class Condition {
         Assert.notNull(operator, "The operator cannot be null");
         Assert.notNull(columnName, "The column cannot be null");
         Assert.notNull(value, "value cannot be null");
-        return new Condition(operator, ColumnValue.with(columnName, value).build());
+        return new Condition(operator, ColumnValue.with(columnName, value));
     }
 }

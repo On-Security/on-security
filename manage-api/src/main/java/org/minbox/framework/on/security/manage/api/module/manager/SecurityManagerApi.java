@@ -23,11 +23,14 @@ import org.minbox.framework.on.security.core.authorization.data.console.Security
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContext;
 import org.minbox.framework.on.security.core.authorization.manage.context.OnSecurityManageContextHolder;
 import org.minbox.framework.on.security.manage.api.module.ApiErrorCodes;
+import org.minbox.framework.on.security.manage.api.module.manager.model.AddManagerVO;
+import org.minbox.framework.on.security.manage.api.module.manager.model.DeleteManagerVO;
+import org.minbox.framework.on.security.manage.api.module.manager.model.UpdateManagerVO;
 import org.minbox.framework.on.security.manage.api.module.manager.service.SecurityManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * 管理员基本信息维护接口
@@ -57,5 +60,43 @@ public class SecurityManagerApi {
             throw new ApiException(ApiErrorCodes.MANAGER_DELETED);
         }
         return ApiResponse.success(manager);
+    }
+
+    /**
+     * 添加管理员
+     *
+     * @param addManagerVO 添加管理员的请求实体 {@link AddManagerVO}
+     * @return {@link ApiResponse}
+     */
+    @PostMapping(value = "/add")
+    public ApiResponse addManager(@RequestBody @Valid AddManagerVO addManagerVO) throws ApiException {
+        OnSecurityManageContext manageContext = OnSecurityManageContextHolder.getContext();
+        addManagerVO.setRegionId(manageContext.getRegion().getId());
+        managerService.addManager(addManagerVO);
+        return ApiResponse.success();
+    }
+
+    /**
+     * 更新管理员
+     *
+     * @param updateManagerVO 更新管理员的请求实体 {@link UpdateManagerVO}
+     * @return {@link ApiResponse}
+     */
+    @PostMapping(value = "/update")
+    public ApiResponse updateManager(@RequestBody @Valid UpdateManagerVO updateManagerVO) {
+        managerService.updateManager(updateManagerVO);
+        return ApiResponse.success();
+    }
+
+    /**
+     * 删除管理员
+     *
+     * @param deleteManagerVO 删除管理员的请求实体 {@link DeleteManagerVO}
+     * @return {@link ApiResponse}
+     */
+    @PostMapping(value = "/delete")
+    public ApiResponse deleteManager(@RequestBody @Valid DeleteManagerVO deleteManagerVO) {
+        managerService.deleteManager(deleteManagerVO);
+        return ApiResponse.success();
     }
 }

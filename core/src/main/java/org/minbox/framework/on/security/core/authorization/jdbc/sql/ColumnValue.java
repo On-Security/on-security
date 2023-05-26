@@ -31,7 +31,10 @@ public class ColumnValue {
     private Object value;
 
     // @formatter:off
-    private ColumnValue() { }
+    private ColumnValue(OnSecurityColumnName columnName,Object value) {
+        this.columnName = columnName;
+        this.value = value;
+    }
     // @formatter:on
 
     public OnSecurityColumnName getColumnName() {
@@ -42,29 +45,9 @@ public class ColumnValue {
         return value;
     }
 
-    public static Builder with(OnSecurityColumnName columnName, Object value) {
+    public static ColumnValue with(OnSecurityColumnName columnName, Object value) {
         Assert.notNull(columnName, "The filter column cannot be null.");
         Assert.notNull(value, "The filter column value cannot be null.");
-        return new Builder(columnName, value);
-    }
-
-    /**
-     * The {@link ColumnValue} Builder
-     */
-    public static class Builder {
-        private OnSecurityColumnName columnName;
-        private Object value;
-
-        public Builder(OnSecurityColumnName columnName, Object value) {
-            this.columnName = columnName;
-            this.value = value;
-        }
-
-        public ColumnValue build() {
-            ColumnValue columnValue = new ColumnValue();
-            columnValue.columnName = this.columnName;
-            columnValue.value = this.value;
-            return columnValue;
-        }
+        return new ColumnValue(columnName, value);
     }
 }

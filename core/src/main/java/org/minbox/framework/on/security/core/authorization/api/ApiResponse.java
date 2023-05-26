@@ -53,6 +53,10 @@ public class ApiResponse {
         this.timestamp = System.currentTimeMillis();
     }
 
+    public static ApiResponse success() {
+        return new ApiResponse(null, null, null, true);
+    }
+
     public static ApiResponse success(Object data) {
         return new ApiResponse(null, null, data, true);
     }

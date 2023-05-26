@@ -29,4 +29,8 @@ import org.minbox.framework.on.security.core.authorization.api.CommonApiErrorCod
 public interface ApiErrorCodes extends CommonApiErrorCodes {
     ApiErrorCode MANAGER_DISABLED = new ApiErrorCode("MANAGER_DISABLED", "管理员已被禁用");
     ApiErrorCode MANAGER_DELETED = new ApiErrorCode("MANAGER_DELETED", "管理员已被删除");
+    ApiErrorCode MANAGER_NOT_FOUND = new ApiErrorCode("MANAGER_NOT_FOUND", "管理员：[%s]，不存在");
+    ApiErrorCode MANAGER_ALREADY_EXIST = new ApiErrorCode("MANAGER_ALREADY_EXIST", "管理员：[%s]，已存在");
+    ApiErrorCode MENU_NOT_FOUND = new ApiErrorCode("MENU_NOT_FOUND", "菜单：[%s]，不存在");
+    ApiErrorCode REGION_ALREADY_EXIST = new ApiErrorCode("REGION_ALREADY_EXIST", "安全域：[%s]，已存在");
 }

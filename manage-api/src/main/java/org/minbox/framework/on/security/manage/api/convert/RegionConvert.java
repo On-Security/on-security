@@ -15,16 +15,30 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.api;
+package org.minbox.framework.on.security.manage.api.convert;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+import org.minbox.framework.on.security.core.authorization.data.region.SecurityRegion;
+import org.minbox.framework.on.security.manage.api.module.region.model.AddSecurityRegionVO;
 
 /**
- * 通用的接口异常码定义
+ * 安全域对象转换定义
  *
  * @author 恒宇少年
- * @since 0.1.2
  */
-public interface CommonApiErrorCodes {
-    ApiErrorCode SYSTEM_EXCEPTION = new ApiErrorCode("SYSTEM_EXCEPTION", "系统异常，请联系管理员");
-    ApiErrorCode PARAMETER_VERIFICATION_FAILED = new ApiErrorCode("PARAMETER_VERIFICATION_FAILED", "参数校验失败，原因：%s");
-    ApiErrorCode OPERATION_NOT_ALLOWED = new ApiErrorCode("OPERATION_NOT_ALLOWED", "不允许操作");
+@Mapper
+public interface RegionConvert {
+    /**
+     * get new mapStruct instance
+     */
+    RegionConvert INSTANCE = Mappers.getMapper(RegionConvert.class);
+
+    /**
+     * AddSecurityRegionVO to SecurityRegion
+     *
+     * @param addSecurityRegionVO {@link AddSecurityRegionVO}
+     * @return {@link SecurityRegion}
+     */
+    SecurityRegion fromAddSecurityRegionVO(AddSecurityRegionVO addSecurityRegionVO);
 }

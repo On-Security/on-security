@@ -15,16 +15,28 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.core.authorization.api;
+package org.minbox.framework.on.security.manage.api.module.manager.model;
+
+import javax.validation.constraints.NotBlank;
 
 /**
- * 通用的接口异常码定义
+ * 删除管理员的请求实体
  *
  * @author 恒宇少年
  * @since 0.1.2
  */
-public interface CommonApiErrorCodes {
-    ApiErrorCode SYSTEM_EXCEPTION = new ApiErrorCode("SYSTEM_EXCEPTION", "系统异常，请联系管理员");
-    ApiErrorCode PARAMETER_VERIFICATION_FAILED = new ApiErrorCode("PARAMETER_VERIFICATION_FAILED", "参数校验失败，原因：%s");
-    ApiErrorCode OPERATION_NOT_ALLOWED = new ApiErrorCode("OPERATION_NOT_ALLOWED", "不允许操作");
+public class DeleteManagerVO {
+    /**
+     * 管理员ID
+     */
+    @NotBlank(message = "管理员ID不可以为空")
+    private String managerId;
+
+    public String getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(String managerId) {
+        this.managerId = managerId;
+    }
 }

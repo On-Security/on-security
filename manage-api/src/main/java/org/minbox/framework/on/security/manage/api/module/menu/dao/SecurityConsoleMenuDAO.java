@@ -15,28 +15,23 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.minbox.framework.on.security.manage.api.module.menu.service;
+package org.minbox.framework.on.security.manage.api.module.menu.dao;
 
 import org.minbox.framework.on.security.core.authorization.data.console.SecurityConsoleMenu;
-import org.minbox.framework.on.security.manage.api.module.menu.dao.SecurityConsoleMenuDAO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.minbox.framework.on.security.core.authorization.jdbc.OnSecurityBaseJdbcRepositorySupport;
+import org.minbox.framework.on.security.core.authorization.jdbc.definition.OnSecurityTables;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.stereotype.Component;
 
 /**
- * 控制台菜单业务逻辑实现类
+ * 控制台菜单数据访问接口实现
  *
  * @author 恒宇少年
  * @since 0.1.2
  */
-@Service
-@Transactional(rollbackFor = RuntimeException.class)
-public class SecurityConsoleMenuServiceImpl implements SecurityConsoleMenuService {
-    @Autowired
-    private SecurityConsoleMenuDAO consoleMenuDAO;
-
-    @Override
-    public SecurityConsoleMenu selectById(String menuId) {
-        return consoleMenuDAO.selectOne(menuId);
+@Component
+public class SecurityConsoleMenuDAO extends OnSecurityBaseJdbcRepositorySupport<SecurityConsoleMenu, String> {
+    public SecurityConsoleMenuDAO(JdbcOperations jdbcOperations) {
+        super(OnSecurityTables.SecurityConsoleMenu, jdbcOperations);
     }
 }
