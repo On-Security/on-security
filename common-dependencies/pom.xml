@@ -40,7 +40,7 @@
         <api-boot.version>2.3.8</api-boot.version>
         <spring-framework.version>5.3.26</spring-framework.version>
         <spring-security.version>5.7.7</spring-security.version>
-        <spring-security-authorization-server.version>0.4.2</spring-security-authorization-server.version>
+        <spring-security-authorization-server.version>0.4.3</spring-security-authorization-server.version>
         <xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
         <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
